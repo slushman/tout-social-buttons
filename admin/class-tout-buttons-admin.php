@@ -110,6 +110,22 @@ class Tout_Buttons_Admin {
 	} // enqueue_scripts()
 
 	/**
+	 * Returns an array of settings names, field types, and default values.
+	 *
+	 * $settings[] = array( 'field-name', 'field-type', 'default-value' )
+	 *
+	 * @since 		1.0.0
+	 * @return 		array 		An array of settings.
+	 */
+	public function get_settings_list() {
+
+		$settings = array();
+
+		return $settings;
+
+	} // get_settings_list()
+
+	/**
 	 * Adds a link to the plugin settings page from the Plugin listings.
 	 *
 	 * @since 		1.0.0
@@ -152,5 +168,44 @@ class Tout_Buttons_Admin {
 		);
 
 	} // register_settings()
+
+	/**
+	 * Validates the saved settings.
+	 *
+	 * @since 		1.0.0
+	 * @param 		array 		$input 		Array of submitted plugin settings.
+	 * @return 		array 					Array of validated plugin settings.
+	 */
+	public function validate_settings( $input ) {
+
+		//wp_die( print_r( $input ) );
+
+		$valid 		= array();
+		$settings 	= $this->get_settings_list();
+
+		//wp_die( print_r( $settings ) );
+
+		foreach ( $settings as $setting ) {
+
+			$sanitizer 			= new Tout_Buttons_Sanitize();
+			$valid[$setting[0]] = $sanitizer->clean( $input[$setting[0]], $setting[1] );
+
+			//wp_die( print_r( $valid ) );
+
+			if ( $valid[$setting[0]] != $input[$setting[0]] ) {
+
+				add_settings_error( $setting[0], $setting[0] . '_error', esc_html__( $setting[0] . ' error.', 'tout-buttons' ), 'error' );
+
+			}
+
+			unset( $sanitizer );
+
+		}
+
+		//wp_die( print_r( $valid ) );
+
+		return $valid;
+
+	} // validate_settings()
 
 } // class

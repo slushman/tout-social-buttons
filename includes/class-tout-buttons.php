@@ -119,6 +119,11 @@ class Tout_Buttons {
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-tout-buttons-public.php';
 
+		/**
+		 * The class responsible for defining the sanitization actions.
+		 */
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-tout-buttons-sanitize.php';
+
 		$this->loader = new Tout_Buttons_Loader();
 
 	} // load_dependencies()
