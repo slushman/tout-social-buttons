@@ -30,6 +30,9 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
+define( 'TOUT_BUTTONS_SLUG', 'tout-buttons' );
+define( 'TOUT_BUTTONS_SETTINGS', 'tout-buttons-settings' );
+
 /**
  * The code that runs during plugin activation.
  * This action is documented in includes/class-tout-buttons-activator.php

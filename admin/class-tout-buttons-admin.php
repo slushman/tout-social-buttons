@@ -55,6 +55,37 @@ class Tout_Buttons_Admin {
 	} // __ construct()
 
 	/**
+	 * Adds a settings page link to a menu
+	 *
+	 * Top-level page
+	 * add_menu_page( $page_title, $menu_title, $capability, $menu_slug, $function, $icon_url, $position );
+	 *
+	 * Submenu Page
+	 * add_submenu_page( $parent_slug, $page_title, $menu_title, $capability, $menu_slug, $function);
+	 *
+	 * Admin menu page slugs:
+	 * 	Options: options-general.php?page=
+	 * 	Tools: tools.php?page=
+	 *
+	 *
+	 * @hooked 		admin_menu
+	 * @link 		https://codex.wordpress.org/Administration_Menus
+	 * @since 		1.0.0
+	 */
+	public function add_menu() {
+
+		add_submenu_page(
+			'options-general.php',
+			esc_html__( 'Tout Buttons Settings', 'tout-buttons' ),
+			esc_html__( 'Tout Buttons', 'tout-buttons' ),
+			'manage_options',
+			TOUT_BUTTONS_SETTINGS,
+			array( $this, 'page_settings' )
+		);
+
+	} // add_menu()
+
+	/**
 	 * Register the stylesheets for the admin area.
 	 *
 	 * @hooked 		admin_enqueue_scripts
@@ -77,5 +108,34 @@ class Tout_Buttons_Admin {
 		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/tout-buttons-admin.js', array( 'jquery' ), $this->version, false );
 
 	} // enqueue_scripts()
+
+	/**
+	 * Includes the options page partial file.
+	 *
+	 * @since 		1.0.0
+	 */
+	public function page_settings() {
+
+		include( plugin_dir_path( dirname( __FILE__ ) ) . 'admin/partials/pages/settings.php' );
+
+	} // page_settings()
+
+	/**
+	 * Registers plugin settings.
+	 *
+	 * register_setting( $option_group, $option_name, $sanitize_callback );
+	 *
+	 * @link 		https://developer.wordpress.org/reference/functions/register_setting/
+	 * @since 		1.0.0
+	 */
+	public function register_settings() {
+
+		register_setting(
+			TOUT_BUTTONS_SETTINGS,
+			TOUT_BUTTONS_SETTINGS,
+			array( $this, 'validate_settings' )
+		);
+
+	} // register_settings()
 
 } // class
