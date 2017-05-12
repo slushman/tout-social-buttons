@@ -23,6 +23,29 @@
  * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
  * Text Domain:       tout-buttons
  * Domain Path:       /languages
+ *
+ * @todo 		Test: In settings, if there's a default field value, you save a new value, the remore that value.
+ *         			Is the field value now blank (as expected) or back to the default value?
+ *
+ * @todo 		Admin Option: sortable buttons
+ * @todo 		Admin Option: turn off any button
+ * @todo 		Admin Option: Selector for whether to use a modal or pop-up.
+ * @todo 		Admin Option: button style selector
+ * @todo 		Admin Option: tab of post types (public only) where the share buttons should appear.
+ * @todo 		Public: show the buttons, in the correct order, on the post types selected.
+ * @todo 		Public: Add modal for sharing.
+ * @todo 		Public: Add pop-up window for sharing.
+ * @todo 		Public: add shortcode and add_action for templates.
+ *
+ * PRO Version
+ * @todo 		Analytics: separate tab. Show each link and its share count.
+ *         			Should the plugin then have its own admin entry? So analytics could be its own page?
+ * @todo 		Post Analytics: show that post's sharing info, with times & dates.
+ * @todo 		Blockquote Sharing: show the tout buttons at the bottom of blockquotes
+ *         			and the shared content is the quote.
+ * @todo 		Design: more options for the button designs?
+ * @todo 		Public: Side pop-out menu sharing window option - like time.com
+ *
  */
 
 // If this file is called directly, abort.
