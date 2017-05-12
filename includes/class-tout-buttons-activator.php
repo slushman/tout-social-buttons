@@ -31,7 +31,18 @@ class Tout_Buttons_Activator {
 	 */
 	public static function activate() {
 
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-tout-buttons-admin.php';
 
+		$opts 		= array();
+		$options 	= Tout_Buttons_Admin::get_settings_list();
+
+		foreach ( $options as $option ) {
+
+			$opts[ $option[0] ] = $option[2];
+
+		} // foreach
+
+		update_option( TOUT_BUTTONS_SETTINGS, $opts  );
 
 	} // activate()
 
