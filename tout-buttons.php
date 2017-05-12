@@ -24,9 +24,6 @@
  * Text Domain:       tout-buttons
  * Domain Path:       /languages
  *
- * @todo 		Test: In settings, if there's a default field value, you save a new value, the remore that value.
- *         			Is the field value now blank (as expected) or back to the default value?
- *
  * @todo 		Admin Option: sortable buttons
  * @todo 		Admin Option: turn off any button
  * @todo 		Admin Option: Selector for whether to use a modal or pop-up.
