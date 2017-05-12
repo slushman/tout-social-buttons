@@ -30,6 +30,7 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
+define( 'TOUT_BUTTONS_FILE', plugin_basename( __FILE__ ) );
 define( 'TOUT_BUTTONS_SLUG', 'tout-buttons' );
 define( 'TOUT_BUTTONS_SETTINGS', 'tout-buttons-settings' );
 

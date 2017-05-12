@@ -110,6 +110,21 @@ class Tout_Buttons_Admin {
 	} // enqueue_scripts()
 
 	/**
+	 * Adds a link to the plugin settings page from the Plugin listings.
+	 *
+	 * @since 		1.0.0
+	 * @param 		array 		$links 		The current array of links.
+	 * @return 		array 		$links 		The modified array of links.
+	 */
+	public function link_settings( $links ) {
+
+		$links[] = sprintf( '<a href="%s">%s</a>', admin_url( 'options-general.php?page=' . TOUT_BUTTONS_SETTINGS ), esc_html__( 'Settings', 'tout-buttons' ) );
+
+		return $links;
+
+	} // link_settings()
+
+	/**
 	 * Includes the options page partial file.
 	 *
 	 * @since 		1.0.0
