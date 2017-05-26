@@ -129,6 +129,36 @@ class Tout_Buttons {
 		 */
 		require_once( plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-tout-buttons-buttons.php' );
 
+		/**
+		 * The class responsible for defining a form field.
+		 */
+		require_once( plugin_dir_path( dirname( __FILE__ ) ) . 'fields/class-tout-buttons-field.php' );
+
+		/**
+		 * The class responsible for defining the buttons form field.
+		 */
+		require_once( plugin_dir_path( dirname( __FILE__ ) ) . 'fields/class-tout-buttons-field-buttons.php' );
+
+		/**
+		 * The class responsible for defining a checkbox form field.
+		 */
+		require_once( plugin_dir_path( dirname( __FILE__ ) ) . 'fields/class-tout-buttons-field-checkbox.php' );
+
+		/**
+		 * The class responsible for defining a hidden form field.
+		 */
+		require_once( plugin_dir_path( dirname( __FILE__ ) ) . 'fields/class-tout-buttons-field-hidden.php' );
+
+		/**
+		 * The class responsible for defining a select form field.
+		 */
+		require_once( plugin_dir_path( dirname( __FILE__ ) ) . 'fields/class-tout-buttons-field-select.php' );
+
+		/**
+		 * The class responsible for defining a text form field.
+		 */
+		require_once( plugin_dir_path( dirname( __FILE__ ) ) . 'fields/class-tout-buttons-field-text.php' );
+
 		$this->loader = new Tout_Buttons_Loader();
 
 	} // load_dependencies()
@@ -164,6 +194,8 @@ class Tout_Buttons {
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
 		$this->loader->add_action( 'admin_init', 			$plugin_admin, 'register_settings' );
+		$this->loader->add_action( 'admin_init', 			$plugin_admin, 'register_fields' );
+		$this->loader->add_action( 'admin_init', 			$plugin_admin, 'register_sections' );
 		$this->loader->add_action( 'admin_menu', 			$plugin_admin, 'add_menu' );
 		$this->loader->add_action( 'plugin_action_links_' . TOUT_BUTTONS_FILE, $plugin_admin, 'link_settings' );
 

@@ -10,6 +10,7 @@
  * @link 			https://developer.wordpress.org/reference/functions/submit_button/
  * @since 			1.0.0
  * @package 		Tout_Buttons
+ * @subpackage 		Tout_Buttons/admin/partials/pages
  */
 
 ?><h1><?php echo esc_html( get_admin_page_title() ); ?></h1>
