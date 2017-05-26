@@ -124,6 +124,11 @@ class Tout_Buttons {
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-tout-buttons-sanitize.php';
 
+		/**
+		 * The class responsible for defining shared code for both public and admin.
+		 */
+		require_once( plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-tout-buttons-buttons.php' );
+
 		$this->loader = new Tout_Buttons_Loader();
 
 	} // load_dependencies()
@@ -175,8 +180,20 @@ class Tout_Buttons {
 
 		$plugin_public = new Tout_Buttons_Public( $this->get_plugin_name(), $this->get_version() );
 
-		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
-		$this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
+		$this->loader->add_action( 'wp_enqueue_scripts', 	$plugin_public, 'enqueue_styles' );
+		$this->loader->add_action( 'wp_enqueue_scripts', 	$plugin_public, 'enqueue_scripts' );
+		$this->loader->add_filter( 'the_content', 			$plugin_public, 'add_buttons_to_content', 19, 1 );
+		$this->loader->add_action( 'init', 					$plugin_public, 'register_shortcode' );
+
+		/**
+		 * Action instead of template tag.
+		 *
+		 * Usage:
+		 * do_action( 'toutbuttons' );
+		 *
+		 * @link 		http://nacin.com/2010/05/18/rethinking-template-tags-in-plugins/
+		 */
+		$this->loader->add_action( 'toutbuttons', 			$plugin_public, 'display_buttons' );
 
 	} // define_public_hooks()
 
