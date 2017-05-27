@@ -41,6 +41,13 @@ class Tout_Buttons_Field {
 	var $properties;
 
 	/**
+	 * The field settings, based on the context.
+	 *
+	 * @var 		array
+	 */
+	var $settings;
+
+	/**
 	 * Class contructor.
 	 * Sets the default attributes and properties class variables.
 	 * Sets the $attributes and $properties class variables.
@@ -58,6 +65,9 @@ class Tout_Buttons_Field {
 	public function __construct( $attributes, $properties, $context ) {
 
 		$this->set_context( $context );
+		$this->set_settings( $attributes, $properties );
+
+		$this->set_settings( $attributes );
 
 		$this->set_attributes( $attributes );
 
@@ -361,6 +371,26 @@ class Tout_Buttons_Field {
 	} // set_properties()
 
 	/**
+	 * Sets the $settings class variable based on the context.
+	 *
+	 * @param 		array 		$attributes 		The field attributes.
+	 * @param 		array 		$properties 		The field properties
+	 */
+	protected function set_settings( $attributes, $properties ) {
+
+		if ( 'settings' === $this->context ) {
+
+			$this->settings = get_option( TOUT_BUTTONS_SETTINGS );
+
+		} elseif ( 'metaboxes' === $this->context ) {
+
+			$this->settings = get_post_custom();
+
+		}
+
+	} // set_settings()
+
+	/**
 	 * Sets the value attributes based on the field context.
 	 *
 	 * @since 		1.0.0
@@ -368,25 +398,21 @@ class Tout_Buttons_Field {
 	 */
 	protected function set_value( $attributes ) {
 
-		if ( 'settings' === $this->context ) { // plugin
+		if ( 'checkbox' === $attributes['type'] ) {
 
-			$settings = get_option( TOUT_BUTTONS_SETTINGS );
+			$this->attributes['value'] = 1;
 
-			if ( ! is_array( $settings ) ) { return; }
+		} elseif ( 'settings' === $this->context ) { // plugin
 
-			if ( array_key_exists( $this->attributes['id'], $settings ) ) {
+			if ( array_key_exists( $this->attributes['id'], $this->settings ) ) {
 
-				$this->attributes['value'] = $settings[$this->attributes['id']];
+				$this->attributes['value'] = $this->settings[$this->attributes['id']];
 
 			}
 
 		} elseif ( 'metaboxes' === $this->context ) { // metaboxes
 
-			$meta = get_post_custom();
-
-			if ( ! is_array( $meta ) ) { return; }
-
-			$this->attributes['value'] = $meta[$this->attributes['id']][0];
+			$this->attributes['value'] = $this->settings[$this->attributes['id']][0];
 
 		} /*elseif ( 'widget' === $this->context ) { // widgets settings
 

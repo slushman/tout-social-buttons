@@ -20,6 +20,7 @@ class Tout_Buttons_Field_Text extends Tout_Buttons_Field {
 	public function __construct( $context, $attributes, $properties ) {
 
 		$this->set_context( $context );
+		$this->set_settings( $attributes, $properties );
 
 		$this->set_default_attributes();
 		$this->set_attributes( $attributes );

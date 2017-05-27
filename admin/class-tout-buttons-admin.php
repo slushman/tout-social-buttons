@@ -477,9 +477,13 @@ class Tout_Buttons_Admin {
 			$sanitizer 			= new Tout_Buttons_Sanitize();
 			$valid[$setting[0]] = $sanitizer->clean( $input[$setting[0]], $setting[1] );
 
-			//wp_die( print_r( $valid ) );
+			// if ( 'auto-post' === $setting[0] ) {
+			//
+			// 	wp_die( print_r( $input ) );
+			//
+			// }
 
-			if ( $valid[$setting[0]] != $input[$setting[0]] ) {
+			if ( $valid[$setting[0]] != $input[$setting[0]] && 'checkbox' !== $setting[1] ) {
 
 				add_settings_error( $setting[0], $setting[0] . '_error', esc_html__( $setting[0] . ' error.', 'tout-buttons' ), 'error' );
 

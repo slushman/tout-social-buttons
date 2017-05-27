@@ -28,6 +28,7 @@ class Tout_Buttons_Field_Select extends Tout_Buttons_Field {
 	public function __construct( $context, $attributes, $properties, $options ) {
 
 		$this->set_context( $context );
+		$this->set_settings( $attributes, $properties );
 
 		$this->set_default_attributes();
 		$this->set_default_select_attributes();

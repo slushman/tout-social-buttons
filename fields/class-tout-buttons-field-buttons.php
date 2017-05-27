@@ -33,11 +33,11 @@ class Tout_Buttons_Field_Buttons extends Tout_Buttons_Field {
 	 */
 	public function __construct( $context, $attributes, $properties ) {
 
-		$this->set_settings();
 		//$this->set_buttons();
 		$this->set_shared();
 
 		$this->set_context( $context );
+		$this->set_settings( $attributes, $properties );
 
 		$this->set_default_attributes();
 		$this->set_value( $attributes );
@@ -75,15 +75,6 @@ class Tout_Buttons_Field_Buttons extends Tout_Buttons_Field {
 		$this->buttons = $this->shared->get_button_array();
 
 	} // set_buttons()
-
-	/**
-	 * Sets the class variable $settings.
-	 */
-	protected function set_settings() {
-
-		$this->settings = get_option( TOUT_BUTTONS_SETTINGS );
-
-	} // set_settings()
 
 	/**
 	 * Sets the $shared class variable with a new instance of the Tout_Buttons_Buttons class.

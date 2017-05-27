@@ -24,6 +24,6 @@ foreach ( $this->attributes as $key => $value ) :
 
 endforeach;
 
-    checked( 1, $this->attributes['value'], true );
+    checked( 1, $this->settings[$this->attributes['id']], true );
 
 ?>/>
