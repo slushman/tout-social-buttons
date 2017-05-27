@@ -91,6 +91,7 @@ class Tout_Buttons_Public {
 		if ( is_front_page() ) { return $content; }
 		if ( in_array( 'get_the_excerpt', (array) $wp_current_filter ) ) { return $content; }
 		if ( ! is_main_query() ) { return $content; }
+		if ( 0 === $this->settings['auto-post'] ) { return $content; }
 
 		return $content . $this->display_buttons();
 
@@ -241,7 +242,7 @@ class Tout_Buttons_Public {
 	} // set_shared()
 
 	/**
-	 * 
+	 *
 	 *
 	 * @param 		array 		$atts 		The shortcode attributes.
 	 * @return 		mixed 					The shortcode output.
