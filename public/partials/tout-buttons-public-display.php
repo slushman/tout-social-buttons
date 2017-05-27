@@ -28,7 +28,15 @@
 			$class 	= $this->get_button_class( $lower );
 			$url 	= $this->get_url( $lower );
 
-			?><a class="<?php echo esc_attr( $class ); ?>" href="<?php echo esc_url( $url ); ?>" rel="nofollow">
+			?><a class="<?php echo esc_attr( $class ); ?>" href="<?php echo esc_url( $url ); ?>" rel="nofollow"<?php
+
+					if ( 'new' === $this->settings['button-behavior'] ) {
+
+						echo ' target="_blank"';
+
+					}
+
+				?>>
 				<span class="screen-reader-text"><?php
 
 					echo $this->shared->get_screen_reader_text( $button );

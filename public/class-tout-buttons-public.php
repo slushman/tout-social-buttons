@@ -241,6 +241,7 @@ class Tout_Buttons_Public {
 	} // set_shared()
 
 	/**
+	 * 
 	 *
 	 * @param 		array 		$atts 		The shortcode attributes.
 	 * @return 		mixed 					The shortcode output.
