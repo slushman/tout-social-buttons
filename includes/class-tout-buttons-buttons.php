@@ -69,7 +69,7 @@ class Tout_Buttons_Buttons {
 
 		if ( empty( $lower ) ) { return; }
 
-		if ( 'icon' === $this->options['button-type'] ) {
+		if ( 'icon' === $this->settings['button-type'] ) {
 
 			return $this->get_svg( $lower );
 
