@@ -127,7 +127,7 @@ class Tout_Buttons {
 		/**
 		 * The class responsible for defining shared code for both public and admin.
 		 */
-		require_once( plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-tout-buttons-buttons.php' );
+		require_once( plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-tout-buttons-display.php' );
 
 		/**
 		 * The class responsible for defining a form field.

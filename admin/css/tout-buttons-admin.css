@@ -2,3 +2,31 @@
  * All of the CSS for your admin-specific functionality should be
  * included in this file.
  */
+
+.tout-btn-wrap {
+	position: relative;
+}
+
+.tout-btn-handle,
+.tout-btn-icon {
+	bottom 		: 0;
+	height		: 30px !important;
+	left 		: 0;
+	position	: absolute;
+	right 		: 0;
+	top 		: 0;
+	width		: 30px !important;
+}
+
+.tout-btn-handle {
+	opacity: 0;
+	z-index: 1;
+}
+
+.tout-btn-icon {
+	fill: gray;
+}
+
+.tout-btn-handle:checked ~ .tout-btn-icon {
+	fill: black;
+}

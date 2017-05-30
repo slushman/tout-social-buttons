@@ -41,11 +41,11 @@ class Tout_Buttons_Public {
 	private $settings;
 
 	/**
-	 * Tout_Buttons_Buttons object.
+	 * Tout_Buttons_Display object.
 	 *
 	 * @since 		1.0.0
 	 * @access 		protected
-	 * @var 		Tout_Buttons_Buttons 		$shared 		Tout_Buttons_Buttons object.
+	 * @var 		Tout_Buttons_Display 		$shared 		Tout_Buttons_Display object.
 	 */
 	private $shared;
 
@@ -231,13 +231,13 @@ class Tout_Buttons_Public {
 	} // set_settings()
 
 	/**
-	 * Sets the class variable $shared with an instance of the Tout_Buttons_Buttons class.
+	 * Sets the class variable $shared with an instance of the Tout_Buttons_Display class.
 	 *
 	 * @since 		1.0.0
 	 */
 	protected function set_shared() {
 
-		$this->shared = new Tout_Buttons_Buttons();
+		$this->shared = new Tout_Buttons_Display();
 
 	} // set_shared()
 

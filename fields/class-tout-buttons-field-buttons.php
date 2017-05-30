@@ -14,9 +14,9 @@ class Tout_Buttons_Field_Buttons extends Tout_Buttons_Field {
 	var $buttons = array();
 
 	/**
-	 * Instance of the Tout_Buttons_Buttons class.
+	 * Instance of the Tout_Buttons_Display class.
 	 *
-	 * @var 	Tout_Buttons_Buttons
+	 * @var 	Tout_Buttons_Display
 	 */
 	var $shared = '';
 
@@ -77,13 +77,13 @@ class Tout_Buttons_Field_Buttons extends Tout_Buttons_Field {
 	} // set_buttons()
 
 	/**
-	 * Sets the $shared class variable with a new instance of the Tout_Buttons_Buttons class.
+	 * Sets the $shared class variable with a new instance of the Tout_Buttons_Display class.
 	 *
 	 * @since 		1.0.0
 	 */
 	protected function set_shared() {
 
-		$this->shared = new Tout_Buttons_Buttons();
+		$this->shared = new Tout_Buttons_Display();
 
 	} // set_shared()
 
