@@ -105,7 +105,11 @@ class Tout_Buttons_Admin {
 	 */
 	public function enqueue_scripts( $hook_suffix ) {
 
-		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/tout-buttons-admin.js', array( 'jquery' ), $this->version, false );
+		$screen = get_current_screen();
+
+		if ( $screen->id != $hook_suffix ) { return; }
+
+		wp_enqueue_script( $this->plugin_name . '-admin', plugin_dir_url( __FILE__ ) . 'js/tout-buttons-admin.min.js', array( 'jquery', 'jquery-ui-core', 'jquery-ui-sortable' ), $this->version, true );
 
 	} // enqueue_scripts()
 
@@ -117,7 +121,7 @@ class Tout_Buttons_Admin {
 	 */
 	public function field_buttons( $args ) {
 
-		new Tout_Buttons_Field_Buttons( 'settings', $args['attributes'], $args['properties'], $args['options'] );
+		new Tout_Buttons_Field_Buttons( 'settings', $args['attributes'], $args['properties'] );
 
 	} // field_buttons()
 
@@ -129,7 +133,7 @@ class Tout_Buttons_Admin {
 	 */
 	public function field_checkbox( $args ) {
 
-		new Tout_Buttons_Field_Checkbox( 'settings', $args['attributes'], $args['properties'], $args['options'] );
+		new Tout_Buttons_Field_Checkbox( 'settings', $args['attributes'], $args['properties'] );
 
 	} // field_checkbox()
 
@@ -184,17 +188,15 @@ class Tout_Buttons_Admin {
 
 		$settings = array();
 
-		$settings[] = array( 'account-delicious', 'text', '' );
 		$settings[] = array( 'account-tumblr', 'text', '' );
 		$settings[] = array( 'account-twitter', 'text', '' );
 		$settings[] = array( 'auto-post', 'checkbox', 1 );
 		$settings[] = array( 'button-behavior', 'select', '' );
-		$settings[] = array( 'button-order', 'hidden', 'Baidu,Buffer,Delicious,Digg,Douban,Email,Evernote,Facebook,Google,Linkedin,Pinterest,QZone,Reddit,Renren,Stumbleupon,tumblr,Twitter,VK,Weibo,Xing' );
+		$settings[] = array( 'button-order', 'hidden', 'baidu,buffer,digg,douban,email,evernote,facebook,google,linkedin,pinterest,qzone,reddit,renren,stumbleupon,tumblr,twitter,vk,weibo,xing' );
 		$settings[] = array( 'button-type', 'select', 'icon' );
 
 		$settings[] = array( 'button-baidu', 'checkbox', 0 );
 		$settings[] = array( 'button-buffer', 'checkbox', 0 );
-		$settings[] = array( 'button-delicious', 'checkbox', 0 );
 		$settings[] = array( 'button-digg', 'checkbox', 0 );
 		$settings[] = array( 'button-douban', 'checkbox', 0 );
 		$settings[] = array( 'button-email', 'checkbox', 0 );
@@ -207,6 +209,7 @@ class Tout_Buttons_Admin {
 		$settings[] = array( 'button-reddit', 'checkbox', 0 );
 		$settings[] = array( 'button-renren', 'checkbox', 0 );
 		$settings[] = array( 'button-stumbleupon', 'checkbox', 0 );
+		$settings[] = array( 'button-tumblr', 'checkbox', 0 );
 		$settings[] = array( 'button-twitter', 'checkbox', 0 );
 		$settings[] = array( 'button-vk', 'checkbox', 0 );
 		$settings[] = array( 'button-weibo', 'checkbox', 0 );
@@ -230,6 +233,30 @@ class Tout_Buttons_Admin {
 		return $links;
 
 	} // link_settings()
+
+	/**
+	 * Sends localization strings to scripts.
+	 *
+	 * @since 		1.0.0
+	 * @param 		string 		$hook_suffix 		The current admin page.
+	 */
+	public function localize_scripts( $hook_suffix ) {
+
+		$screen = get_current_screen();
+
+		if ( $screen->id != $hook_suffix ) { return; }
+
+		wp_localize_script(
+			$this->plugin_name . '-admin',
+			'Tout_Buttons_Ajax',
+			array(
+				'error_message'		=> esc_html__( 'There was a problem saving the button order.', 'tout-buttons' ),
+				'success_message'	=> esc_html__( 'Button order saved.', 'tout-buttons' ),
+				'tbboNonce' 		=> wp_create_nonce( 'tout-buttons-ajax-nonce' )
+			)
+		);
+
+	} // localize_scripts()
 
 	/**
 	 * Includes the options page partial file.
@@ -261,7 +288,7 @@ class Tout_Buttons_Admin {
 					'id' 		=> 'buttons'
 				),
 				'properties' 	=> array(
-					'description' 	=> __( 'Click a button to activate or decactivate it. Drag them into the order you prefer.', 'tout-buttons' )
+					'description' 	=> __( 'Click a button to activate or deactivate it. Drag them into the order you prefer.', 'tout-buttons' )
 				)
 			)
 		);
@@ -278,22 +305,6 @@ class Tout_Buttons_Admin {
 				),
 				'properties' 	=> array(
 					'description' 	=> __( 'Enter your Twitter username.', 'tout-buttons' )
-				)
-			)
-		);
-
-		add_settings_field(
-			'account-delicious',
-			esc_html__( 'Delicious Account', 'tout-buttons' ),
-			array( $this, 'field_text' ),
-			TOUT_BUTTONS_SLUG,
-			TOUT_BUTTONS_SLUG . '-accounts',
-			array(
-				'attributes' 	=> array(
-					'id' 		=> 'account-delicious'
-				),
-				'properties' 	=> array(
-					'description' 	=> __( 'Enter your Delicious username.', 'tout-buttons' )
 				)
 			)
 		);
@@ -476,12 +487,6 @@ class Tout_Buttons_Admin {
 
 			$sanitizer 			= new Tout_Buttons_Sanitize();
 			$valid[$setting[0]] = $sanitizer->clean( $input[$setting[0]], $setting[1] );
-
-			// if ( 'auto-post' === $setting[0] ) {
-			//
-			// 	wp_die( print_r( $input ) );
-			//
-			// }
 
 			if ( $valid[$setting[0]] != $input[$setting[0]] && 'checkbox' !== $setting[1] ) {
 

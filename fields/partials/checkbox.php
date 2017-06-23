@@ -4,7 +4,8 @@
 * The HTML for a checkbox field.
 */
 
-?><input <?php
+?><input type="hidden" value="0" name="<?php echo esc_attr( $this->attributes['name'] ); ?>" />
+<input <?php
 
 foreach ( $this->attributes as $key => $value ) :
 

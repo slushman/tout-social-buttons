@@ -159,6 +159,11 @@ class Tout_Buttons {
 		 */
 		require_once( plugin_dir_path( dirname( __FILE__ ) ) . 'fields/class-tout-buttons-field-text.php' );
 
+		/**
+		 * The class responsible for defining all actions for saving the button order via AJAX.
+		 */
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-tout-buttons-admin-ajax-save-buttons.php';
+
 		$this->loader = new Tout_Buttons_Loader();
 
 	} // load_dependencies()
@@ -193,6 +198,7 @@ class Tout_Buttons {
 
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
+		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'localize_scripts' );
 		$this->loader->add_action( 'admin_init', 			$plugin_admin, 'register_settings' );
 		$this->loader->add_action( 'admin_init', 			$plugin_admin, 'register_fields' );
 		$this->loader->add_action( 'admin_init', 			$plugin_admin, 'register_sections' );
@@ -200,6 +206,21 @@ class Tout_Buttons {
 		$this->loader->add_action( 'plugin_action_links_' . TOUT_BUTTONS_FILE, $plugin_admin, 'link_settings' );
 
 	} // define_admin_hooks()
+
+	/**
+	 * Register all of the hooks related to the AJAX processes for saving the
+	 * button order.
+	 *
+	 * @since 		1.0.0
+	 * @access 		private
+	 */
+	private function define_ajax_hooks() {
+
+		$plugin_ajax = new Tout_Buttons_AJAX_Save_Buttons( $this->get_plugin_name(), $this->get_version() );
+
+		$this->loader->add_action( 'wp_ajax_save_button_order', $plugin_ajax, 'save_button_order' );
+
+	} // define_ajax_hooks()
 
 	/**
 	 * Register all of the hooks related to the public-facing functionality

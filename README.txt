@@ -1,7 +1,7 @@
 === Tout Buttons ===
 Contributors: slushman
 Donate link: https://www.slushman.com
-Tags: social, sharing
+Tags: social, sharing, Baidu, Buffer, Digg, Douban, email, Evernote, Facebook, Google, Google Plus, Google+, Linkedin, Pinterest, QZone, Reddit, Renren, Stumbleupon, tumblr, Twitter, VK, Weibo, Xing
 Requires at least: 3.0.1
 Tested up to: 4.7.4
 Stable tag: 1.0.0

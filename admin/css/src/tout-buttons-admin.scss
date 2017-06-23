@@ -1,0 +1,53 @@
+/**
+ * All of the SASS for your admin-specific functionality should be
+ * included in this file.
+ */
+
+.tout-buttons {
+	display		: flex;
+	flex-wrap	: wrap;
+}
+
+.tout-btn {
+	position: relative;
+}
+
+.tout-btn-wrap {
+	height			: 40px;
+	margin-left		: 0.5em;
+	margin-right	: 0.5em;
+
+	&.icon {
+		width: 30px;
+	}
+
+	&.text {
+		width: auto;
+	}
+}
+
+.tout-btn-icon {
+	bottom 		: 0;
+	fill 		: gray;
+	height		: 30px !important;
+	left 		: 0;
+	position	: absolute;
+	right 		: 0;
+	top 		: 0;
+	width		: 30px !important;
+
+	.checked & {
+		fill: black;
+	}
+}
+
+.tout-btn-checkbox {
+	opacity: 0;
+	z-index: -1;
+}
+
+.btn-placeholder {
+	background-color: #444;
+	height			: 40px;
+	width			: 40px;
+}

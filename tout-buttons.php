@@ -24,25 +24,34 @@
  * Text Domain:       tout-buttons
  * Domain Path:       /languages
  *
- * @todo 		Admin Option: sortable buttons
- * @todo 		Admin Option: turn off any button
- * @todo 		Admin Option: Selector for whether to use a modal or pop-up.
- * @todo 		Admin Option: button style selector
- * @todo 		Admin Option: tab of post types (public only) where the share buttons should appear.
- * @todo 		Public: show the buttons, in the correct order, on the post types selected.
+ * @todo 		Admin: Save button order changes via AJAX.
+ * @todo 		Admin: Save button order changes via REST API.
+ * @todo 		Admin: use REST API is available, otherwise use AJAX to save button order.
  * @todo 		Public: Add modal for sharing.
  * @todo 		Public: Add pop-up window for sharing.
- * @todo 		Public: add shortcode and add_action for templates.
  *
  * PRO Version
- * @todo 		Analytics: separate tab. Show each link and its share count.
- *         			Should the plugin then have its own admin entry? So analytics could be its own page?
- * @todo 		Post Analytics: show that post's sharing info, with times & dates.
- * @todo 		Blockquote Sharing: show the tout buttons at the bottom of blockquotes
- *         			and the shared content is the quote.
- * @todo 		Design: more options for the button designs?
+ * @todo 		Shortcode: add options for sharing specific content within the shortcode.
+ *         			blockquotes
+ * @todo 		Design: more options for the button designs - square, circle, etc
  * @todo 		Public: Side pop-out menu sharing window option - like time.com
+ * @todo 		Admin Option: tab of post types (public only) where the share buttons should appear.
+ * @todo 		Public: show the buttons, in the correct order, on selected  post types
  *
+ * Analytics Add-on
+ * @todo 		Analytics: separate tab. Show each link and its share count.
+ * @todo 		Analytics: each post has a metabox showing each share: time, date, and where.
+ *
+ * Schedule Add-on:
+ * Adds the ability to schedule social media posts. You can schedule social media posts when writing posts
+ * 	and have them auto-publish those posts, so your content marketing efforts are on-going.
+ * Posts can be re-published on your social feeds at a custom or pre-chosen schedule based on best practices.
+ *
+ * @todo 		Admin: add options for sharing particular content on your social networks
+ *         				on a schedule. Uses WP-Cron to schedule the social post.
+ * @todo 		Admin: add the ability to schedule social media posts on a chosen schedule.
+ * @todo 		Admin: add the ability to schedule social media posts on a custom schedule.
+ * @todo 		Admin: add login and API bridges for each social network.
  */
 
 // If this file is called directly, abort.

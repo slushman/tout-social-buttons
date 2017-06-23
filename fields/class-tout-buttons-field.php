@@ -315,6 +315,7 @@ class Tout_Buttons_Field {
 		$this->default_properties['description'] 		= '';
 		$this->default_properties['error'] 				= '';
 		$this->default_properties['label'] 				= '';
+		$this->default_properties['role-fieldset'] 		= 'group';
 
 	} // get_default_properties()
 
@@ -398,7 +399,7 @@ class Tout_Buttons_Field {
 	 */
 	protected function set_value( $attributes ) {
 
-		if ( 'checkbox' === $attributes['type'] ) {
+		if ( isset( $this->attributes['type'] ) && 'checkbox' === $this->attributes['type'] ) {
 
 			$this->attributes['value'] = 1;
 

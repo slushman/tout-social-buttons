@@ -29,6 +29,7 @@ class Tout_Buttons_Field_Checkbox extends Tout_Buttons_Field {
 		$this->set_name_attribute();
 
 		$this->set_default_properties();
+		$this->set_default_checkbox_properties();
 		$this->set_properties( $properties );
 
 		$this->output_label_begin();
@@ -60,5 +61,17 @@ class Tout_Buttons_Field_Checkbox extends Tout_Buttons_Field {
 		$this->default_attributes['value'] 	= 1;
 
 	} // set_default_checkbox_attributes()
+
+	/**
+	 * Sets default properties specifically for checkbox fields.
+	 *
+	 * @since 		1.0.0
+	 */
+	protected function set_default_checkbox_properties() {
+
+		$this->default_attributes['class-label'] 		= 'checkbox-label';
+		$this->default_attributes['class-label-span'] 	= 'checkbox-label-text';
+
+	} // set_default_checkbox_properties()
 
 } // class

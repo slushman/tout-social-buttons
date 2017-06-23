@@ -66,7 +66,7 @@ class Tout_Buttons_Sanitize {
 			case 'image' 			:
 			case 'text'				: $sanitized = sanitize_text_field( $data ); break;
 
-			case 'checkbox'			: $sanitized = ( isset( $data ) ? 1 : 0 ); break;
+			case 'checkbox'			: $sanitized = $data ? 1 : 0; break;
 			case 'color' 			: $sanitized = $this->sanitize_color( $data ); break;
 			case 'editor' 			: $sanitized = wp_kses_post( $data ); break;
 			case 'email'			: $sanitized = sanitize_email( $data ); break;
