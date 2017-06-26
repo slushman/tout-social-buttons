@@ -24,9 +24,6 @@
  * Text Domain:       tout-buttons
  * Domain Path:       /languages
  *
- * @todo 		Admin: Save button order changes via AJAX.
- * @todo 		Admin: Save button order changes via REST API.
- * @todo 		Admin: use REST API is available, otherwise use AJAX to save button order.
  * @todo 		Public: Add modal for sharing.
  * @todo 		Public: Add pop-up window for sharing.
  *

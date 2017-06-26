@@ -250,9 +250,9 @@ class Tout_Buttons_Admin {
 			$this->plugin_name . '-admin',
 			'Tout_Buttons_Ajax',
 			array(
-				'error_message'		=> esc_html__( 'There was a problem saving the button order.', 'tout-buttons' ),
-				'success_message'	=> esc_html__( 'Button order saved.', 'tout-buttons' ),
-				'tbboNonce' 		=> wp_create_nonce( 'tout-buttons-ajax-nonce' )
+				'tbOrderNonce' 			=> wp_create_nonce( 'tout-buttons-order-ajax-nonce' ),
+				'tbSelectionNonce' 		=> wp_create_nonce( 'tout-buttons-selection-ajax-nonce' ),
+
 			)
 		);
 

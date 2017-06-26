@@ -75,6 +75,7 @@ class Tout_Buttons {
 		$this->set_locale();
 		$this->define_admin_hooks();
 		$this->define_public_hooks();
+		$this->define_ajax_hooks();
 
 	} // __construct()
 
@@ -219,6 +220,7 @@ class Tout_Buttons {
 		$plugin_ajax = new Tout_Buttons_AJAX_Save_Buttons( $this->get_plugin_name(), $this->get_version() );
 
 		$this->loader->add_action( 'wp_ajax_save_button_order', $plugin_ajax, 'save_button_order' );
+		$this->loader->add_action( 'wp_ajax_save_button_selection', $plugin_ajax, 'save_button_selection' );
 
 	} // define_ajax_hooks()
 

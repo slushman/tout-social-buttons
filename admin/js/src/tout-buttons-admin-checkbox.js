@@ -1,4 +1,4 @@
-(function() {
+(function( $ ) {
 
 	'use strict';
 
@@ -33,10 +33,43 @@
 
 		parent.classList.toggle( 'checked' );
 
+		var wrap = tout.getParent( target, 'tout-btn-wrap' );
+		var selection = wrap.getAttribute( 'data-id' );
+
+		var opts = {
+			url: ajaxurl,
+			type: 'POST',
+			async: true,
+			cache: false,
+			data: {
+				action: 'save_button_selection',
+				tbSelectionNonce: Tout_Buttons_Ajax.tbSelectionNonce,
+				selection: selection
+			},
+			success: function ( response ) {
+				$( '.button-status' ).html( '<span class="status">' + response  + '</span>' );
+				$( '.button-status' ).addClass( 'updated' );
+				$( '.button-status' ).fadeIn( 'fast' );
+				$( '.button-status' ).fadeOut( 2000 );
+
+				return;
+			},
+			error: function (xhr, testStatus, error ) {
+				$( '.button-status' ).html( '<span class="status">' + error + '</span>' );
+				$( '.button-status' ).addClass( 'error' );
+				$( '.button-status' ).fadeIn( 'fast' );
+				$( '.button-status' ).fadeOut( 2000 );
+
+				return;
+			}
+		}
+
+		$.ajax( opts );
+
 	} // processEvent()
 
 	var buttons = document.querySelector( '.tout-buttons' );
 
 	buttons.addEventListener( 'click', processEvent );
 
-})();
+})( jQuery );

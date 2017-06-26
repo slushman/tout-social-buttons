@@ -17,64 +17,41 @@
 		placeholder: 'btn-placeholder',
 		update: function( event, ui ) {
 
-			var btnOrder = $('#tout-button-order');
-			var order = sorter.sortable('toArray', {attribute:'data-id'}).toString();
+			var btnOrderField = $('#tout-button-order');
+			var newOrder = sorter.sortable('toArray', {attribute:'data-id'}).toString();
 
-			btnOrder.val( order );
+			btnOrderField.val( newOrder );
 
-			// console.log( order );
-			//
-			// $.ajax({
-			// 	url: ajaxurl,
-			// 	type: 'POST',
-			// 	data: {
-			// 		action: 'save_button_order',
-			// 		tbboNonce: Tout_Buttons_Ajax.tbboNonce,
-			// 		order: sorter.sortable('serialize')
-			// 	},
-			// 	success: function( response ) {
-			// 		$( '.button-status' ).html( '<span class="status">' + response + '</span>' );
-			// 		$( '.button-status' ).addClass( 'updated' );
-			// 		$( '.button-status' ).fadeIn( 'fast' );
-			// 		$( '.button-status' ).fadeOut( 2000 );
-			// 	},
-			// 	error: function( error ) {
-			// 		alert( error );
-			// 	}
-			// });
+			var opts = {
+				url: ajaxurl,
+				type: 'POST',
+				async: true,
+				cache: false,
+				//dataType: 'json',
+				data: {
+					action: 'save_button_order',
+					tbOrderNonce: Tout_Buttons_Ajax.tbOrderNonce,
+					order: newOrder
+				},
+				success: function ( response ) {
+					$( '.button-status' ).html( '<span class="status">' + response  + '</span>' );
+					$( '.button-status' ).addClass( 'updated' );
+					$( '.button-status' ).fadeIn( 'fast' );
+					$( '.button-status' ).fadeOut( 2000 );
 
-			//return false;
+					return;
+				},
+				error: function (xhr, testStatus, error ) {
+					$( '.button-status' ).html( '<span class="status">' + response + '</span>' );
+					$( '.button-status' ).addClass( 'error' );
+					$( '.button-status' ).fadeIn( 'fast' );
+					$( '.button-status' ).fadeOut( 2000 );
 
-			// var opts = {
-			// 	url: ajaxurl,
-			// 	type: 'POST',
-			// 	async: true,
-			// 	cache: false,
-			// 	dataType: 'json',
-			// 	data: {
-			// 		'action': 'save_button_order',
-			// 		'tbboNonce': Tout_Buttons_Ajax.tbboNonce,
-			// 		'order': sorter.sortable('serialize')
-			// 	},
-			// 	success: function ( response ) {
-			// 		$( '.button-status' ).html( '<span class="status">' + response  + '</span>' );
-			// 		$( '.button-status' ).addClass( 'updated' );
-			// 		$( '.button-status' ).fadeIn( 'fast' );
-			// 		$( '.button-status' ).fadeOut( 2000 );
-			//
-			// 		return;
-			// 	},
-			// 	error: function (xhr, testStatus, error ) {
-			// 		$( '.button-status' ).html( '<span class="status">' + Tout_Buttons_Ajax.error_message + '</span>' );
-			// 		$( '.button-status' ).addClass( 'error' );
-			// 		$( '.button-status' ).fadeIn( 'fast' );
-			// 		$( '.button-status' ).fadeOut( 2000 );
-			//
-			// 		return;
-			// 	}
-			// }
-			//
-			// $.ajax( opts );
+					return;
+				}
+			}
+
+			$.ajax( opts );
 
 		}
 

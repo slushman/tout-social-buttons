@@ -60,7 +60,7 @@ class Tout_Buttons_AJAX_Save_Buttons {
 		$this->plugin_name = $plugin_name;
 		$this->version = $version;
 
-		//$this->set_settings();
+		$this->set_settings();
 
 	} // __construct()
 
@@ -72,32 +72,53 @@ class Tout_Buttons_AJAX_Save_Buttons {
 	 */
 	public function save_button_order() {
 
-		echo 'yep';
+		check_ajax_referer( 'tout-buttons-order-ajax-nonce', 'tbOrderNonce' );
 
-		wp_die();
-
-		//check_ajax_referer( 'tout-buttons-ajax-nonce', 'tbboNonce' );
-
-		//$order 							= $this->settings['button-order'];
-		$new_order 					= $_POST['order'];
-		$new_order_string 			= implode( ',', $new_order );
-		$settings 					= get_option( 'tout-buttons-settings' );
-		$settings['button-order'] 	= $new_order_string;
-		$update 					= update_option( 'tout-buttons-settings', $settings );
+		$new_order 						= $_POST['order'];
+		$this->settings['button-order']	= $new_order;
+		$update 						= update_option( TOUT_BUTTONS_SETTINGS, $this->settings );
 
 		if ( ! $update ) {
 
-			esc_html_e( 'There was a problem saving the button order.', 'tout-buttons' );
+			echo esc_html__( 'There was a problem saving the button order.', 'tout-buttons' );
 
 		} else {
 
-			esc_html_e( 'Button order saved.', 'tout-buttons' );
+			echo esc_html__( 'Button order saved.', 'tout-buttons' );
 
 		}
 
 		wp_die();
 
 	} // save_button_order()
+
+	/**
+	 * Saves button selection.
+	 * Request comes through AJAX.
+	 *
+	 * @since 		1.0.0
+	 */
+	public function save_button_selection() {
+
+		check_ajax_referer( 'tout-buttons-selection-ajax-nonce', 'tbSelectionNonce' );
+
+		$selection 								= $_POST['selection'];
+		$this->settings['button-' . $selection]	= $selection;
+		$update 								= update_option( TOUT_BUTTONS_SETTINGS, $this->settings );
+
+		if ( ! $update ) {
+
+			echo esc_html__( 'Could not save the selected button.', 'tout-buttons' );
+
+		} else {
+
+			echo esc_html__( 'Button selection saved.', 'tout-buttons' );
+
+		}
+
+		wp_die();
+
+	} // save_button_status()
 
 	/**
 	 * Sets the class variable $settings.
