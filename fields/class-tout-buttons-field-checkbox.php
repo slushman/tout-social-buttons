@@ -35,6 +35,7 @@ class Tout_Buttons_Field_Checkbox extends Tout_Buttons_Field {
 		$this->output_label_begin();
 		$this->output_field();
 		$this->output_description_span();
+		$this->output_alert();
 		$this->output_label_end();
 
 	} // __construct()

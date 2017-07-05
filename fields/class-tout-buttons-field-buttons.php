@@ -50,9 +50,38 @@ class Tout_Buttons_Field_Buttons extends Tout_Buttons_Field {
 		$this->output_fieldset_begin();
 		$this->output_description_legend();
 		$this->output_field();
+		$this->output_alert();
 		$this->output_fieldset_end();
 
 	} // __construct()
+
+	/**
+	 * Returns the screen reader text based on the plugin setting.
+	 *
+	 * @exits 		If the $button parameter is empty.
+	 * @since 		1.0.0
+	 * @param 		string 		$button 		The name of the button.
+	 * @return 		string 						The screen text.
+	 */
+	protected function get_screen_reader_text( $button ) {
+
+		if ( empty( $button ) ) { return; }
+
+		$return 		= '';
+
+		if ( 'Email' === $button ) {
+
+			$return	= sprintf( esc_html__( 'Share content by %s', 'tout-buttons' ), $button );
+
+		} else {
+
+			$return = sprintf( esc_html__( 'Share content on %s', 'tout-buttons' ), $button );
+
+		}
+
+		return $return;
+
+	} // get_screen_reader_text()
 
 	/**
 	 * Includes the button field HTML file.

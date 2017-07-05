@@ -10,7 +10,7 @@
  * tout.getEventTarget( eventName )
  * tout.getParent( element, className )
  */
-(function( exports ) {
+(function( exports, $ ) {
 
 	'use strict';
 
@@ -52,4 +52,44 @@
 
 	} // getParent()
 
-})( this.tout = {} );
+	/**
+	 * Sends data to a PHP handler for saving via AJAX.
+	 *
+	 * @since 		1.0.0
+	 * @param 		array 		paramData 		The data to send to the PHP handler.
+	 */
+	exports.saveAjax = function saveAjax( paramData ) {
+
+		//console.log( paramData );
+
+		var opts = {
+			url: ajaxurl,
+			type: 'POST',
+			async: true,
+			cache: false,
+			data: paramData,
+			success: function ( response ) {
+				$( '.button-status' ).html( '<span class="status">' + response  + '</span>' );
+				$( '.button-status' ).addClass( 'updated' );
+				$( '.button-status' ).fadeIn( 'fast' );
+				$( '.button-status' ).fadeOut( 2000 );
+
+				return;
+			},
+			error: function (xhr, testStatus, error ) {
+				$( '.button-status' ).html( '<span class="status">' + error + '</span>' );
+				$( '.button-status' ).addClass( 'error' );
+				$( '.button-status' ).fadeIn( 'fast' );
+				$( '.button-status' ).fadeOut( 2000 );
+
+				return;
+			}
+		}
+
+		//console.log( opts );
+
+		$.ajax( opts );
+
+	} // saveAjax()
+
+})( this.tout = {}, jQuery );

@@ -103,12 +103,16 @@ class Tout_Buttons_AJAX_Save_Buttons {
 		check_ajax_referer( 'tout-buttons-selection-ajax-nonce', 'tbSelectionNonce' );
 
 		$selection 								= $_POST['selection'];
-		$this->settings['button-' . $selection]	= $selection;
+		$this->settings['button-' . $selection]	= $_POST['checked'];
 		$update 								= update_option( TOUT_BUTTONS_SETTINGS, $this->settings );
 
 		if ( ! $update ) {
 
 			echo esc_html__( 'Could not save the selected button.', 'tout-buttons' );
+
+		} elseif ( ! $_POST['checked'] ) {
+
+			echo esc_html__( 'Button deselected.', 'tout-buttons' );
 
 		} else {
 
@@ -118,7 +122,35 @@ class Tout_Buttons_AJAX_Save_Buttons {
 
 		wp_die();
 
-	} // save_button_status()
+	} // save_button_selection()
+
+	/**
+	 * Saves button type.
+	 * Request comes through AJAX.
+	 *
+	 * @since 		1.0.0
+	 */
+	public function save_button_type() {
+
+		check_ajax_referer( 'tout-buttons-type-ajax-nonce', 'tbTypeNonce' );
+
+		$type 							= $_POST['type'];
+		$this->settings['button-type']	= $type;
+		$update 						= update_option( TOUT_BUTTONS_SETTINGS, $this->settings );
+
+		if ( ! $update ) {
+
+			echo esc_html__( 'Could not save the button type.', 'tout-buttons' );
+
+		} else {
+
+			echo esc_html__( 'Button type saved.', 'tout-buttons' );
+
+		}
+
+		wp_die();
+
+	} // save_butttype()
 
 	/**
 	 * Sets the class variable $settings.

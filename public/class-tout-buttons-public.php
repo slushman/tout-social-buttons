@@ -196,6 +196,35 @@ class Tout_Buttons_Public {
 	} // get_button_class()
 
 	/**
+	 * Returns the button label based on the plugin setting.
+	 *
+	 * @exits 		If $lower parameter is empty.
+	 * @since 		1.0.0
+	 * @param 		string 				$lower 			The lowercase name of the button.
+	 * @return 		string|mixed						The label text or SVG icon.
+	 */
+	public function get_label( $lower ) {
+
+		if ( empty( $lower ) ) { return; }
+
+		$return = '';
+		$name 	= $this->get_name( $lower );
+		$return .= $this->get_svg( $lower );
+		$return .= '<span class="tout-btn-text';
+
+		if ( 'icon' === $this->settings['button-type'] ) {
+
+			$return .= esc_attr( ' screen-reader-text' );
+
+		}
+
+		$return .= '">' . $name . '</span>';
+
+		return $return;
+
+	} // get_label()
+
+	/**
 	 * Returns the URL for the selected button.
 	 *
 	 * @exits 		If $lower is empty or not a string.

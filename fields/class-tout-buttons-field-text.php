@@ -33,6 +33,7 @@ class Tout_Buttons_Field_Text extends Tout_Buttons_Field {
 		$this->output_label();
 		$this->output_field();
 		$this->output_description();
+		$this->output_alert();
 
 	} // __construct()
 

@@ -45,6 +45,7 @@ class Tout_Buttons_Field_Select extends Tout_Buttons_Field {
 		$this->output_label();
 		$this->output_field();
 		$this->output_description();
+		$this->output_alert();
 
 	} // __construct()
 

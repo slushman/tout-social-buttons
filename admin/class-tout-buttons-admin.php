@@ -109,7 +109,8 @@ class Tout_Buttons_Admin {
 
 		if ( $screen->id != $hook_suffix ) { return; }
 
-		wp_enqueue_script( $this->plugin_name . '-admin', plugin_dir_url( __FILE__ ) . 'js/tout-buttons-admin.min.js', array( 'jquery', 'jquery-ui-core', 'jquery-ui-sortable' ), $this->version, true );
+		wp_enqueue_script( 'johnny-sortable', '//johnny.github.io/jquery-sortable/js/jquery-sortable-min.js', array( 'jquery' ), $this->version, true );
+		wp_enqueue_script( $this->plugin_name . '-admin', plugin_dir_url( __FILE__ ) . 'js/tout-buttons-admin.min.js', array( 'jquery', 'johnny-sortable' ), $this->version, true );
 
 	} // enqueue_scripts()
 
@@ -250,9 +251,9 @@ class Tout_Buttons_Admin {
 			$this->plugin_name . '-admin',
 			'Tout_Buttons_Ajax',
 			array(
-				'tbOrderNonce' 			=> wp_create_nonce( 'tout-buttons-order-ajax-nonce' ),
-				'tbSelectionNonce' 		=> wp_create_nonce( 'tout-buttons-selection-ajax-nonce' ),
-
+				'tbOrderNonce' 		=> wp_create_nonce( 'tout-buttons-order-ajax-nonce' ),
+				'tbSelectionNonce' 	=> wp_create_nonce( 'tout-buttons-selection-ajax-nonce' ),
+				'tbTypeNonce' 		=> wp_create_nonce( 'tout-buttons-type-ajax-nonce' ),
 			)
 		);
 
@@ -357,7 +358,8 @@ class Tout_Buttons_Admin {
 					'id' 		=> 'button-behavior'
 				),
 				'properties' 	=> array(
-					'description' 	=> __( 'Should the share buttons open a modal, pop-up window, or something else?', 'tout-buttons' )
+					//'alert' 		=> __( 'WARNING: Forcing links to open in modals, pop-ups, or new tabs/windows creates an accessibility problem.', 'tout-buttons' ),
+					'description' 	=> __( 'Should the share buttons be simple links (default), open a modal, pop-up window, or open in a new tab or window?', 'tout-buttons' )
 				),
 				'options' 		=> array(
 					array( 'label' => __( 'Pop-up', 'tout-buttons' ), 'value' => 'popup' ),

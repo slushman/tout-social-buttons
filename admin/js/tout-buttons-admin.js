@@ -10,7 +10,7 @@
  * tout.getEventTarget( eventName )
  * tout.getParent( element, className )
  */
-(function( exports ) {
+(function( exports, $ ) {
 
 	'use strict';
 
@@ -52,56 +52,22 @@
 
 	} // getParent()
 
-})( this.tout = {} );
-
-(function( $ ) {
-
-	'use strict';
-
 	/**
-	 * Gets the event target, then gets the checkbox,
-	 * then checks the box.
+	 * Sends data to a PHP handler for saving via AJAX.
 	 *
-	 * @param 		object 		event 		The event.
+	 * @since 		1.0.0
+	 * @param 		array 		paramData 		The data to send to the PHP handler.
 	 */
-	function processEvent( event ) {
+	exports.saveAjax = function saveAjax( paramData ) {
 
-		var target = tout.getEventTarget( event );
-
-		if ( 'path' !== target.nodeName && 'INPUT' !== target.nodeName && 'svg' !== target.nodeName ) { return; }
-
-		var parent = tout.getParent( target, 'tout-btn' );
-		var checkbox = parent.querySelector( '.tout-btn-checkbox' );
-
-		// console.log( target );
-		// console.log( parent );
-		// console.log( checkbox );
-
-		if ( 'checked' === checkbox.getAttribute( 'checked' ) ) { // checkbox is checked
-
-			checkbox.removeAttribute( 'checked' );
-
-		} else {
-
-			checkbox.setAttribute( 'checked', 'checked' );
-
-		}
-
-		parent.classList.toggle( 'checked' );
-
-		var wrap = tout.getParent( target, 'tout-btn-wrap' );
-		var selection = wrap.getAttribute( 'data-id' );
+		//console.log( paramData );
 
 		var opts = {
 			url: ajaxurl,
 			type: 'POST',
 			async: true,
 			cache: false,
-			data: {
-				action: 'save_button_selection',
-				tbSelectionNonce: Tout_Buttons_Ajax.tbSelectionNonce,
-				selection: selection
-			},
+			data: paramData,
 			success: function ( response ) {
 				$( '.button-status' ).html( '<span class="status">' + response  + '</span>' );
 				$( '.button-status' ).addClass( 'updated' );
@@ -120,7 +86,117 @@
 			}
 		}
 
+		//console.log( opts );
+
 		$.ajax( opts );
+
+	} // saveAjax()
+
+})( this.tout = {}, jQuery );
+
+(function() {
+
+	'use strict';
+
+	/**
+	 * Gets the event target, gets the parent wrap element,
+	 * then on focusin it adds the focus class or on focusout
+	 * it removes the focus class.
+	 *
+	 * @since 		1.0.0
+	 * @param 		object 		event 		The event.
+	 */
+	function processEvent( event ) {
+
+		var target = tout.getEventTarget( event );
+
+		if ( 'INPUT' !== target.nodeName ) { return; }
+
+		var wrap = tout.getParent( target, 'tout-btn-wrap' );
+
+		if ( ! wrap ) { return; }
+
+		if ( 'focusin' === event.type && ! wrap.classList.contains( 'focus' ) ) {
+
+			wrap.classList.add( 'focus' );
+
+		} else if ( 'focusout' === event.type && wrap.classList.contains( 'focus' ) ) {
+
+			wrap.classList.remove( 'focus' );
+
+		}
+
+	} // processEvent()
+
+	var buttons = document.querySelector( '.tout-buttons' );
+
+	buttons.addEventListener( 'focusin', processEvent, true );
+	buttons.addEventListener( 'focusout', processEvent, true );
+
+})();
+
+(function( $ ) {
+
+	'use strict';
+
+	/**
+	 * Checks the hidden checkbox input when the icon is clicked.
+	 * Returns boolean: TRUE if the box was checked, otherwise FALSE.
+	 *
+	 * @since 		1.0.0
+	 * @param 		object 		target 		The event target object.
+	 * @return 		bool 					Whether the box was checked or not.
+	 */
+	function checkBox( target ) {
+
+		var parent = tout.getParent( target, 'tout-btn' );
+		var checkbox = parent.querySelector( '.tout-btn-checkbox' );
+		var checked = '';
+
+		if ( 'checked' === checkbox.getAttribute( 'checked' ) ) { // checkbox is checked
+
+			checkbox.removeAttribute( 'checked' );
+			checked = 0;
+
+		} else {
+
+			checkbox.setAttribute( 'checked', 'checked' );
+			checked = 1;
+
+		}
+
+		parent.classList.toggle( 'checked' );
+
+		return checked;
+
+	} // checkBox()
+
+	/**
+	 * Gets the event target, then gets the checkbox,
+	 * then checks the box.
+	 *
+	 * @since 		1.0.0
+	 * @param 		object 		event 		The event.
+	 */
+	function processEvent( event ) {
+
+		var target = tout.getEventTarget( event );
+
+		if ( 'path' !== target.nodeName && 'INPUT' !== target.nodeName && 'svg' !== target.nodeName ) { return; }
+
+		// Check the hidden checkbox input for the selected icon.
+		var checked = checkBox( target );
+
+		// save the selection via AJAX.
+		var wrap = tout.getParent( target, 'tout-btn-wrap' );
+		var selection = wrap.getAttribute( 'data-id' );
+
+		tout.saveAjax( {
+			action: 'save_button_selection',
+			tbSelectionNonce: Tout_Buttons_Ajax.tbSelectionNonce,
+			selection: selection,
+			checked: checked
+		});
 
 	} // processEvent()
 
@@ -134,59 +210,74 @@
 
 	'use strict';
 
+	function changeButtonType() {
+
+		//
+
+	} // changeButtonType()
+
 	/**
-	 * Makes the icons in the admin sortable using jQuery UI Sortable.
-	 * Saves the button order via AJAX in the button-order hidden field.
+	 * Gets the event target, then gets the checkbox,
+	 * then checks the box.
+	 *
+	 * @param 		object 		event 		The event.
+	 */
+	function processEvent( event ) {
+
+		var type = event.target.value;
+
+		tout.saveAjax( {
+			action: 'save_button_type',
+			tbTypeNonce: Tout_Buttons_Ajax.tbTypeNonce,
+			type: type
+		});
+
+	} // processEvent()
+
+	var buttonTypeField = document.querySelector( '#button-type' );
+
+	buttonTypeField.addEventListener( 'change', processEvent );
+
+})( jQuery );
+
+(function( $ ) {
+
+	'use strict';
+
+	/**
+	 * Makes the icons in the admin sortable using Johnny's Sortable jQuery plugin.
+	 * Saves the button order via AJAX and in the button-order hidden field.
 	 */
 
 	var sorter = $('#tout-btn-sort');
 
 	sorter.sortable({
-		cursor: 'move',
-		forcePlaceholderSize: true,
-		items: '.tout-btn-wrap',
-		opacity: 0.6,
-		placeholder: 'btn-placeholder',
-		update: function( event, ui ) {
+		placeholder: '<li class="placeholder"></li>',
+		placeholderClass: 'placeholder',
+		//pullPlaceholder: true,
+		onDrop: function ( $item, container, _super, event ) {
 
 			var btnOrderField = $('#tout-button-order');
-			var newOrder = sorter.sortable('toArray', {attribute:'data-id'}).toString();
+			var newOrderObjects = sorter.sortable('serialize').get();
+			var newOrder = newOrderObjects[0].map( function ( item ){
 
+				return item.id;
+
+			}).toString();
+
+			// Save the order to the hidden order field.
 			btnOrderField.val( newOrder );
 
-			var opts = {
-				url: ajaxurl,
-				type: 'POST',
-				async: true,
-				cache: false,
-				//dataType: 'json',
-				data: {
-					action: 'save_button_order',
-					tbOrderNonce: Tout_Buttons_Ajax.tbOrderNonce,
-					order: newOrder
-				},
-				success: function ( response ) {
-					$( '.button-status' ).html( '<span class="status">' + response  + '</span>' );
-					$( '.button-status' ).addClass( 'updated' );
-					$( '.button-status' ).fadeIn( 'fast' );
-					$( '.button-status' ).fadeOut( 2000 );
+			// Save the order in plugin settings via AJAX.
+			tout.saveAjax( {
+				action: 'save_button_order',
+				tbOrderNonce: Tout_Buttons_Ajax.tbOrderNonce,
+				order: newOrder
+			});
 
-					return;
-				},
-				error: function (xhr, testStatus, error ) {
-					$( '.button-status' ).html( '<span class="status">' + response + '</span>' );
-					$( '.button-status' ).addClass( 'error' );
-					$( '.button-status' ).fadeIn( 'fast' );
-					$( '.button-status' ).fadeOut( 2000 );
-
-					return;
-				}
-			}
-
-			$.ajax( opts );
+			_super( $item, container );
 
 		}
-
 	});
 
 })( jQuery );

@@ -221,6 +221,7 @@ class Tout_Buttons {
 
 		$this->loader->add_action( 'wp_ajax_save_button_order', $plugin_ajax, 'save_button_order' );
 		$this->loader->add_action( 'wp_ajax_save_button_selection', $plugin_ajax, 'save_button_selection' );
+		$this->loader->add_action( 'wp_ajax_save_button_type', $plugin_ajax, 'save_button_type' );
 
 	} // define_ajax_hooks()
 

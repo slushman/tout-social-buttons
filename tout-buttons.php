@@ -36,7 +36,7 @@
  * @todo 		Public: show the buttons, in the correct order, on selected  post types
  *
  * Analytics Add-on
- * @todo 		Analytics: separate tab. Show each link and its share count.
+ * @todo 		Analytics: separate settings tab. Show each link and its share count on each network.
  * @todo 		Analytics: each post has a metabox showing each share: time, date, and where.
  *
  * Schedule Add-on:

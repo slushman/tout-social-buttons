@@ -27,8 +27,10 @@
 
 			$class 	= $this->get_button_class( $lower );
 			$url 	= $this->get_url( $lower );
+			$reader = $this->shared->get_screen_reader_text( $button );
 
-			?><a class="<?php echo esc_attr( $class ); ?>" href="<?php echo esc_url( $url ); ?>" rel="nofollow"<?php
+			?><li class="<?php echo esc_attr( $class ); ?>">
+				<a class="tout-button-link" href="<?php echo esc_url( $url ); ?>" rel="nofollow"<?php
 
 					if ( 'new' === $this->settings['button-behavior'] ) {
 
@@ -36,16 +38,17 @@
 
 					}
 
-				?>>
+				?> title="<?php echo esc_attr( $reader ); ?>">
 				<span class="screen-reader-text"><?php
 
-					echo $this->shared->get_screen_reader_text( $button );
+					echo $reader;
 
 				?></span><?php
 
 				echo $this->shared->get_label( $lower );
 
-			?></a><?php
+				?></a>
+			</li><?php
 
 		endforeach;
 

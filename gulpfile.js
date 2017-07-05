@@ -49,7 +49,7 @@ var watch = {
 		'path': './public/js/',
 		'source': './public/js/src/*.js',
 	},
-	'publicStyles': './public/css/*.scss',
+	'publicStyles': './public/css/src/*.scss',
 	'adminSVGs': {
 		'path': './admin/SVGs/',
 		'source': './admin/SVGs/**/*.svg',

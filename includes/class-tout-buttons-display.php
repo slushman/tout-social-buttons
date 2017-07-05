@@ -63,27 +63,49 @@ class Tout_Buttons_Display {
 	 * @exits 		If $lower parameter is empty.
 	 * @since 		1.0.0
 	 * @param 		string 				$lower 			The lowercase name of the button.
+	 * @param 		string 				$context
 	 * @return 		string|mixed						The label text or SVG icon.
 	 */
 	public function get_label( $lower ) {
 
 		if ( empty( $lower ) ) { return; }
 
+		$return = '';
+		$name = $this->get_name( $lower );
+
+		// if ( 'icon' === $this->settings['button-type'] ) {
+		//
+		// 	return $this->get_svg( $lower );
+		//
+		// } else {
+		//
+		// 	$name = $this->get_name( $lower );
+		//
+		// 	return '<span class="tout-btn-text">' . $name . '</span>';
+		//
+		// }
+
+		$return .= $this->get_svg( $lower );
+		$return .= '<span class="tout-btn-text';
+
 		if ( 'icon' === $this->settings['button-type'] ) {
 
-			return $this->get_svg( $lower );
-
-		} else {
-
-			$name = $this->get_name( $lower );
-
-			return '<span class="tout-btn-text">' . $name . '</span>';
+			$return .= esc_attr( ' screen-reader-text' );
 
 		}
 
+		$return .= '">' . $name . '</span>';
+
+		return $return;
+
 	} // get_label()
 
-	protected function get_name( $lower ) {
+	/**
+	 * Returns the
+	 * @param  [type] $lower [description]
+	 * @return [type]        [description]
+	 */
+	public function get_name( $lower ) {
 
 		if ( empty( $lower ) ) { return; }
 
@@ -125,8 +147,17 @@ class Tout_Buttons_Display {
 
 		$return 		= '';
 
-		$text['icon'] 	= esc_html__( 'Share on', 'tout-buttons' );
-		$text['text'] 	= sprintf( esc_html__( 'Share on %s', 'tout-buttons' ), $button );
+		if ( 'Email' === $button ) {
+
+			$text['text'] 	= esc_html__( 'Share by ', 'tout-buttons' );
+			$text['icon'] 	= sprintf( esc_html__( 'Share by %s', 'tout-buttons' ), $button );
+
+		} else {
+
+			$text['text'] 	= esc_html__( 'Share on ', 'tout-buttons' );
+			$text['icon'] 	= sprintf( esc_html__( 'Share on %s', 'tout-buttons' ), $button );
+
+		}
 
 		if ( array_key_exists( $this->settings['button-type'], $text ) ) {
 

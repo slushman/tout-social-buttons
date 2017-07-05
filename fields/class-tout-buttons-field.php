@@ -76,6 +76,7 @@ class Tout_Buttons_Field {
 		$this->output_label();
 		$this->output_field();
 		$this->output_description();
+		$this->output_alert();
 
 	} // __construct()
 
@@ -148,6 +149,20 @@ class Tout_Buttons_Field {
 		return $this->properties;
 
 	} // get_properties()
+
+	/**
+	 * Includes the field alert partial file.
+	 *
+	 * @exits 		If the alert property is empty.
+	 * @since 		1.0.0
+	 */
+	protected function output_alert() {
+
+		if ( empty( $this->properties['alert'] ) ) { return; }
+
+	    include( plugin_dir_path( dirname( __FILE__ ) ) . 'fields/partials/alert.php' );
+
+	} // output_alert()
 
 	/**
 	 * Includes the field HTML file.
@@ -309,6 +324,7 @@ class Tout_Buttons_Field {
 	protected function set_default_properties() {
 
 		$this->default_properties 						= array();
+		$this->default_properties['alert'] 				= '';
 		$this->default_properties['class-desc'] 		= '';
 		$this->default_properties['class-label'] 		= '';
 		$this->default_properties['class-label-span'] 	= '';

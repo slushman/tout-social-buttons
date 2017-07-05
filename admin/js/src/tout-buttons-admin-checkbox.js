@@ -3,9 +3,42 @@
 	'use strict';
 
 	/**
+	 * Checks the hidden checkbox input when the icon is clicked.
+	 * Returns boolean: TRUE if the box was checked, otherwise FALSE.
+	 *
+	 * @since 		1.0.0
+	 * @param 		object 		target 		The event target object.
+	 * @return 		bool 					Whether the box was checked or not.
+	 */
+	function checkBox( target ) {
+
+		var parent = tout.getParent( target, 'tout-btn' );
+		var checkbox = parent.querySelector( '.tout-btn-checkbox' );
+		var checked = '';
+
+		if ( 'checked' === checkbox.getAttribute( 'checked' ) ) { // checkbox is checked
+
+			checkbox.removeAttribute( 'checked' );
+			checked = 0;
+
+		} else {
+
+			checkbox.setAttribute( 'checked', 'checked' );
+			checked = 1;
+
+		}
+
+		parent.classList.toggle( 'checked' );
+
+		return checked;
+
+	} // checkBox()
+
+	/**
 	 * Gets the event target, then gets the checkbox,
 	 * then checks the box.
 	 *
+	 * @since 		1.0.0
 	 * @param 		object 		event 		The event.
 	 */
 	function processEvent( event ) {
@@ -14,57 +47,19 @@
 
 		if ( 'path' !== target.nodeName && 'INPUT' !== target.nodeName && 'svg' !== target.nodeName ) { return; }
 
-		var parent = tout.getParent( target, 'tout-btn' );
-		var checkbox = parent.querySelector( '.tout-btn-checkbox' );
+		// Check the hidden checkbox input for the selected icon.
+		var checked = checkBox( target );
 
-		// console.log( target );
-		// console.log( parent );
-		// console.log( checkbox );
-
-		if ( 'checked' === checkbox.getAttribute( 'checked' ) ) { // checkbox is checked
-
-			checkbox.removeAttribute( 'checked' );
-
-		} else {
-
-			checkbox.setAttribute( 'checked', 'checked' );
-
-		}
-
-		parent.classList.toggle( 'checked' );
-
+		// save the selection via AJAX.
 		var wrap = tout.getParent( target, 'tout-btn-wrap' );
 		var selection = wrap.getAttribute( 'data-id' );
 
-		var opts = {
-			url: ajaxurl,
-			type: 'POST',
-			async: true,
-			cache: false,
-			data: {
-				action: 'save_button_selection',
-				tbSelectionNonce: Tout_Buttons_Ajax.tbSelectionNonce,
-				selection: selection
-			},
-			success: function ( response ) {
-				$( '.button-status' ).html( '<span class="status">' + response  + '</span>' );
-				$( '.button-status' ).addClass( 'updated' );
-				$( '.button-status' ).fadeIn( 'fast' );
-				$( '.button-status' ).fadeOut( 2000 );
-
-				return;
-			},
-			error: function (xhr, testStatus, error ) {
-				$( '.button-status' ).html( '<span class="status">' + error + '</span>' );
-				$( '.button-status' ).addClass( 'error' );
-				$( '.button-status' ).fadeIn( 'fast' );
-				$( '.button-status' ).fadeOut( 2000 );
-
-				return;
-			}
-		}
-
-		$.ajax( opts );
+		tout.saveAjax( {
+			action: 'save_button_selection',
+			tbSelectionNonce: Tout_Buttons_Ajax.tbSelectionNonce,
+			selection: selection,
+			checked: checked
+		});
 
 	} // processEvent()
 
