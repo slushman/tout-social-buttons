@@ -184,7 +184,7 @@ class Tout_Social_Buttons_Public {
 
 		/**
 		 * The tout_social_buttons_active_buttons filter.
-		 * Allows for adding buttons via filter.
+		 * Allows for adding active buttons via filter.
 		 *
 		 * @param 		array 		$active_buttons 		Button selected in the plugin settings.
 		 */
@@ -205,6 +205,8 @@ class Tout_Social_Buttons_Public {
 
 	/**
 	 * Handles the output of the shortcode.
+	 *
+	 * Does not currently use any shortcode attributes.
 	 *
 	 * @since 		1.0.0
 	 * @param 		array 		$atts 			The shortcode attributes.
