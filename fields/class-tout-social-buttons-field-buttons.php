@@ -71,8 +71,15 @@ class Tout_Social_Buttons_Field_Buttons extends Tout_Social_Buttons_Field {
 	 */
 	protected function set_buttons() {
 
-		$buttons 		= $this->settings['button-order'];
-		$this->buttons 	= explode( ',', $buttons );
+		$button_order 	= $this->settings['button-order'];
+		$buttons 		= explode( ',', $button_order );
+
+		/**
+		 * The tout_social_buttons_admin_buttons filter.
+		 *
+		 * @param 		array 		$buttons 		Array of button derived from the button-order setting.
+		 */
+		$this->buttons 	= apply_filters( 'tout_social_buttons_admin_buttons', $buttons );
 
 	} // set_buttons()
 
