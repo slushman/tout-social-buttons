@@ -6,7 +6,7 @@
  *
  * npm init
  * sudo npm install --save-dev gulp gulp-util gulp-load-plugins browser-sync fs path event-stream gulp-plumber
- * sudo npm install --save-dev gulp-sourcemaps gulp-autoprefixer gulp-filter gulp-merge-media-queries gulp-cssnano gulp-sass gulp-concat gulp-uglify gulp-notify gulp-imagemin gulp-rename gulp-wp-pot gulp-sort gulp-parker gulp-svgmin gulp-size
+ * sudo npm install --save-dev gulp-sourcemaps gulp-autoprefixer gulp-filter gulp-merge-media-queries gulp-cssnano gulp-sass gulp-concat gulp-uglify gulp-notify gulp-imagemin gulp-rename gulp-wp-pot gulp-sort gulp-parker gulp-svgmin gulp-size gulp-readme-to-markdown
  * gulp
  *
  * Implements:
@@ -18,6 +18,7 @@
  *  7. Corrects the line endings.
  *  8. InjectCSS instead of browser page reload.
  *  9. Generates .pot file for i18n and l10n.
+ *  10. Generates a Github-compatible README.me file from the README.txt file.
  *
  * @since 		1.0.0
  * @author 		Chris Wilcoxson (@slushman)
@@ -306,13 +307,27 @@ gulp.task( 'translate', function () {
 		.pipe( plugins.notify( { message: 'TASK: "translate" Completed! 💯', onLast: true } ) );
 });
 
+gulp.task( 'readme', function() {
+	return gulp.src( ['README.txt'] )
+		.pipe( plugins.readmeToMarkdown({
+			details: false,
+			extract: {
+				'changelog': 'CHANGELOG',
+				'Frequently Asked Questions': 'FAQ'
+			}
+		}))
+		.pipe( gulp.dest( '.' ) )
+		.pipe( plugins.notify( { message: 'TASK: "readme" Completed! 💯', onLast: true } ) );
+});
+
 /**
  * Watches for file changes and runs specific tasks.
  */
-gulp.task( 'default', ['adminStyles', 'publicStyles', 'adminScripts', 'publicScripts', 'adminImages', 'publicImages', 'adminSVGs', 'publicSVGs', 'translate', 'browser-sync'], function () {
+gulp.task( 'default', ['adminStyles', 'publicStyles', 'adminScripts', 'publicScripts', 'adminImages', 'publicImages', 'adminSVGs', 'publicSVGs', 'translate', 'browser-sync', 'readme'], function () {
 	gulp.watch( watch.php, reload ); // Reload on PHP file changes.
 	gulp.watch( watch.adminStyles, ['adminStyles', reload] ); // Reload on SCSS file changes.
 	gulp.watch( watch.publicStyles, ['publicStyles', reload] ); // Reload on SCSS file changes.
 	gulp.watch( watch.adminScripts.source, [ 'adminScripts', reload ] ); // Reload on admin JS file changes.
 	gulp.watch( watch.publicScripts.source, [ 'publicScripts', reload ] ); // Reload on public JS file changes
+	gulp.watch( 'README.txt', ['readme'] );
 });
