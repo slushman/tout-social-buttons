@@ -23,6 +23,16 @@
 class Tout_Social_Buttons_Public {
 
 	/**
+	 * Tout_Social_Buttons_Display object.
+	 *
+	 * @since 		1.0.0
+	 * @access 		protected
+	 * @var 		array 		$buttons 		Array of active buttons.
+	 */
+	private $buttons;
+
+
+	/**
 	 * The ID of this plugin.
 	 *
 	 * @since 		1.0.0
@@ -39,15 +49,6 @@ class Tout_Social_Buttons_Public {
 	 * @var 		string 			$settings 		The plugin settings.
 	 */
 	private $settings;
-
-	/**
-	 * Tout_Social_Buttons_Display object.
-	 *
-	 * @since 		1.0.0
-	 * @access 		protected
-	 * @var 		Tout_Social_Buttons_Display 		$shared 		Tout_Social_Buttons_Display object.
-	 */
-	private $shared;
 
 	/**
 	 * The version of this plugin.
@@ -71,6 +72,7 @@ class Tout_Social_Buttons_Public {
 		$this->version = $version;
 
 		$this->set_settings();
+		$this->set_buttons();
 
 	} // __construct()
 
@@ -105,11 +107,9 @@ class Tout_Social_Buttons_Public {
 	 */
 	public function display_buttons() {
 
+		if ( empty( $this->buttons ) ) { return; }
+
 		ob_start();
-
-		$buttons = $this->get_active_buttons();
-
-		if ( empty( $buttons ) ) { return; }
 
 		include( plugin_dir_path( dirname( __FILE__ ) ) . 'public/partials/tout-social-buttons-public-button-set.php' );
 
@@ -146,31 +146,6 @@ class Tout_Social_Buttons_Public {
 	} // enqueue_scripts()
 
 	/**
-	 * Gets the buttons, then filters out the buttons not selected in the admin.
-	 *
-	 * @since 		1.0.0
-	 * @return 		array 		The selected buttons.
-	 */
-	protected function get_active_buttons() {
-
-		$buttons = $this->settings['button-order'];
-		$buttons = explode( ',', $buttons );
-
-		foreach ( $buttons as $key => $button ) {
-
-			if ( 1 !== $this->settings['button-' . $button] ) {
-
-				unset( $buttons[$key] );
-
-			}
-
-		}
-
-		return $buttons;
-
-	} // get_active_buttons()
-
-	/**
 	 * Registers shortcodes with WordPress.
 	 *
 	 * @since 		1.0.0
@@ -180,6 +155,42 @@ class Tout_Social_Buttons_Public {
 		add_shortcode( 'toutbuttons', array( $this, 'shortcode' ) );
 
 	} // register_shortcode()
+
+	/**
+	 * Sets the class variable $buttons with the buttons selected in the
+	 * plugin settings.
+	 *
+	 * Gets the button order. Explodes that string into an array.
+	 * Loops through the button order and adds any active buttons
+	 * to the $buttons class variable array.
+	 *
+	 * @since 		1.0.0
+	 */
+	public function set_buttons() {
+
+		$button_order 	= $this->settings['button-order'];
+		$buttons 		= explode( ',', $button_order );
+		$active_buttons = array();
+
+		foreach ( $buttons as $key => $button ) {
+
+			if ( 1 === $this->settings['button-' . $button] ) {
+
+				$active_buttons[] = $button;
+
+			}
+
+		}
+
+		/**
+		 * The tout_social_buttons_active_buttons filter.
+		 * Allows for adding buttons via filter.
+		 *
+		 * @param 		array 		$active_buttons 		Button selected in the plugin settings.
+		 */
+		$this->buttons = apply_filters( 'tout_social_buttons_active_buttons', $active_buttons );
+
+	} // set_buttons()
 
 	/**
 	 * Sets the class variable $settings with the plugin settings.

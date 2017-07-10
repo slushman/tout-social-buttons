@@ -23,7 +23,7 @@
 	?></span>
 	<ul class="tout-social-buttons"><?php
 
-		foreach ( $buttons as $button ) :
+		foreach ( $this->buttons as $button ) :
 
 			include( plugin_dir_path( dirname( __FILE__ ) ) . 'partials/tout-social-buttons-public-button.php' );
 
