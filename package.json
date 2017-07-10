@@ -1,5 +1,5 @@
 {
-  "name": "tout-buttons",
+  "name": "tout-social-buttons",
   "version": "1.0.0",
   "description": "Adds social media sharing buttons on your posts.",
   "main": "gulpfile.js",
@@ -8,14 +8,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/slushman/tout-buttons.git"
+    "url": "git+ssh://git@github.com/slushman/tout-social-buttons.git"
   },
   "author": "slushman",
   "license": "GPL-2.0",
   "bugs": {
-    "url": "https://github.com/slushman/tout-buttons/issues"
+    "url": "https://github.com/slushman/tout-social-buttons/issues"
   },
-  "homepage": "https://github.com/slushman/tout-buttons#readme",
+  "homepage": "https://github.com/slushman/tout-social-buttons#readme",
   "devDependencies": {
     "browser-sync": "^2.18.12",
     "event-stream": "^3.3.4",

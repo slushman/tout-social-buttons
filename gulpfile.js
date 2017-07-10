@@ -29,10 +29,10 @@
 var project = {
 	'url': 'tout.dev',
 	'i18n': {
-		'domain': 'tout-buttons',
-		'destFile': 'tout-buttons.pot',
-		'package': 'Tout Buttons',
-		'bugReport': 'https://github.com/slushman/tout-buttons/issues',
+		'domain': 'tout-social-buttons',
+		'destFile': 'languages/tout-social-buttons.pot',
+		'package': 'Tout.Social Buttons',
+		'bugReport': 'https://github.com/slushman/tout-social-buttons/issues',
 		'translator': 'Chris Wilcoxson <chris@slushman.com>',
 		'lastTranslator': 'Chris Wilcoxson <chris@slushman.com>'
 	}
@@ -190,10 +190,10 @@ gulp.task( 'adminScripts', function() {
 	return gulp.src( watch.adminScripts.source )
 		.pipe( plugins.plumber({ errorHandler: onError }) )
 		.pipe( plugins.sourcemaps.init() )
-		.pipe( plugins.concat( 'tout-buttons-admin.js' ) )
+		.pipe( plugins.concat( 'tout-social-buttons-admin.js' ) )
 		.pipe( gulp.dest( watch.adminScripts.path ) )
 		.pipe( plugins.uglify() )
-		.pipe( plugins.rename( 'tout-buttons-admin.min.js' ) )
+		.pipe( plugins.rename( 'tout-social-buttons-admin.min.js' ) )
 		.pipe( plugins.sourcemaps.write( 'maps' ) )
 		.pipe( gulp.dest( watch.adminScripts.path ) )
 		.pipe( plugins.notify( { message: 'TASK: "adminScripts" Completed! 💯', onLast: true } ) );
@@ -206,10 +206,10 @@ gulp.task( 'publicScripts', function() {
 	return gulp.src( watch.publicScripts.source )
 		.pipe( plugins.plumber({ errorHandler: onError }) )
 		.pipe( plugins.sourcemaps.init() )
-		.pipe( plugins.concat( 'tout-buttons-public.js' ) )
+		.pipe( plugins.concat( 'tout-social-buttons-public.js' ) )
 		.pipe( gulp.dest( watch.publicScripts.path ) )
 		.pipe( plugins.uglify() )
-		.pipe( plugins.rename( 'tout-buttons-public.min.js' ) )
+		.pipe( plugins.rename( 'tout-social-buttons-public.min.js' ) )
 		.pipe( plugins.sourcemaps.write( 'maps' ) )
 		.pipe( gulp.dest( watch.publicScripts.path ) )
 		.pipe( plugins.notify( { message: 'TASK: "publicScripts" Completed! 💯', onLast: true } ) );

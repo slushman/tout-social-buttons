@@ -1,6 +1,6 @@
-=== Tout Buttons ===
+=== Tout.Social Buttons ===
 Contributors: slushman
-Donate link: https://www.slushman.com
+Donate link: https://www.tout.social
 Tags: social, sharing, Baidu, Buffer, Digg, Douban, email, Evernote, Facebook, Google, Google Plus, Google+, Linkedin, Pinterest, QZone, Reddit, Renren, Stumbleupon, tumblr, Twitter, VK, Weibo, Xing
 Requires at least: 3.0.1
 Tested up to: 4.7.4
@@ -20,7 +20,7 @@ Adds social sharing buttons to your posts.
 
 == Installation ==
 
-1. Upload `tout-buttons` folder to the `/wp-content/plugins/` directory
+1. Upload `tout-social-buttons` folder to the `/wp-content/plugins/` directory
 2. Activate the plugin through the `Plugins` menu in WordPress
 
 

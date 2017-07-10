@@ -1,0 +1,33 @@
+/**
+ * All of the CSS for your public-facing functionality should be
+ * included in this file.
+ */
+
+@import '../../../includes/css/src/buttons';
+@import '../../../includes/css/src/mixins';
+
+.tout-social-buttons {
+    @include resetlist();
+    display     : flex;
+    list-style  : none;
+    margin      : 0;
+    padding     : 0;
+}
+
+.hidden {
+    display: none;
+}
+
+.tout-button-link {
+    display: inline-block;
+
+    @each $brand, $color in $brands {
+        .#{$brand} {
+            fill: $color;
+        }
+	}
+
+	.email {
+		filter: drop-shadow( 0 0 1px #23282d );
+	}
+}
