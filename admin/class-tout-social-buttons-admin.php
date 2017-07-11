@@ -59,6 +59,22 @@ class Tout_Social_Buttons_Admin {
 	} // __ construct()
 
 	/**
+	 * Displays an error notice displaying the error notice, if there is one.
+	 *
+	 * @since 		1.0.0
+	 * @return
+	 */
+	public function activation_error_notice() {
+
+		$error = get_option( 'tout-social-buttons-errors' );
+
+		if ( empty( $error ) ) { return; }
+
+		include( plugin_dir_path( dirname( __FILE__ ) ) . 'admin/partials/tout-social-buttons-error-notice.php' );
+
+	} // activation_error_notice()
+
+	/**
 	 * Adds a settings page link to a menu
 	 *
 	 * Top-level page
@@ -209,7 +225,7 @@ class Tout_Social_Buttons_Admin {
 	 * @since 		1.0.0
 	 * @return 		array 		An array of settings.
 	 */
-	public function get_settings_list() {
+	public static function get_settings_list() {
 
 		$settings = array();
 
@@ -459,6 +475,17 @@ class Tout_Social_Buttons_Admin {
 		);
 
 	} // register_settings()
+
+	/**
+	 * Saves activations errors to a plugin setting.
+	 *
+	 * @since 		1.0.0
+	 */
+	public function save_activation_errors() {
+
+		update_option( 'tout-social-buttons-errors', ob_get_contents() );
+
+	} // save_activation_errors()
 
 	/**
 	 * Includes the settings section partial file based on the section ID.
