@@ -40,12 +40,15 @@ class Tout_Social_Buttons_Sanitize {
 
 		}
 
-		$sanitized = '';
-
 		/**
+		 * The tout_social_buttons_pre_sanitize filter.
 		 * Add additional santization before the default sanitization.
+		 *
+		 * @param 		string 		$sanitized 		Empty.
+		 * @param 		mixed 		$data 			The data passed in.
+		 * @param 		string 		$type 			The data type.
 		 */
-		do_action( 'tout_buttons_pre_sanitize', $sanitized, $data, $type );
+		$sanitized = apply_filters( 'tout_social_buttons_pre_sanitize', '', $data, $type );
 
 		switch ( $type ) {
 
@@ -78,9 +81,14 @@ class Tout_Social_Buttons_Sanitize {
 		} // switch
 
 		/**
+		 * The tout_social_buttons_post_sanitize filter.
 		 * Add additional santization after the default sanitization.
+		 *
+		 * @param 		mixed 		$sanitized 		The sanitized data.
+		 * @param 		mixed 		$data 			The data passed in.
+		 * @param 		string 		$type 			The data type.
 		 */
-		do_action( 'tout_buttons_post_sanitize', $sanitized, $data, $type );
+		$sanitized = apply_filters( 'tout_social_buttons_post_sanitize', $sanitized, $data, $type );
 
 		return $sanitized;
 

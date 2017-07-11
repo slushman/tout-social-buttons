@@ -527,7 +527,7 @@ class Tout_Social_Buttons_Admin {
 	/**
 	 * Sets the class variable $tabs.
 	 *
-	 * Tabs can be added using the tout_buttons_settings_tabs filter.
+	 * Tabs can be added using the tout_social_buttons_settings_tabs filter.
 	 * Each tab array needs the following:
 	 * 	name 		The name of the tab
 	 *  url 		The URL for the tab.
@@ -551,11 +551,11 @@ class Tout_Social_Buttons_Admin {
 		// $default_tabs['help']['sections'] 	= 'tout-social-buttons-help';
 
 		/**
-		 * The tout_buttons_settings_tabs filter.
+		 * The tout_social_buttons_settings_tabs filter.
 		 *
 		 * @param 		array 		$default_tabs 		The default tabs.
 		 */
-		$this->tabs = apply_filters( 'tout_buttons_settings_tabs', $default_tabs );
+		$this->tabs = apply_filters( 'tout_social_buttons_settings_tabs', $default_tabs );
 
 	} // set_tabs()
 

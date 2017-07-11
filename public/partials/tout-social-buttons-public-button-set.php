@@ -16,9 +16,9 @@
 	<span class="tout-social-buttons-pretext"><?php
 
 		/**
-		 * The tout_buttons_pretext filter.
+		 * The tout_social_buttons_pretext filter.
 		 */
-		echo apply_filters( 'tout_buttons_pretext', esc_html__( 'Share This:', 'tout-social-buttons' ) );
+		echo apply_filters( 'tout_social_buttons_pretext', esc_html__( 'Share This:', 'tout-social-buttons' ) );
 
 	?></span>
 	<ul class="tout-social-buttons"><?php

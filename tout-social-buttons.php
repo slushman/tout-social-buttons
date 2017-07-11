@@ -53,7 +53,7 @@ define( 'TOUT_SOCIAL_BUTTONS_SETTINGS', 'tout-social-buttons-settings' );
  * The code that runs during plugin activation.
  * This action is documented in includes/class-tout-social-buttons-activator.php
  */
-function activate_tout_buttons() {
+function activate_tout_social_buttons() {
 	require_once plugin_dir_path( __FILE__ ) . 'includes/class-tout-social-buttons-activator.php';
 	Tout_Social_Buttons_Activator::activate();
 }
@@ -62,13 +62,13 @@ function activate_tout_buttons() {
  * The code that runs during plugin deactivation.
  * This action is documented in includes/class-tout-social-buttons-deactivator.php
  */
-function deactivate_tout_buttons() {
+function deactivate_tout_social_buttons() {
 	require_once plugin_dir_path( __FILE__ ) . 'includes/class-tout-social-buttons-deactivator.php';
 	Tout_Social_Buttons_Deactivator::deactivate();
 }
 
-register_activation_hook( __FILE__, 'activate_tout_buttons' );
-register_deactivation_hook( __FILE__, 'deactivate_tout_buttons' );
+register_activation_hook( __FILE__, 'activate_tout_social_buttons' );
+register_deactivation_hook( __FILE__, 'deactivate_tout_social_buttons' );
 
 /**
  * The core plugin class that is used to define internationalization,
@@ -85,10 +85,10 @@ require plugin_dir_path( __FILE__ ) . 'includes/class-tout-social-buttons.php';
  *
  * @since    1.0.0
  */
-function run_tout_buttons() {
+function run_tout_social_buttons() {
 
 	$plugin = new Tout_Social_Buttons();
 	$plugin->run();
 
 }
-run_tout_buttons();
+run_tout_social_buttons();
