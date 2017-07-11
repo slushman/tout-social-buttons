@@ -370,7 +370,7 @@ class Tout_Social_Buttons_Field {
 
 		if ( 'settings' !== $this->context && empty( $this->attributes['id'] ) && ! empty( $this->attributes['name'] ) ) { return; }
 
-		$this->attributes['name'] = TOUT_BUTTONS_SETTINGS . '[' . $this->attributes['id'] . ']';
+		$this->attributes['name'] = TOUT_SOCIAL_BUTTONS_SETTINGS . '[' . $this->attributes['id'] . ']';
 
 	} // set_name_attribute()
 
@@ -397,7 +397,7 @@ class Tout_Social_Buttons_Field {
 
 		if ( 'settings' === $this->context ) {
 
-			$this->settings = get_option( TOUT_BUTTONS_SETTINGS );
+			$this->settings = get_option( TOUT_SOCIAL_BUTTONS_SETTINGS );
 
 		} elseif ( 'metaboxes' === $this->context ) {
 

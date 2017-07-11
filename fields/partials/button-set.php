@@ -13,5 +13,5 @@
 	endforeach;
 
 ?></ul>
-<input id="tout-social-button-order" name="<?php echo TOUT_BUTTONS_SLUG; ?>-settings[button-order]" type="hidden" value="<?php echo esc_attr( $this->settings['button-order'] ); ?>" />
+<input id="tout-social-button-order" name="<?php echo TOUT_SOCIAL_BUTTONS_SLUG; ?>-settings[button-order]" type="hidden" value="<?php echo esc_attr( $this->settings['button-order'] ); ?>" />
 <div class="button-status"></div>

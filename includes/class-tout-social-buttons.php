@@ -301,7 +301,7 @@ class Tout_Social_Buttons {
 		$this->loader->add_action( 'admin_init', 			$plugin_admin, 'register_fields' );
 		$this->loader->add_action( 'admin_init', 			$plugin_admin, 'register_sections' );
 		$this->loader->add_action( 'admin_menu', 			$plugin_admin, 'add_menu' );
-		$this->loader->add_action( 'plugin_action_links_' . TOUT_BUTTONS_FILE, $plugin_admin, 'link_settings' );
+		$this->loader->add_action( 'plugin_action_links_' . TOUT_SOCIAL_BUTTONS_FILE, $plugin_admin, 'link_settings' );
 
 	} // define_admin_hooks()
 

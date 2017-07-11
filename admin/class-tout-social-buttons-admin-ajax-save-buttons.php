@@ -76,7 +76,7 @@ class Tout_Social_Buttons_AJAX_Save_Buttons {
 
 		$new_order 						= $_POST['order'];
 		$this->settings['button-order']	= $new_order;
-		$update 						= update_option( TOUT_BUTTONS_SETTINGS, $this->settings );
+		$update 						= update_option( TOUT_SOCIAL_BUTTONS_SETTINGS, $this->settings );
 
 		if ( ! $update ) {
 
@@ -104,7 +104,7 @@ class Tout_Social_Buttons_AJAX_Save_Buttons {
 
 		$selection 								= $_POST['selection'];
 		$this->settings['button-' . $selection]	= $_POST['checked'];
-		$update 								= update_option( TOUT_BUTTONS_SETTINGS, $this->settings );
+		$update 								= update_option( TOUT_SOCIAL_BUTTONS_SETTINGS, $this->settings );
 
 		if ( ! $update ) {
 
@@ -136,7 +136,7 @@ class Tout_Social_Buttons_AJAX_Save_Buttons {
 
 		$type 							= $_POST['type'];
 		$this->settings['button-type']	= $type;
-		$update 						= update_option( TOUT_BUTTONS_SETTINGS, $this->settings );
+		$update 						= update_option( TOUT_SOCIAL_BUTTONS_SETTINGS, $this->settings );
 
 		if ( ! $update ) {
 
@@ -159,7 +159,7 @@ class Tout_Social_Buttons_AJAX_Save_Buttons {
 	 */
 	private function set_settings() {
 
-		$this->settings = get_option( TOUT_BUTTONS_SETTINGS );
+		$this->settings = get_option( TOUT_SOCIAL_BUTTONS_SETTINGS );
 
 	} // set_settings()
 

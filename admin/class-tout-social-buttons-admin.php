@@ -99,7 +99,7 @@ class Tout_Social_Buttons_Admin {
 			esc_html__( 'Tout.Social Buttons Settings', 'tout-social-buttons' ),
 			esc_html__( 'Tout.Social Buttons', 'tout-social-buttons' ),
 			'manage_options',
-			TOUT_BUTTONS_SETTINGS,
+			TOUT_SOCIAL_BUTTONS_SETTINGS,
 			array( $this, 'page_settings' )
 		);
 
@@ -269,7 +269,7 @@ class Tout_Social_Buttons_Admin {
 	 */
 	public function link_settings( $links ) {
 
-		$links[] = sprintf( '<a href="%s">%s</a>', admin_url( 'options-general.php?page=' . TOUT_BUTTONS_SETTINGS ), esc_html__( 'Settings', 'tout-social-buttons' ) );
+		$links[] = sprintf( '<a href="%s">%s</a>', admin_url( 'options-general.php?page=' . TOUT_SOCIAL_BUTTONS_SETTINGS ), esc_html__( 'Settings', 'tout-social-buttons' ) );
 
 		return $links;
 
@@ -323,8 +323,8 @@ class Tout_Social_Buttons_Admin {
 			'buttons',
 			esc_html__( 'Buttons', 'tout-social-buttons' ),
 			array( $this, 'field_buttons' ),
-			TOUT_BUTTONS_SLUG,
-			TOUT_BUTTONS_SLUG . '-buttons',
+			TOUT_SOCIAL_BUTTONS_SLUG,
+			TOUT_SOCIAL_BUTTONS_SLUG . '-buttons',
 			array(
 				'attributes' 	=> array(
 					'id' 		=> 'buttons'
@@ -339,8 +339,8 @@ class Tout_Social_Buttons_Admin {
 			'button-type',
 			esc_html__( 'Button Type', 'tout-social-buttons' ),
 			array( $this, 'field_select' ),
-			TOUT_BUTTONS_SLUG,
-			TOUT_BUTTONS_SLUG . '-buttons',
+			TOUT_SOCIAL_BUTTONS_SLUG,
+			TOUT_SOCIAL_BUTTONS_SLUG . '-buttons',
 			array(
 				'attributes' 	=> array(
 					'id' 		=> 'button-type',
@@ -360,8 +360,8 @@ class Tout_Social_Buttons_Admin {
 			'button-behavior',
 			esc_html__( 'Button Behavior', 'tout-social-buttons' ),
 			array( $this, 'field_select' ),
-			TOUT_BUTTONS_SLUG,
-			TOUT_BUTTONS_SLUG . '-buttons',
+			TOUT_SOCIAL_BUTTONS_SLUG,
+			TOUT_SOCIAL_BUTTONS_SLUG . '-buttons',
 			array(
 				'attributes' 	=> array(
 					'id' 		=> 'button-behavior'
@@ -382,8 +382,8 @@ class Tout_Social_Buttons_Admin {
 			'auto-post',
 			esc_html__( 'Auto Post', 'tout-social-buttons' ),
 			array( $this, 'field_checkbox' ),
-			TOUT_BUTTONS_SLUG,
-			TOUT_BUTTONS_SLUG . '-buttons',
+			TOUT_SOCIAL_BUTTONS_SLUG,
+			TOUT_SOCIAL_BUTTONS_SLUG . '-buttons',
 			array(
 				'attributes' 	=> array(
 					'id' 		=> 'auto-post',
@@ -402,8 +402,8 @@ class Tout_Social_Buttons_Admin {
 			'account-twitter',
 			esc_html__( 'Twitter Account', 'tout-social-buttons' ),
 			array( $this, 'field_text' ),
-			TOUT_BUTTONS_SLUG,
-			TOUT_BUTTONS_SLUG . '-accounts',
+			TOUT_SOCIAL_BUTTONS_SLUG,
+			TOUT_SOCIAL_BUTTONS_SLUG . '-accounts',
 			array(
 				'attributes' 	=> array(
 					'id' 		=> 'account-twitter'
@@ -418,8 +418,8 @@ class Tout_Social_Buttons_Admin {
 			'account-tumblr',
 			esc_html__( 'tumblr Account', 'tout-social-buttons' ),
 			array( $this, 'field_text' ),
-			TOUT_BUTTONS_SLUG,
-			TOUT_BUTTONS_SLUG . '-accounts',
+			TOUT_SOCIAL_BUTTONS_SLUG,
+			TOUT_SOCIAL_BUTTONS_SLUG . '-accounts',
 			array(
 				'attributes' 	=> array(
 					'id' 		=> 'account-tumblr'
@@ -443,17 +443,17 @@ class Tout_Social_Buttons_Admin {
 	public function register_sections() {
 
 		add_settings_section(
-			TOUT_BUTTONS_SLUG . '-buttons',
+			TOUT_SOCIAL_BUTTONS_SLUG . '-buttons',
 			esc_html__( 'Buttons', 'tout-social-buttons' ),
 			array( $this, 'sections' ),
-			TOUT_BUTTONS_SLUG
+			TOUT_SOCIAL_BUTTONS_SLUG
 		);
 
 		add_settings_section(
-			TOUT_BUTTONS_SLUG . '-accounts',
+			TOUT_SOCIAL_BUTTONS_SLUG . '-accounts',
 			esc_html__( 'Accounts', 'tout-social-buttons' ),
 			array( $this, 'sections' ),
-			TOUT_BUTTONS_SLUG
+			TOUT_SOCIAL_BUTTONS_SLUG
 		);
 
 	} // register_sections()
@@ -469,8 +469,8 @@ class Tout_Social_Buttons_Admin {
 	public function register_settings() {
 
 		register_setting(
-			TOUT_BUTTONS_SETTINGS,
-			TOUT_BUTTONS_SETTINGS,
+			TOUT_SOCIAL_BUTTONS_SETTINGS,
+			TOUT_SOCIAL_BUTTONS_SETTINGS,
 			array( $this, 'validate_settings' )
 		);
 
@@ -496,7 +496,7 @@ class Tout_Social_Buttons_Admin {
 	 */
 	public function sections( $params ) {
 
-		if ( TOUT_BUTTONS_SLUG . '-accounts' === $params['id'] ) {
+		if ( TOUT_SOCIAL_BUTTONS_SLUG . '-accounts' === $params['id'] ) {
 
 			$params['description'] = __( 'Enter your username(s) for correct attributions on items shared on these sites. This is completely optional.', 'tout-social-buttons' );
 
@@ -513,7 +513,7 @@ class Tout_Social_Buttons_Admin {
 	 */
 	private function set_settings() {
 
-		$this->settings = get_option( TOUT_BUTTONS_SETTINGS );
+		$this->settings = get_option( TOUT_SOCIAL_BUTTONS_SETTINGS );
 
 	} // set_settings()
 
@@ -533,13 +533,13 @@ class Tout_Social_Buttons_Admin {
 
 		// Settings Tab
 		$default_tabs['settings']['name'] 		= esc_html__( 'Settings', 'tout-social-buttons' );
-		$default_tabs['settings']['url'] 		= '?page=' . TOUT_BUTTONS_SETTINGS . '&tab=settings';
-		$default_tabs['settings']['fields'] 	= TOUT_BUTTONS_SETTINGS;
-		$default_tabs['settings']['sections'] 	= TOUT_BUTTONS_SLUG;
+		$default_tabs['settings']['url'] 		= '?page=' . TOUT_SOCIAL_BUTTONS_SETTINGS . '&tab=settings';
+		$default_tabs['settings']['fields'] 	= TOUT_SOCIAL_BUTTONS_SETTINGS;
+		$default_tabs['settings']['sections'] 	= TOUT_SOCIAL_BUTTONS_SLUG;
 
 		// Settings Tab
 		// $default_tabs['help']['name'] 		= esc_html__( 'Help', 'tout-social-buttons' );
-		// $default_tabs['help']['url'] 		= '?page=' . TOUT_BUTTONS_SETTINGS . '&tab=help';
+		// $default_tabs['help']['url'] 		= '?page=' . TOUT_SOCIAL_BUTTONS_SETTINGS . '&tab=help';
 		// $default_tabs['help']['fields'] 	= 'tout-social-buttons-help';
 		// $default_tabs['help']['sections'] 	= 'tout-social-buttons-help';
 

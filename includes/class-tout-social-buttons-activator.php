@@ -44,7 +44,7 @@ class Tout_Social_Buttons_Activator {
 
 		} // foreach
 
-		update_option( TOUT_BUTTONS_SETTINGS, $opts  );
+		update_option( TOUT_SOCIAL_BUTTONS_SETTINGS, $opts  );
 
 	} // activate()
 

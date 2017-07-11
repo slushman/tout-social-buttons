@@ -53,9 +53,9 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
-define( 'TOUT_BUTTONS_FILE', plugin_basename( __FILE__ ) );
-define( 'TOUT_BUTTONS_SLUG', 'tout-social-buttons' );
-define( 'TOUT_BUTTONS_SETTINGS', 'tout-social-buttons-settings' );
+define( 'TOUT_SOCIAL_BUTTONS_FILE', plugin_basename( __FILE__ ) );
+define( 'TOUT_SOCIAL_BUTTONS_SLUG', 'tout-social-buttons' );
+define( 'TOUT_SOCIAL_BUTTONS_SETTINGS', 'tout-social-buttons-settings' );
 
 /**
  * The code that runs during plugin activation.

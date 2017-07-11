@@ -199,7 +199,7 @@ class Tout_Social_Buttons_Public {
 	 */
 	public function set_settings() {
 
-		$this->settings = get_option( TOUT_BUTTONS_SETTINGS );
+		$this->settings = get_option( TOUT_SOCIAL_BUTTONS_SETTINGS );
 
 	} // set_settings()
 
