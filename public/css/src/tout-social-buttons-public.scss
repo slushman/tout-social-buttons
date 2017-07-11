@@ -20,14 +20,14 @@
 
 .tout-social-button-link {
     display: inline-block;
+}
 
-    @each $brand, $color in $brands {
-        .tout-social-button-icon-#{$brand} {
-            fill: $color;
-        }
-	}
+@each $brand, $color in $brands {
+    .tout-social-button-icon-#{$brand} {
+        fill: $color;
+    }
+}
 
-	.tout-social-button-icon-email {
-		filter: drop-shadow( 0 0 1px #23282d );
-	}
+.tout-social-button-icon-email {
+    filter: drop-shadow( 0 0 1px #23282d );
 }
