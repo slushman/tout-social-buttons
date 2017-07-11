@@ -23,13 +23,14 @@
 class Tout_Social_Buttons_Deactivator {
 
 	/**
-	 * Short Description. (use period)
-	 *
-	 * Long Description.
+	 * Removes plugin options from the database.
 	 *
 	 * @since 		1.0.0
 	 */
 	public static function deactivate() {
+
+		delete_option( 'tout-social-buttons-settings' );
+		delete_option( 'tout-social-buttons-errors' );
 
 	} // deactivate()
 
