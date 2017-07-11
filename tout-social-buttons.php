@@ -24,14 +24,6 @@
  * Text Domain:       tout-social-buttons
  * Domain Path:       /languages
  *
- * PRO Version
- * @todo 		Shortcode: add options for sharing specific content within the shortcode.
- *         			blockquotes
- * @todo 		Design: more options for the button designs - square, circle, etc
- * @todo 		Public: Side pop-out menu sharing window option - like time.com
- * @todo 		Admin Option: tab of post types (public only) where the share buttons should appear.
- * @todo 		Public: show the buttons, in the correct order, on selected  post types
- *
  * Analytics Add-on
  * @todo 		Analytics: separate settings tab. Show each link and its share count on each network.
  * @todo 		Analytics: each post has a metabox showing each share: time, date, and where.

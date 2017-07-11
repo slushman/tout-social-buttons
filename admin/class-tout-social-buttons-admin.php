@@ -31,6 +31,13 @@ class Tout_Social_Buttons_Admin {
 	 */
 	private $plugin_name;
 
+	/**
+	 * The settings tabs.
+	 *
+	 * @since 		1.0.0
+	 * @access 		private
+	 * @var 		array 		$tabs 		The settings tabs.
+	 */
 	private $tabs;
 
 	/**
