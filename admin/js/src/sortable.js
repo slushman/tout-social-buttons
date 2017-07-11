@@ -7,7 +7,7 @@
 	 * Saves the button order via AJAX and in the button-order hidden field.
 	 */
 
-	var sorter = $('#tout-btn-sort');
+	var sorter = $('#tout-social-button-sort');
 
 	if ( ! sorter ) { return; }
 
@@ -17,7 +17,7 @@
 		//pullPlaceholder: true,
 		onDrop: function ( $item, container, _super, event ) {
 
-			var btnOrderField = $('#tout-button-order');
+			var btnOrderField = $('#tout-social-button-order');
 			var newOrderObjects = sorter.sortable('serialize').get();
 			var newOrder = newOrderObjects[0].map( function ( item ){
 

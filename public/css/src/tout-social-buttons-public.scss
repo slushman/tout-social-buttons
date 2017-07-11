@@ -18,16 +18,16 @@
     display: none;
 }
 
-.tout-button-link {
+.tout-social-button-link {
     display: inline-block;
 
     @each $brand, $color in $brands {
-        .#{$brand} {
+        .tout-social-button-icon-#{$brand} {
             fill: $color;
         }
 	}
 
-	.email {
+	.tout-social-button-icon-email {
 		filter: drop-shadow( 0 0 1px #23282d );
 	}
 }

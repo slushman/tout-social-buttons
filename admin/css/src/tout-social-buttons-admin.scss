@@ -6,7 +6,7 @@
 @import '../../../includes/css/src/buttons';
 @import '../../../includes/css/src/mixins';
 
-.tout-btn-wrap {
+.tout-social-buttons-wrap {
 	cursor 		: move;
 	padding 	: 0 0.5em;
 
@@ -19,7 +19,7 @@
 	}
 }
 
-.tout-btn-checkbox {
+.tout-social-button-checkbox {
 	left 		: 50%;
 	position 	: absolute;
 	opacity 	: 0;
@@ -28,19 +28,19 @@
 	z-index 	: -1;
 }
 
-.tout-btn-icon {
+.tout-social-button-icon {
 	fill 		: #23282d;
 }
 
 .checked {
 
     @each $brand, $color in $brands {
-        .#{$brand} {
+        .tout-social-button-icon-#{$brand} {
             fill: $color;
         }
 	}
 
-	.email {
+	.tout-social-button-icon-email {
 		filter: drop-shadow( 0 0 1px #23282d );
 	}
 }

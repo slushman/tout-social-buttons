@@ -16,7 +16,7 @@
 
 		if ( 'INPUT' !== target.nodeName ) { return; }
 
-		var wrap = tout.getParent( target, 'tout-btn-wrap' );
+		var wrap = tout.getParent( target, 'tout-social-button-wrap' );
 
 		if ( ! wrap ) { return; }
 

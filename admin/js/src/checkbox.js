@@ -12,8 +12,8 @@
 	 */
 	function checkBox( target ) {
 
-		var parent = tout.getParent( target, 'tout-btn' );
-		var checkbox = parent.querySelector( '.tout-btn-checkbox' );
+		var parent = tout.getParent( target, 'tout-social-button' );
+		var checkbox = parent.querySelector( '.tout-social-button-checkbox' );
 		var checked = '';
 
 		if ( 'checked' === checkbox.getAttribute( 'checked' ) ) { // checkbox is checked
@@ -51,7 +51,7 @@
 		var checked = checkBox( target );
 
 		// save the selection via AJAX.
-		var wrap = tout.getParent( target, 'tout-btn-wrap' );
+		var wrap = tout.getParent( target, 'tout-social-button-wrap' );
 		var selection = wrap.getAttribute( 'data-id' );
 
 		tout.saveAjax( {

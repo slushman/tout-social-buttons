@@ -16,7 +16,7 @@
 
 		if ( 'INPUT' !== target.nodeName ) { return; }
 
-		var wrap = tout.getParent( target, 'tout-btn-wrap' );
+		var wrap = tout.getParent( target, 'tout-social-button-wrap' );
 
 		if ( ! wrap ) { return; }
 
@@ -55,8 +55,8 @@
 	 */
 	function checkBox( target ) {
 
-		var parent = tout.getParent( target, 'tout-btn' );
-		var checkbox = parent.querySelector( '.tout-btn-checkbox' );
+		var parent = tout.getParent( target, 'tout-social-button' );
+		var checkbox = parent.querySelector( '.tout-social-button-checkbox' );
 		var checked = '';
 
 		if ( 'checked' === checkbox.getAttribute( 'checked' ) ) { // checkbox is checked
@@ -94,7 +94,7 @@
 		var checked = checkBox( target );
 
 		// save the selection via AJAX.
-		var wrap = tout.getParent( target, 'tout-btn-wrap' );
+		var wrap = tout.getParent( target, 'tout-social-button-wrap' );
 		var selection = wrap.getAttribute( 'data-id' );
 
 		tout.saveAjax( {
@@ -219,7 +219,7 @@
 	 * Saves the button order via AJAX and in the button-order hidden field.
 	 */
 
-	var sorter = $('#tout-btn-sort');
+	var sorter = $('#tout-social-button-sort');
 
 	if ( ! sorter ) { return; }
 
@@ -229,7 +229,7 @@
 		//pullPlaceholder: true,
 		onDrop: function ( $item, container, _super, event ) {
 
-			var btnOrderField = $('#tout-button-order');
+			var btnOrderField = $('#tout-social-button-order');
 			var newOrderObjects = sorter.sortable('serialize').get();
 			var newOrder = newOrderObjects[0].map( function ( item ){
 

@@ -21,7 +21,7 @@ class Tout_Button_QZone extends Tout_Button {
 
 		$this->set_settings();
 
-		$this->icon = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" class="tout-btn-icon qzone"><path d="M14.6 12.4l.5 1.5c-1.7-.2-4.2-.4-6.4-.8-.1-.3 6.1-4.6 6-4.9-5.5-.9-9.6 0-9.6 0l6.7.9s-6.3 4.2-6.4 4.6c2.8.5 7.3.5 9.8.4.6 1.9 1.4 4.6.9 4.9-1.2.6-6.3-3.3-6.3-3.3s-5 3.6-5.8 3.2c-1.2-.6.5-6.6.5-6.6S-.1 8.6.2 7.7c.3-.9 7-1.2 7-1.2S9.1 1.2 10 1s3 5.2 3 5.2 6.4.7 6.8 1.3c.4.5-5.2 4.9-5.2 4.9zM17 14s-.7 0-1.9.1c0-.1-.1-.2-.1-.2 1.3.1 2 .1 2 .1z"/></svg>';
+		$this->icon = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" class="tout-social-button-icon tout-social-button-icon-qzone"><path d="M14.6 12.4l.5 1.5c-1.7-.2-4.2-.4-6.4-.8-.1-.3 6.1-4.6 6-4.9-5.5-.9-9.6 0-9.6 0l6.7.9s-6.3 4.2-6.4 4.6c2.8.5 7.3.5 9.8.4.6 1.9 1.4 4.6.9 4.9-1.2.6-6.3-3.3-6.3-3.3s-5 3.6-5.8 3.2c-1.2-.6.5-6.6.5-6.6S-.1 8.6.2 7.7c.3-.9 7-1.2 7-1.2S9.1 1.2 10 1s3 5.2 3 5.2 6.4.7 6.8 1.3c.4.5-5.2 4.9-5.2 4.9zM17 14s-.7 0-1.9.1c0-.1-.1-.2-.1-.2 1.3.1 2 .1 2 .1z"/></svg>';
 		$this->id 	= 'qzone';
 		$this->name = esc_html__( 'QZone', 'tout-social-buttons' );
 

@@ -20,14 +20,14 @@
 
 		if ( 'UL' === target.nodeName ) { return event; }
 
-		var wrap = tout.getParent( target, 'tout-button' );
+		var wrap = tout.getParent( target, 'tout-social-button' );
 		var selection = wrap.getAttribute( 'data-id' );
 
 		if ( 'email' === selection ) { return event; }
 
 		event.preventDefault();
 
-		var link = wrap.querySelector( '.tout-button-popup-link' );
+		var link = wrap.querySelector( '.tout-social-button-popup-link' );
 		var href = link.getAttribute( 'href' );
 
 		window.open( href, 'Share', 'menubar=no,resizeable=no,scrollbars=no,status=no,width=550,height=420' );

@@ -15,12 +15,12 @@
 $class_name = 'Tout_Button_' . $button;
 $instance 	= new $class_name;
 
-?><li class="tout-button tout-button-<?php echo esc_attr( $button ); ?>" data-id="<?php echo esc_attr( $button ); ?>" data-name="<?php echo esc_attr( $instance->get_name() ); ?>">
-	<a class="tout-button-link<?php
+?><li class="tout-social-button tout-social-button-<?php echo esc_attr( $button ); ?>" data-id="<?php echo esc_attr( $button ); ?>" data-name="<?php echo esc_attr( $instance->get_name() ); ?>">
+	<a class="tout-social-button-link tout-social-button-link-<?php echo esc_attr( $button );
 
 		if ( 'popup' === $this->settings['button-behavior'] ) {
 
-			echo esc_attr( ' tout-button-popup-link' );
+			echo esc_attr( ' tout-social-button-popup-link' );
 
 		}
 
