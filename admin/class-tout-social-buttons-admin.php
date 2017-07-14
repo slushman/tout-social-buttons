@@ -129,6 +129,7 @@ class Tout_Social_Buttons_Admin {
 	 *
 	 * @hooked 		admin_enqueue_scripts
 	 * @since 		1.0.0
+	 * @param 		string 		$hook_suffix 		The suffix for the admin page.
 	 */
 	public function enqueue_scripts( $hook_suffix ) {
 
@@ -512,17 +513,6 @@ class Tout_Social_Buttons_Admin {
 		include( plugin_dir_path( dirname( __FILE__ ) ) . 'admin/partials/tout-social-buttons-settings-section.php' );
 
 	} // sections()
-
-	/**
-	 * Sets the class variable $settings.
-	 *
-	 * @since 		1.0.0
-	 */
-	private function set_settings() {
-
-		$this->settings = get_option( TOUT_SOCIAL_BUTTONS_SETTINGS );
-
-	} // set_settings()
 
 	/**
 	 * Sets the class variable $tabs.
