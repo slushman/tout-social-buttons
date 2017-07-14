@@ -19,7 +19,7 @@
 }
 
 .tout-social-button-link {
-    display: inline-block;
+    display: block;
 }
 
 @each $brand, $color in $brands {
