@@ -18,28 +18,41 @@ $instance 	= new $class_name;
 ?><li class="tout-social-button tout-social-button-<?php echo esc_attr( $button ); ?>" data-id="<?php echo esc_attr( $button ); ?>" data-name="<?php echo esc_attr( $instance->get_name() ); ?>">
 	<a class="tout-social-button-link tout-social-button-link-<?php echo esc_attr( $button );
 
-		if ( 'popup' === $this->settings['button-behavior'] ) {
+			if ( 'popup' === $this->settings['button-behavior'] ) {
 
-			echo esc_attr( ' tout-social-button-popup-link' );
+				echo esc_attr( ' tout-social-button-popup-link' );
 
-		}
+			}
 
-		?>" href="<?php echo esc_url( $instance->get_url() ); ?>" rel="nofollow"<?php
+			?>" href="<?php echo esc_url( $instance->get_url() ); ?>" rel="nofollow"<?php
 
-		if ( ! empty( $this->settings['button-behavior'] ) && 'email' !== $button ) {
+			if ( ! empty( $this->settings['button-behavior'] ) && 'email' !== $button ) {
 
-			echo ' target="_blank"';
+				echo ' target="_blank"';
 
-		}
+			}
 
-	?> title="<?php echo esc_attr( $instance->get_title() ); ?>">
-	<span class="screen-reader-text"><?php
+		?> title="<?php echo esc_attr( $instance->get_title() ); ?>"><?php
 
-		echo $instance->get_a11y_text();
+		echo $instance->get_icon();
 
-	?></span><?php
+		?><span class="screen-reader-text"><?php
 
-	echo $instance->get_type();
+			echo $instance->get_a11y_text();
 
-	?></a>
+		?></span>
+		<span class="tout-social-button-text<?php
+
+			if ( 'icon' === $instance->get_type() ) :
+
+				echo ' screen-reader-text' ;
+
+			endif;
+
+			?>"><?php
+
+			echo $instance->get_name();
+
+		?></span>
+	</a>
 </li>

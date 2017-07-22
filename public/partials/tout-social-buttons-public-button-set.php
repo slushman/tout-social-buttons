@@ -21,7 +21,7 @@
 		echo apply_filters( 'tout_social_buttons_pretext', esc_html__( 'Share This:', 'tout-social-buttons' ) );
 
 	?></span>
-	<ul class="tout-social-buttons"><?php
+	<ul class="<?php echo esc_attr( $this->get_button_set_classes() ); ?>" id="tout-social-buttons"><?php
 
 		foreach ( $this->buttons as $button ) :
 

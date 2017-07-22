@@ -397,7 +397,17 @@ class Tout_Social_Buttons_Field {
 
 		if ( 'settings' === $this->context ) {
 
-			$this->settings = get_option( TOUT_SOCIAL_BUTTONS_SETTINGS );
+			$settings = get_option( TOUT_SOCIAL_BUTTONS_SETTINGS );
+
+			if ( ! $settings ) {
+
+				$this->settings = array();
+
+			} else {
+
+				$this->settings = $settings;
+
+			}
 
 		} elseif ( 'metaboxes' === $this->context ) {
 

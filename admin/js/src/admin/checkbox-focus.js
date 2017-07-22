@@ -12,11 +12,11 @@
 	 */
 	function processEvent( event ) {
 
-		var target = tout.getEventTarget( event );
+		var target = getEventTarget( event );
 
 		if ( 'INPUT' !== target.nodeName ) { return; }
 
-		var wrap = tout.getParent( target, 'tout-social-button-wrap' );
+		var wrap = getParent( target, 'tout-social-button-wrap' );
 
 		if ( ! wrap ) { return; }
 

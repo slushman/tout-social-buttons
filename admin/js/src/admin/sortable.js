@@ -35,8 +35,6 @@
 				order: newOrder
 			});
 
-			_super( $item, container );
-
 		}
 	});
 

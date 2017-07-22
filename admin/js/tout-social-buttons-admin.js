@@ -12,11 +12,11 @@
 	 */
 	function processEvent( event ) {
 
-		var target = tout.getEventTarget( event );
+		var target = getEventTarget( event );
 
 		if ( 'INPUT' !== target.nodeName ) { return; }
 
-		var wrap = tout.getParent( target, 'tout-social-button-wrap' );
+		var wrap = getParent( target, 'tout-social-button-wrap' );
 
 		if ( ! wrap ) { return; }
 
@@ -55,7 +55,7 @@
 	 */
 	function checkBox( target ) {
 
-		var parent = tout.getParent( target, 'tout-social-button' );
+		var parent = getParent( target, 'tout-social-button' );
 		var checkbox = parent.querySelector( '.tout-social-button-checkbox' );
 		var checked = '';
 
@@ -86,7 +86,7 @@
 	 */
 	function processEvent( event ) {
 
-		var target = tout.getEventTarget( event );
+		var target = getEventTarget( event );
 
 		if ( 'path' !== target.nodeName && 'INPUT' !== target.nodeName && 'svg' !== target.nodeName ) { return; }
 
@@ -94,7 +94,7 @@
 		var checked = checkBox( target );
 
 		// save the selection via AJAX.
-		var wrap = tout.getParent( target, 'tout-social-button-wrap' );
+		var wrap = getParent( target, 'tout-social-button-wrap' );
 		var selection = wrap.getAttribute( 'data-id' );
 
 		tout.saveAjax( {
@@ -115,100 +115,78 @@
 })( jQuery );
 
 /**
- * The following pattern allows for outside files to use these functions as a library.
+ * Returns the event target.
  *
- * The parameter passed into this function is 'exports'.
- * Each function within defines itself within 'exports', along with a unique name
- * 	that outside scripts can reference.
- * In the parenthesis below, setup the blank this.tout as an empty object.
- *
- * Outside scripts would call these like:
- * tout.getEventTarget( eventName )
- * tout.getParent( element, className )
+ * @since 		1.0.0
+ * @param 		object 		event 		The event.
+ * @return 		object 		target 		The event target.
  */
-(function( exports, $ ) {
+function getEventTarget( event ) {
 
-	'use strict';
+	event.event || window.event;
 
-	/**
-	 * Returns the event target.
-	 *
-	 * @param 		object 		event 		The event.
-	 * @return 		object 		target 		The event target.
-	 */
-	exports.getEventTarget = function getEventTarget( event ) {
+	return event.target || event.scrElement;
 
-		event = event || window.event;
+} // getEventTarget()
 
-		return event.target || event.srcElement;
+/**
+ * Returns the parent node with the requested class.
+ *
+ * This is recursive, so it will continue up the DOM tree
+ * until the correct parent is found.
+ *
+ * @since 		1.0.0
+ * @param 		object 		el 				The node element.
+ * @param 		string 		className 		Name of the class to find.
+ * @return 		object 						The parent element.
+ */
+function getParent( el, className ) {
 
-	} // getEventTarget()
+	var parent = el.parentNode;
 
-	/**
-	 * Returns the parent node with the requested class.
-	 *
-	 * This is recursive, so it will continue up the DOM tree
-	 * until the correct parent is found.
-	 *
-	 * @param 		object 		el 				The node element.
-	 * @param 		string 		className 		Name of the class to find.
-	 * @return 		object 						The parent element.
-	 */
-	exports.getParent = function getParent( el, className ) {
+	if ( '' !== parent.classList && parent.classList.contains( className ) ) {
 
-		var parent = el.parentNode;
+		return parent;
 
-		if ( '' !== parent.classList && parent.classList.contains( className ) ) {
+	}
 
-			return parent;
+	return getParent( parent, className );
 
+} // getParent()
+
+/**
+ * Sends data to a PHP handler for saving via AJAX.
+ *
+ * @since 		1.0.0
+ * @param 		array 		paramData 		The data to send to the PHP handler.
+ */
+var tout = {};
+
+tout.saveAjax = function( paramData ) {
+	jQuery.ajax({
+		url: ajaxurl,
+		type: 'POST',
+		async: true,
+		cache: false,
+		data: paramData,
+		success: function ( response ) {
+			jQuery( '.button-status' ).html( '<span class="status">' + response  + '</span>' );
+			jQuery( '.button-status' ).addClass( 'updated' );
+			jQuery( '.button-status' ).fadeIn( 'fast' );
+			jQuery( '.button-status' ).fadeOut( 2000 );
+
+			return;
+		},
+		error: function (xhr, testStatus, error ) {
+			jQuery( '.button-status' ).html( '<span class="status">' + error + '</span>' );
+			jQuery( '.button-status' ).addClass( 'error' );
+			jQuery( '.button-status' ).fadeIn( 'fast' );
+			jQuery( '.button-status' ).fadeOut( 2000 );
+
+			return;
 		}
-
-		return exports.getParent( parent, className );
-
-	} // getParent()
-
-	/**
-	 * Sends data to a PHP handler for saving via AJAX.
-	 *
-	 * @since 		1.0.0
-	 * @param 		array 		paramData 		The data to send to the PHP handler.
-	 */
-	exports.saveAjax = function saveAjax( paramData ) {
-
-		//console.log( paramData );
-
-		var opts = {
-			url: ajaxurl,
-			type: 'POST',
-			async: true,
-			cache: false,
-			data: paramData,
-			success: function ( response ) {
-				$( '.button-status' ).html( '<span class="status">' + response  + '</span>' );
-				$( '.button-status' ).addClass( 'updated' );
-				$( '.button-status' ).fadeIn( 'fast' );
-				$( '.button-status' ).fadeOut( 2000 );
-
-				return;
-			},
-			error: function (xhr, testStatus, error ) {
-				$( '.button-status' ).html( '<span class="status">' + error + '</span>' );
-				$( '.button-status' ).addClass( 'error' );
-				$( '.button-status' ).fadeIn( 'fast' );
-				$( '.button-status' ).fadeOut( 2000 );
-
-				return;
-			}
-		}
-
-		//console.log( opts );
-
-		$.ajax( opts );
-
-	} // saveAjax()
-
-})( this.tout = {}, jQuery );
+	});
+};
 
 (function( $ ) {
 
@@ -246,8 +224,6 @@
 				tbOrderNonce: Tout_Social_Buttons_Ajax.tbOrderNonce,
 				order: newOrder
 			});
-
-			_super( $item, container );
 
 		}
 	});

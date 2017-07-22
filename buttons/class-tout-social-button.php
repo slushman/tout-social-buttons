@@ -58,6 +58,15 @@ class Tout_Button {
 	protected $settings;
 
 	/**
+	 * The button type (text or icon).
+	 *
+	 * @since 		1.0.0
+	 * @access 		private
+	 * @var 		string 		$type 		The button type.
+	 */
+	protected $type;
+
+	/**
 	 * The URL of this button.
 	 *
 	 * @since 		1.0.0
@@ -99,6 +108,10 @@ class Tout_Button {
 	 */
 	public function get_icon() {
 
+		$type = $this->get_type();
+
+		if ( 'icon' !== $type ) { return; }
+
 		return $this->icon;
 
 	} // get_icon()
@@ -114,6 +127,39 @@ class Tout_Button {
 		return $this->id;
 
 	} // get_id()
+
+	/**
+	 * Returns the selected output type for this button.
+	 *
+	 * @since 		1.0.0
+	 * @return 		mixed 		Either the button text in a span or the icon.
+	 */
+	public function get_label() {
+
+		$return = '';
+		$type 	= $this->get_type();
+
+		if ( 'icon' === $type ) :
+
+			$return .= $this->get_icon();
+
+		endif;
+
+		$return .= '<span class="tout-btn-text';
+
+		if ( 'icon' === $type ) :
+
+			$return .= ' screen-reader-text';
+
+		endif;
+
+		$return .='">';
+		$return .= $this->get_name();
+		$return .= '</span>';
+
+		return $return;
+
+	} // get_label()
 
 	/**
 	 * Returns the name for this button.
@@ -140,28 +186,14 @@ class Tout_Button {
 	} // get_title()
 
 	/**
-	 * Returns the selected output type for this button.
+	 * Returns the type for this button.
 	 *
 	 * @since 		1.0.0
-	 * @return 		mixed 		Either the button text in a span or the icon.
+	 * @return 		string 		The type class variable.
 	 */
 	public function get_type() {
 
-		$return = '';
-
-		if ( 'text' === $this->settings['button-type'] ) :
-
-			$return .= '<span class="tout-btn-text">';
-			$return .= $this->get_name();
-			$return .= '</span>';
-
-		else :
-
-			$return .= $this->get_icon();
-
-		endif;
-
-		return $return;
+		return get_option( 'tout_social_buttons_button_type' );
 
 	} // get_type()
 
@@ -211,13 +243,9 @@ class Tout_Button {
 
 		if ( is_admin() ) {
 
-			$this->a11y_text = esc_html__( 'Share content on ' . $this->get_name(), 'tout-social-buttons' );
+			$this->a11y_text = esc_html__( 'Share content on ', 'tout-social-buttons' );
 
-		} elseif ( 'icon' === $this->settings['button-type'] ) {
-
-			$this->a11y_text = esc_html__( 'Share on ' . $this->get_name(), 'tout-social-buttons' );
-
-		} elseif ( 'text' === $this->settings['button-type'] ) {
+		} else {
 
 			$this->a11y_text = esc_html__( 'Share on ', 'tout-social-buttons' );
 
@@ -235,6 +263,17 @@ class Tout_Button {
 		$this->settings = get_option( TOUT_SOCIAL_BUTTONS_SETTINGS );
 
 	} // set_settings()
+
+	/**
+	 * Sets the type class variable.
+	 *
+	 * @since 		1.0.0
+	 */
+	protected function set_type() {
+
+		$this->type = get_option( 'tout_social_buttons_button_type' );
+
+	} // set_url()
 
 	/**
 	 * Sets the url class variable.

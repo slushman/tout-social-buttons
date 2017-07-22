@@ -69,7 +69,6 @@ class Tout_Social_Buttons_Admin {
 	 * Displays an error notice displaying the error notice, if there is one.
 	 *
 	 * @since 		1.0.0
-	 * @return
 	 */
 	public function activation_error_notice() {
 
@@ -165,6 +164,18 @@ class Tout_Social_Buttons_Admin {
 		new Tout_Social_Buttons_Field_Checkbox( 'settings', $args['attributes'], $args['properties'] );
 
 	} // field_checkbox()
+
+	/**
+	 * Creates the design form field.
+	 *
+	 * @param 		array 		$args 		The field arguments.
+	 * @return 		string 					The HTML field.
+	 */
+	public function field_design( $args ) {
+
+		new Tout_Social_Buttons_Field_Design( 'settings', $args['attributes'], $args['properties'] );
+
+	} // field_design()
 
 	/**
 	 * Creates a hidden form field.
@@ -438,6 +449,25 @@ class Tout_Social_Buttons_Admin {
 			)
 		);
 
+
+
+		// Design fields
+		add_settings_field(
+			'design',
+			esc_html__( 'Design', 'tout-social-buttons-pro' ),
+			array( $this, 'field_design' ),
+			TOUT_SOCIAL_BUTTONS_SLUG,
+			TOUT_SOCIAL_BUTTONS_SLUG . '-design',
+			array(
+				'attributes' 	=> array(
+					'id' 		=> 'design'
+				),
+				'properties' 	=> array(
+					'description' 	=> __( 'Customize the appearance of the Tout.Social buttons.', 'tout-social-buttons-pro' )
+				)
+			)
+		);
+
 	} // register_fields()
 
 	/**
@@ -460,6 +490,13 @@ class Tout_Social_Buttons_Admin {
 		add_settings_section(
 			TOUT_SOCIAL_BUTTONS_SLUG . '-accounts',
 			esc_html__( 'Accounts', 'tout-social-buttons' ),
+			array( $this, 'sections' ),
+			TOUT_SOCIAL_BUTTONS_SLUG
+		);
+
+		add_settings_section(
+			TOUT_SOCIAL_BUTTONS_SLUG . '-design',
+			esc_html__( 'Design', 'tout-social-buttons' ),
 			array( $this, 'sections' ),
 			TOUT_SOCIAL_BUTTONS_SLUG
 		);
@@ -504,11 +541,12 @@ class Tout_Social_Buttons_Admin {
 	 */
 	public function sections( $params ) {
 
-		if ( TOUT_SOCIAL_BUTTONS_SLUG . '-accounts' === $params['id'] ) {
+		switch ( $params['id'] ) :
 
-			$params['description'] = __( 'Enter your username(s) for correct attributions on items shared on these sites. This is completely optional.', 'tout-social-buttons' );
+			case TOUT_SOCIAL_BUTTONS_SLUG . '-accounts': 	$params['description'] = __( 'Enter your username(s) for correct attributions on items shared on these sites. This is completely optional.', 'tout-social-buttons' ); break;
+			case TOUT_SOCIAL_BUTTONS_SLUG . '-design': 		$params['description'] = __( 'Customize the appearance of the Tout.Social buttons.', 'tout-social-buttons' ); break;
 
-		}
+		endswitch;
 
 		include( plugin_dir_path( dirname( __FILE__ ) ) . 'admin/partials/tout-social-buttons-settings-section.php' );
 
@@ -533,12 +571,6 @@ class Tout_Social_Buttons_Admin {
 		$default_tabs['settings']['url'] 		= '?page=' . TOUT_SOCIAL_BUTTONS_SETTINGS . '&tab=settings';
 		$default_tabs['settings']['fields'] 	= TOUT_SOCIAL_BUTTONS_SETTINGS;
 		$default_tabs['settings']['sections'] 	= TOUT_SOCIAL_BUTTONS_SLUG;
-
-		// Settings Tab
-		// $default_tabs['help']['name'] 		= esc_html__( 'Help', 'tout-social-buttons' );
-		// $default_tabs['help']['url'] 		= '?page=' . TOUT_SOCIAL_BUTTONS_SETTINGS . '&tab=help';
-		// $default_tabs['help']['fields'] 	= 'tout-social-buttons-help';
-		// $default_tabs['help']['sections'] 	= 'tout-social-buttons-help';
 
 		/**
 		 * The tout_social_buttons_settings_tabs filter.

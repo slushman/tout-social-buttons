@@ -31,6 +31,14 @@ class Tout_Social_Buttons_Public {
 	 */
 	private $buttons;
 
+	/**
+	 * The plugin customization settings.
+	 *
+	 * @since 		1.0.0
+	 * @access 		private
+	 * @var 		array 			$mods 		The plugin customization settings.
+	 */
+	private $mods;
 
 	/**
 	 * The ID of this plugin.
@@ -46,7 +54,7 @@ class Tout_Social_Buttons_Public {
 	 *
 	 * @since 		1.0.0
 	 * @access 		private
-	 * @var 		string 			$settings 		The plugin settings.
+	 * @var 		array 			$settings 		The plugin settings.
 	 */
 	private $settings;
 
@@ -72,6 +80,7 @@ class Tout_Social_Buttons_Public {
 		$this->version = $version;
 
 		$this->set_settings();
+		$this->set_mods();
 		$this->set_buttons();
 
 	} // __construct()
@@ -146,6 +155,25 @@ class Tout_Social_Buttons_Public {
 	} // enqueue_scripts()
 
 	/**
+	 * Returns the classes for the button set.
+	 *
+	 * @since 		1.0.0
+	 * @return 		string 			The classes for the button set.
+	 */
+	protected function get_button_set_classes() {
+
+		$return 	='';
+		$classes[] 	= 'tout-social-buttons';
+		$classes[] 	= 'icon-color-brand';
+		$classes[] 	= 'bg-color-none';
+		$classes 	= apply_filters( 'tout_social_buttons_button_set_classes', $classes );
+		$return 	= implode( ' ', $classes );
+
+		return $return;
+
+	} // get_button_set_classes()
+
+	/**
 	 * Registers shortcodes with WordPress.
 	 *
 	 * @since 		1.0.0
@@ -191,6 +219,17 @@ class Tout_Social_Buttons_Public {
 		$this->buttons = apply_filters( 'tout_social_buttons_active_buttons', $active_buttons );
 
 	} // set_buttons()
+
+	/**
+	 * Sets the $mods class variable with the Customizer settings.
+	 *
+	 * @since 		1.0.0
+	 */
+	public function set_mods() {
+
+		$this->mods = get_theme_mods();
+
+	} // set_mods()
 
 	/**
 	 * Sets the class variable $settings with the plugin settings.

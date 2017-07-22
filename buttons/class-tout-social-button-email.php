@@ -39,13 +39,9 @@ class Tout_Button_Email extends Tout_Button {
 
 		if ( is_admin() ) {
 
-			$this->a11y_text = esc_html__( 'Share content by ' . $this->name, 'tout-social-buttons' );
+			$this->a11y_text = esc_html__( 'Share content by ', 'tout-social-buttons' );
 
-		} elseif ( 'icon' === $this->settings['button-type'] ) {
-
-			$this->a11y_text = esc_html__( 'Share by ' . $this->name, 'tout-social-buttons' );
-
-		} elseif ( 'text' === $this->settings['button-type'] ) {
+		} else {
 
 			$this->a11y_text = esc_html__( 'Share by ', 'tout-social-buttons' );
 

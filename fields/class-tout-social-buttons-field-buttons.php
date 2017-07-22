@@ -14,13 +14,6 @@ class Tout_Social_Buttons_Field_Buttons extends Tout_Social_Buttons_Field {
 	var $buttons = array();
 
 	/**
-	 * Instance of the Tout_Social_Buttons_Display class.
-	 *
-	 * @var 	Tout_Social_Buttons_Display
-	 */
-	var $shared = '';
-
-	/**
 	 * Class constructor.
 	 *
 	 * @since 		1.0.0

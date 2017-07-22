@@ -8,10 +8,8 @@
 
 .tout-social-buttons {
     @include resetlist();
+
     display     : flex;
-    list-style  : none;
-    margin      : 0;
-    padding     : 0;
 }
 
 .hidden {
@@ -22,12 +20,15 @@
     display: block;
 }
 
-@each $brand, $color in $brands {
-    .tout-social-button-icon-#{$brand} {
-        fill: $color;
-    }
-}
+.icon-color-brand {
+	@each $brand, $color in $brands {
+		.tout-social-button-icon-#{$brand} {
+			fill: $color;
+		}
+	}
 
-.tout-social-button-icon-email {
-    filter: drop-shadow( 0 0 1px #23282d );
+    .tout-social-button-icon-email {
+        filter  : drop-shadow( 0 0 1px #23282d );
+        fill    : #fff;
+    }
 }

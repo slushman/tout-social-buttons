@@ -76,6 +76,7 @@ class Tout_Social_Buttons {
 		$this->define_admin_hooks();
 		$this->define_public_hooks();
 		$this->define_ajax_hooks();
+		$this->define_customizer_hooks();
 
 	} // __construct()
 
@@ -241,6 +242,11 @@ class Tout_Social_Buttons {
 		require_once( plugin_dir_path( dirname( __FILE__ ) ) . 'fields/class-tout-social-buttons-field-checkbox.php' );
 
 		/**
+		 * The class responsible for defining the buttons form field.
+		 */
+		require_once( plugin_dir_path( dirname( __FILE__ ) ) . 'fields/class-tout-social-buttons-field-design.php' );
+
+		/**
 		 * The class responsible for defining a hidden form field.
 		 */
 		require_once( plugin_dir_path( dirname( __FILE__ ) ) . 'fields/class-tout-social-buttons-field-hidden.php' );
@@ -259,6 +265,11 @@ class Tout_Social_Buttons {
 		 * The class responsible for defining all actions for saving the button order via AJAX.
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-tout-social-buttons-admin-ajax-save-buttons.php';
+
+		/**
+		 * The class responsible for defining all actions for the Customizer.
+		 */
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-tout-social-buttons-customizer.php';
 
 		$this->loader = new Tout_Social_Buttons_Loader();
 
@@ -292,15 +303,15 @@ class Tout_Social_Buttons {
 
 		$plugin_admin = new Tout_Social_Buttons_Admin( $this->get_plugin_name(), $this->get_version() );
 
-		$this->loader->add_action( 'activated_plugin', 		$plugin_admin, 'save_activation_errors' );
-		$this->loader->add_action( 'admin_notices', 		$plugin_admin, 'activation_error_notice' );
-		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
-		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
-		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'localize_scripts' );
-		$this->loader->add_action( 'admin_init', 			$plugin_admin, 'register_settings' );
-		$this->loader->add_action( 'admin_init', 			$plugin_admin, 'register_fields' );
-		$this->loader->add_action( 'admin_init', 			$plugin_admin, 'register_sections' );
-		$this->loader->add_action( 'admin_menu', 			$plugin_admin, 'add_menu' );
+		$this->loader->add_action( 'activated_plugin', 					$plugin_admin, 'save_activation_errors' );
+		$this->loader->add_action( 'admin_notices', 					$plugin_admin, 'activation_error_notice' );
+		$this->loader->add_action( 'admin_enqueue_scripts', 			$plugin_admin, 'enqueue_styles' );
+		$this->loader->add_action( 'admin_enqueue_scripts', 			$plugin_admin, 'enqueue_scripts' );
+		$this->loader->add_action( 'admin_enqueue_scripts', 			$plugin_admin, 'localize_scripts' );
+		$this->loader->add_action( 'admin_init', 						$plugin_admin, 'register_settings' );
+		$this->loader->add_action( 'admin_init', 						$plugin_admin, 'register_fields' );
+		$this->loader->add_action( 'admin_init', 						$plugin_admin, 'register_sections' );
+		$this->loader->add_action( 'admin_menu', 						$plugin_admin, 'add_menu' );
 		$this->loader->add_action( 'plugin_action_links_' . TOUT_SOCIAL_BUTTONS_FILE, $plugin_admin, 'link_settings' );
 
 	} // define_admin_hooks()
@@ -318,9 +329,29 @@ class Tout_Social_Buttons {
 
 		$this->loader->add_action( 'wp_ajax_save_button_order', $plugin_ajax, 'save_button_order' );
 		$this->loader->add_action( 'wp_ajax_save_button_selection', $plugin_ajax, 'save_button_selection' );
-		$this->loader->add_action( 'wp_ajax_save_button_type', $plugin_ajax, 'save_button_type' );
 
 	} // define_ajax_hooks()
+
+	/**
+	 * Register all of the hooks related to the customizer.
+	 *
+	 * @since 		1.0.0
+	 * @access 		private
+	 */
+	private function define_customizer_hooks() {
+
+		$plugin_customizer = new Tout_Social_Buttons_Customizer( $this->get_plugin_name(), $this->get_version() );
+
+		$this->loader->add_action( 'enqueue_customizer_styles', 				$plugin_customizer, 'enqueue_styles' );
+		$this->loader->add_action( 'customize_preview_init', 					$plugin_customizer, 'enqueue_scripts' );
+		$this->loader->add_action( 'customize_controls_enqueue_scripts', 		$plugin_customizer, 'enqueue_controls_scripts' );
+		$this->loader->add_action( 'customize_register', 						$plugin_customizer, 'register_panels', 9 );
+		$this->loader->add_action( 'customize_register', 						$plugin_customizer, 'register_sections', 9 );
+		$this->loader->add_action( 'customize_register', 						$plugin_customizer, 'register_fields', 9 );
+		$this->loader->add_action( 'tout_social_buttons_button_set_classes', 	$plugin_customizer, 'filter_button_set_classes', 10, 1 );
+		$this->loader->add_filter( 'wp_loaded', 								$plugin_customizer, 'reset_customizer', 1 );
+
+	} // define_customizer_hooks()
 
 	/**
 	 * Register all of the hooks related to the public-facing functionality

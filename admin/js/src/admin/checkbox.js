@@ -12,7 +12,7 @@
 	 */
 	function checkBox( target ) {
 
-		var parent = tout.getParent( target, 'tout-social-button' );
+		var parent = getParent( target, 'tout-social-button' );
 		var checkbox = parent.querySelector( '.tout-social-button-checkbox' );
 		var checked = '';
 
@@ -43,7 +43,7 @@
 	 */
 	function processEvent( event ) {
 
-		var target = tout.getEventTarget( event );
+		var target = getEventTarget( event );
 
 		if ( 'path' !== target.nodeName && 'INPUT' !== target.nodeName && 'svg' !== target.nodeName ) { return; }
 
@@ -51,7 +51,7 @@
 		var checked = checkBox( target );
 
 		// save the selection via AJAX.
-		var wrap = tout.getParent( target, 'tout-social-button-wrap' );
+		var wrap = getParent( target, 'tout-social-button-wrap' );
 		var selection = wrap.getAttribute( 'data-id' );
 
 		tout.saveAjax( {

@@ -6,7 +6,7 @@
 @import '../../../includes/css/src/buttons';
 @import '../../../includes/css/src/mixins';
 
-.tout-social-buttons-wrap {
+.tout-social-button-wrap {
 	cursor 		: move;
 	padding 	: 0 0.5em;
 
@@ -15,7 +15,9 @@
 	}
 
 	&.focus {
-		outline: auto 5px;
+		outline-style: auto;
+		outline-color: inherit;
+		outline-width: 5px;
 	}
 }
 
