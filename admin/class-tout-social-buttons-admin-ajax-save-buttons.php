@@ -125,34 +125,6 @@ class Tout_Social_Buttons_AJAX_Save_Buttons {
 	} // save_button_selection()
 
 	/**
-	 * Saves button type.
-	 * Request comes through AJAX.
-	 *
-	 * @since 		1.0.0
-	 */
-	public function save_button_type() {
-
-		check_ajax_referer( 'tout-social-buttons-type-ajax-nonce', 'tbTypeNonce' );
-
-		$type 							= $_POST['type'];
-		$this->settings['button-type']	= $type;
-		$update 						= update_option( TOUT_SOCIAL_BUTTONS_SETTINGS, $this->settings );
-
-		if ( ! $update ) {
-
-			echo esc_html__( 'Could not save the button type.', 'tout-social-buttons' );
-
-		} else {
-
-			echo esc_html__( 'Button type saved.', 'tout-social-buttons' );
-
-		}
-
-		wp_die();
-
-	} // save_butttype()
-
-	/**
 	 * Sets the class variable $settings.
 	 *
 	 * @since 		1.0.0
