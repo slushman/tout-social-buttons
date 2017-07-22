@@ -40,24 +40,32 @@ var project = {
 };
 
 var watch = {
-	'php': './*.php',
-	'adminScripts': {
-		'path': './admin/js/',
-		'source': './admin/js/src/*.js',
+	php: './*.php',
+	admin: {
+		scripts: {
+			filename: 'tout-social-buttons-',
+			folders: './admin/js/src/',
+			path: './admin/js/',
+			source: './admin/js/src/**/*.js',
+		},
+		styles: './admin/css/src/*.scss',
+		svgs: {
+			path: './admin/SVGs/',
+			source: './admin/SVGs/**/*.svg',
+		},
 	},
-	'adminStyles': './admin/css/src/*.scss',
-	'publicScripts': {
-		'path': './public/js/',
-		'source': './public/js/src/*.js',
-	},
-	'publicStyles': './public/css/src/*.scss',
-	'adminSVGs': {
-		'path': './admin/SVGs/',
-		'source': './admin/SVGs/**/*.svg',
-	},
-	'publicSVGs': {
-		'path': './public/SVGs/',
-		'source': './public/SVGs/**/*.svg',
+	public: {
+		scripts: {
+			filename: 'tout-social-buttons-',
+			folders: './public/js/src/',
+			path: './public/js/',
+			source: './public/js/src/**/*.js',
+		},
+		styles: './public/css/src/*.scss',
+		svgs: {
+			path: './public/SVGs/',
+			source: './public/SVGs/**/*.svg',
+		},
 	}
 }
 
@@ -91,10 +99,22 @@ var es 				= require( 'event-stream' );
 var onError = function(err) { console.log(err); }
 
 /**
+ * Returns all the folders in a directory.
+ *
+ * @see 	https://gist.github.com/jamescrowley/9058433
+ */
+function getFolders( dir ){
+	return fs.readdirSync( dir )
+		.filter(function( file ){
+			return fs.statSync( path.join( dir, file ) ).isDirectory();
+	});
+}
+
+/**
  * Processes admin SASS files and creates the admin.css file.
  */
 gulp.task( 'adminStyles', function () {
-	gulp.src( watch.adminStyles )
+	gulp.src( watch.admin.styles )
 		.pipe( plugins.plumber({ errorHandler: onError }) )
 		.pipe( plugins.sourcemaps.init() )
 		.pipe( plugins.sass( {
@@ -135,7 +155,7 @@ gulp.task( 'adminStyles', function () {
  * Processes public SASS files and creates the public.css file.
  */
 gulp.task( 'publicStyles', function () {
-	gulp.src( watch.publicStyles )
+	gulp.src( watch.public.styles )
 		.pipe( plugins.plumber({ errorHandler: onError }) )
 		.pipe( plugins.sourcemaps.init() )
 		.pipe( plugins.sass( {
@@ -173,46 +193,48 @@ gulp.task( 'publicStyles', function () {
 });
 
 /**
- * Returns all the folders in a directory.
- *
- * @see 	https://gist.github.com/jamescrowley/9058433
- */
-function getFolders( dir ){
-	return fs.readdirSync( dir )
-		.filter(function( file ){
-			return fs.statSync( path.join( dir, file ) ).isDirectory();
-	});
-}
-
-/**
- * Creates minified and unminified javascript files in the admin source directory.
+ * Creates a minified javascript file for each folder in the admin/src directory.
  */
 gulp.task( 'adminScripts', function() {
-	return gulp.src( watch.adminScripts.source )
-		.pipe( plugins.plumber({ errorHandler: onError }) )
-		.pipe( plugins.sourcemaps.init() )
-		.pipe( plugins.concat( 'tout-social-buttons-admin.js' ) )
-		.pipe( gulp.dest( watch.adminScripts.path ) )
-		.pipe( plugins.uglify() )
-		.pipe( plugins.rename( 'tout-social-buttons-admin.min.js' ) )
-		.pipe( plugins.sourcemaps.write( 'maps' ) )
-		.pipe( gulp.dest( watch.adminScripts.path ) )
+	var folders = getFolders( watch.admin.scripts.folders );
+
+	var tasks = folders.map( function( folder ) {
+
+		return gulp.src( path.join( watch.admin.scripts.folders, folder, '/*.js' ) )
+			.pipe( plugins.plumber({ errorHandler: onError }) )
+			.pipe( plugins.sourcemaps.init() )
+			.pipe( plugins.concat( watch.public.scripts.filename + folder + '.js' ) )
+			.pipe( gulp.dest( watch.admin.scripts.path ) )
+			.pipe( plugins.uglify() )
+			.pipe( plugins.rename( watch.public.scripts.filename + folder + '.min.js' ) )
+			.pipe( plugins.sourcemaps.write( 'maps' ) )
+			.pipe( gulp.dest( watch.admin.scripts.path ) );
+	});
+
+	return es.concat.apply( null, tasks )
 		.pipe( plugins.notify( { message: 'TASK: "adminScripts" Completed! 💯', onLast: true } ) );
 });
 
 /**
- * Creates minified and unminified javascript files in the public source directory.
+ * Creates a minified javascript file for each folder in the admin/src directory.
  */
 gulp.task( 'publicScripts', function() {
-	return gulp.src( watch.publicScripts.source )
-		.pipe( plugins.plumber({ errorHandler: onError }) )
-		.pipe( plugins.sourcemaps.init() )
-		.pipe( plugins.concat( 'tout-social-buttons-public.js' ) )
-		.pipe( gulp.dest( watch.publicScripts.path ) )
-		.pipe( plugins.uglify() )
-		.pipe( plugins.rename( 'tout-social-buttons-public.min.js' ) )
-		.pipe( plugins.sourcemaps.write( 'maps' ) )
-		.pipe( gulp.dest( watch.publicScripts.path ) )
+	var folders = getFolders( watch.public.scripts.folders );
+
+	var tasks = folders.map( function( folder ) {
+
+		return gulp.src( path.join( watch.public.scripts.folders, folder, '/*.js' ) )
+			.pipe( plugins.plumber({ errorHandler: onError }) )
+			.pipe( plugins.sourcemaps.init() )
+			.pipe( plugins.concat( watch.public.scripts.filename + folder + '.js' ) )
+			.pipe( gulp.dest( watch.public.scripts.path ) )
+			.pipe( plugins.uglify() )
+			.pipe( plugins.rename( watch.public.scripts.filename + folder + '.min.js' ) )
+			.pipe( plugins.sourcemaps.write( 'maps' ) )
+			.pipe( gulp.dest( watch.public.scripts.path ) );
+	});
+
+	return es.concat.apply( null, tasks )
 		.pipe( plugins.notify( { message: 'TASK: "publicScripts" Completed! 💯', onLast: true } ) );
 });
 
@@ -267,11 +289,11 @@ gulp.task( 'publicImages', function() {
  * Creates minified SVGs files for the admin.
  */
 gulp.task( 'adminSVGs', function() {
-	var folders = getFolders( watch.adminSVGs.path );
+	var folders = getFolders( watch.admin.svgs.path );
 
 	var tasks = folders.map( function( folder ) {
 
-		return gulp.src( path.join( watch.adminSVGs.path, folder, '/*.svg' ) )
+		return gulp.src( path.join( watch.admin.svgs.path, folder, '/*.svg' ) )
 			.pipe( plugins.plumber({ errorHandler: onError }) )
 			.pipe( plugins.svgmin() )
 			.pipe( gulp.dest( './admin/SVGs/' + folder + '/' ) )
@@ -283,11 +305,11 @@ gulp.task( 'adminSVGs', function() {
  * Creates minified SVGs files for the public.
  */
 gulp.task( 'publicSVGs', function() {
-	var folders = getFolders( watch.publicSVGs.path );
+	var folders = getFolders( watch.public.svgs.path );
 
 	var tasks = folders.map( function( folder ) {
 
-		return gulp.src( path.join( watch.publicSVGs.path, folder, '/*.svg' ) )
+		return gulp.src( path.join( watch.public.svgs.path, folder, '/*.svg' ) )
 			.pipe( plugins.plumber({ errorHandler: onError }) )
 			.pipe( plugins.svgmin() )
 			.pipe( gulp.dest( './public/SVGs/' + folder + '/' ) )
@@ -325,9 +347,9 @@ gulp.task( 'readme', function() {
  */
 gulp.task( 'default', ['adminStyles', 'publicStyles', 'adminScripts', 'publicScripts', 'adminImages', 'publicImages', 'adminSVGs', 'publicSVGs', 'translate', 'browser-sync', 'readme'], function () {
 	gulp.watch( watch.php, reload ); // Reload on PHP file changes.
-	gulp.watch( watch.adminStyles, ['adminStyles', reload] ); // Reload on SCSS file changes.
-	gulp.watch( watch.publicStyles, ['publicStyles', reload] ); // Reload on SCSS file changes.
-	gulp.watch( watch.adminScripts.source, [ 'adminScripts', reload ] ); // Reload on admin JS file changes.
-	gulp.watch( watch.publicScripts.source, [ 'publicScripts', reload ] ); // Reload on public JS file changes
+	gulp.watch( watch.admin.styles, ['adminStyles', reload] ); // Reload on SCSS file changes.
+	gulp.watch( watch.public.styles, ['publicStyles', reload] ); // Reload on SCSS file changes.
+	gulp.watch( watch.admin.scripts.source, [ 'adminScripts', reload ] ); // Reload on admin JS file changes.
+	gulp.watch( watch.public.scripts.source, [ 'publicScripts', reload ] ); // Reload on public JS file changes
 	gulp.watch( 'README.txt', ['readme'] );
 });
