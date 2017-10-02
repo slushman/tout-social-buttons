@@ -7,8 +7,14 @@
 @import '../../../includes/css/src/mixins';
 
 .tout-social-button-wrap {
-	cursor 		: move;
-	padding 	: 0 0.5em;
+	align-items 	: center;
+	cursor 			: move;
+	display 		: flex;
+	flex 			: 1;
+	margin 			: 0.25em;
+	max-width 		: 5em;
+	min-width 		: 120px;
+	padding 		: 0.5em;
 
 	& * {
 		cursor 	: move;
@@ -21,49 +27,21 @@
 	}
 }
 
-.tout-social-button-checkbox {
-	left 		: 50%;
-	position 	: absolute;
-	opacity 	: 0;
-	top 		: 50%;
-	transform 	: translate( -50%, -50% );
-	z-index 	: -1;
-}
+.tout-social-active-buttons {
+	justify-content: start;
 
-.tout-social-button-icon {
-	fill 		: #23282d;
-}
-
-.checked {
-
-    @each $brand, $color in $brands {
-        .tout-social-button-icon-#{$brand} {
-            fill: $color;
-        }
+	&:empty {
+		border 			: 1px dashed;
+		border-radius 	: 1em;
+		min-height		: 4em;
 	}
-
-	.tout-social-button-icon-email {
-		filter: drop-shadow( 0 0 1px #23282d );
-	}
-}
-
-.placeholder {
-	background-color: #444;
-	height 			: 45px;
-	width 			: 45px;
-}
-
-.dragging
-.dragging * {
-    cursor: move !important;
-}
-
-.dragged {
-    opacity 	: 0.6;
-	position 	: absolute;
-    z-index 	: 2000;
 }
 
 .field-alert {
 	color: #a00;
+}
+
+.placeholder,
+.sortable-ghost {
+	opacity: 0.6;
 }

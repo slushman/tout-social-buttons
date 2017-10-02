@@ -21,8 +21,7 @@
  *
  * @link       https://www.slushman.com
  * @since      1.0.0
- *
- * @package    Tout_Social_Buttons
+ * @package    ToutSocialButtons
  */
 
 // If uninstall not called from WordPress, then exit.

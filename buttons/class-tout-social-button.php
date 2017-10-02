@@ -1,16 +1,16 @@
 <?php
 
+namespace ToutSocialButtons\Buttons;
+
 /**
  * Defines a generic tout button.
  *
  * @link 			https://www.slushman.com
  * @since 			1.0.0
- *
- * @package 		Tout_Social_Buttons
- * @subpackage 		Tout_Social_Buttons/buttons
+ * @package 		ToutSocialButtons\Buttons
  * @author 			Slushman <chris@slushman.com>
  */
-class Tout_Button {
+class Tout_Social_Button {
 
 	/**
 	 * The screen reader text for this button.
@@ -20,6 +20,16 @@ class Tout_Button {
 	 * @var 		string 		$a11y_text 		The text.
 	 */
 	protected $a11y_text;
+
+	/**
+	 * An array of colors for the button.
+	 * Includes a background and icon color.
+	 *
+	 * @since 		1.0.0
+	 * @access 		private
+	 * @var 		array 		$colors 		Colors for the button.
+	 */
+	protected $colors;
 
 	/**
 	 * The SVG icon for this button.
@@ -38,6 +48,15 @@ class Tout_Button {
 	 * @var 		string 		$id 		The ID of this button.
 	 */
 	protected $id;
+
+	/**
+	 * An array of custom attributes for the button link.
+	 *
+	 * @since 		1.0.0
+	 * @access 		private
+	 * @var 		array 		$link_attributes 		Custom attributes.
+	 */
+	protected $link_attributes;
 
 	/**
 	 * The name of this button.
@@ -83,6 +102,7 @@ class Tout_Button {
 	public function __construct() {
 
 		$this->set_settings();
+		$this->set_customizer();
 		$this->set_a11y_text();
 		$this->set_url();
 
@@ -101,6 +121,20 @@ class Tout_Button {
 	} // get_a11y_text()
 
 	/**
+	 * Returns the either the colors array or the requested color.
+	 *
+	 * @since 		1.0.0
+	 * @return 		array|string 		Colors array or the requested color.
+	 */
+	public function get_colors( $color = '' ) {
+
+		if ( empty( $color ) ) { return $this->colors; }
+
+		return $colors[$color];
+
+	} // get_colors()
+
+	/**
 	 * Returns the SVG icon for this button.
 	 *
 	 * @since 		1.0.0
@@ -110,7 +144,7 @@ class Tout_Button {
 
 		$type = $this->get_type();
 
-		if ( 'icon' !== $type ) { return; }
+		if ( 'text' === $type && ! is_admin() && ! is_customize_preview() ) { return; }
 
 		return $this->icon;
 
@@ -129,37 +163,38 @@ class Tout_Button {
 	} // get_id()
 
 	/**
-	 * Returns the selected output type for this button.
+	 * Returns a string of custom attributes for the button link.
 	 *
 	 * @since 		1.0.0
-	 * @return 		mixed 		Either the button text in a span or the icon.
+	 * @return 		string 		Custom link attributes.
 	 */
-	public function get_label() {
+	public function get_link_attributes() {
+
+		if ( empty( $this->link_attributes ) ) { return; }
 
 		$return = '';
-		$type 	= $this->get_type();
 
-		if ( 'icon' === $type ) :
+		foreach ( $this->link_attributes as $key => $value ) :
 
-			$return .= $this->get_icon();
+		    if ( 'data' === $key ) :
 
-		endif;
+		        foreach ( $this->link_attributes['data'] as $key => $value ) :
 
-		$return .= '<span class="tout-btn-text';
+		            $return .= ' data-' . $key . '="' . esc_attr( $value ) . '" ';
 
-		if ( 'icon' === $type ) :
+		        endforeach;
 
-			$return .= ' screen-reader-text';
+		    else :
 
-		endif;
+		        $return .= ' ' . $key . '="' . esc_attr( $value ) . '" ';
 
-		$return .='">';
-		$return .= $this->get_name();
-		$return .= '</span>';
+		    endif;
+
+		endforeach;
 
 		return $return;
 
-	} // get_label()
+	} // get_link_attributes()
 
 	/**
 	 * Returns the name for this button.
@@ -169,9 +204,30 @@ class Tout_Button {
 	 */
 	public function get_name() {
 
-		return $this->name;
+		/**
+		 * The tout_social_buttons_button_name filter.
+		 *
+		 * Allows for change the button text.
+		 *
+		 * @since 		1.0.0
+		 * @var 		string 		$name
+		 */
+		return apply_filters( 'tout_social_buttons_button_name',  $this->name );
 
 	} // get_name()
+
+	/**
+	 * Allows additional accepted protocols for esc_url().
+	 * Defined in the child class.
+	 *
+	 * @since 		1.0.0
+	 * @return 		array 		Array of allowed protocols.
+	 */
+	public function get_protocols() {
+
+		return NULL;
+
+	} // get_protocols()
 
 	/**
 	 * Returns the name for this button.
@@ -193,7 +249,9 @@ class Tout_Button {
 	 */
 	public function get_type() {
 
-		return get_option( 'tout_social_buttons_button_type' );
+		$options = get_option( 'tout_social_buttons' );
+
+		return $options['button_type'];
 
 	} // get_type()
 
@@ -205,32 +263,30 @@ class Tout_Button {
 	 */
 	public function get_url() {
 
+	//	return add_query_arg( $this->url['args'], $this->url['base_url'] );
+
 		$title 		= urlencode( get_the_title() );
 		$excerpt 	= urlencode( get_the_excerpt() );
 		$link 		= urlencode( get_permalink() );
 		$image 		= urlencode( wp_get_attachment_url( get_post_thumbnail_id() ) );
 
-		return esc_url( add_query_arg( $this->url['args'], $this->url['base_url'] ) );
+		$url = add_query_arg( $this->url['args'], $this->url['base_url'] );
+
+		return $url;
 
 	} // get_url()
 
 	/**
-	 * Checks if the button is selected in the admin.
+	 * Checks if the button is in the active buttons.
 	 *
 	 * @since 		1.0.0
 	 * @return 		bool 	TRUE if button is selected, otherwise FALSE.
 	 */
 	public function is_active() {
 
-		if ( 1 === $this->settings['button-' . $this->get_id()] ) {
+		$active = explode( ',', $this->settings['active-buttons'] );
 
-			return TRUE;
-
-		} else {
-
-			return FALSE;
-
-		}
+		return in_array( $this->id, $active );
 
 	} // is_active()
 
@@ -254,7 +310,20 @@ class Tout_Button {
 	} // set_a11y_text()
 
 	/**
-	 * Sets the class variable $settings with the plugin settings.
+	 * Sets the $customizer class variable.
+	 *
+	 * @since 		1.0.0
+	 */
+	protected function set_customizer() {
+
+		$this->customizer = get_option( TOUT_SOCIAL_BUTTON_CUSTOMIZER );
+
+	} // set_customizer()
+
+	/**
+	 * Sets the class variable $setting.
+	 *
+	 * Only contains whether this button is activatred or not.
 	 *
 	 * @since 		1.0.0
 	 */
@@ -271,7 +340,7 @@ class Tout_Button {
 	 */
 	protected function set_type() {
 
-		$this->type = get_option( 'tout_social_buttons_button_type' );
+		$this->type = $this->customizer['button_type'];
 
 	} // set_url()
 

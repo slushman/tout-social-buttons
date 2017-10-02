@@ -10,6 +10,6 @@
 
 ?>"><?php
 
-	echo wp_kses( $this->properties['description'], array( 'code' => array() ) ); 
+	echo wp_kses( $this->properties['description'], array( 'code' => array() ) );
 
 ?></span>

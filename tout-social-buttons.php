@@ -10,7 +10,7 @@
  *
  * @link              https://www.slushman.com
  * @since             1.0.0
- * @package           Tout_Social_Buttons
+ * @package           ToutSocialButtons
  *
  * @wordpress-plugin
  * Plugin Name:       Tout.Social Buttons
@@ -24,71 +24,64 @@
  * Text Domain:       tout-social-buttons
  * Domain Path:       /languages
  *
- * Analytics Add-on
- * @todo 		Analytics: separate settings tab. Show each link and its share count on each network.
- * @todo 		Analytics: each post has a metabox showing each share: time, date, and where.
+ * @todo 		Public: add Pin It button to images used in content and/or featured images.
  *
- * Schedule Add-on:
- * Adds the ability to schedule social media posts. You can schedule social media posts when writing posts
- * 	and have them auto-publish those posts, so your content marketing efforts are on-going.
- * Posts can be re-published on your social feeds at a custom or pre-chosen schedule based on best practices.
+ * @todo 		Blocks: add a Gutenblock for the buttons.
+ * @todo 		Blocks: add a click-to-tweet Gutenblock for blockquote sharing
+ *         			Is there already a blockquote block? Can we add an option that instead of creating another one?
  *
- * @todo 		Admin: add options for sharing particular content on your social networks
- *         				on a schedule. Uses WP-Cron to schedule the social post.
- * @todo 		Admin: add the ability to schedule social media posts on a chosen schedule.
- * @todo 		Admin: add the ability to schedule social media posts on a custom schedule.
- * @todo 		Admin: add login and API bridges for each social network.
+ * @todo 		ON HOLD. Figure out AJAX saving via Fetch API.
  */
+
+use ToutSocialButtons\Includes as Inc;
+use ToutSocialButtons\Admin;
+use ToutSocialButtons\Frontend;
+use ToutSocialButtons\Buttons as Buttons;
+use ToutSocialButtons\Blocks as Blocks;
 
 // If this file is called directly, abort.
-if ( ! defined( 'WPINC' ) ) {
-	die;
-}
+if ( ! defined( 'WPINC' ) ) { die; }
 
+/**
+ * Define constants.
+ */
 define( 'TOUT_SOCIAL_BUTTONS_FILE', plugin_basename( __FILE__ ) );
 define( 'TOUT_SOCIAL_BUTTONS_SLUG', 'tout-social-buttons' );
-define( 'TOUT_SOCIAL_BUTTONS_SETTINGS', 'tout-social-buttons-settings' );
+define( 'TOUT_SOCIAL_BUTTONS_SETTINGS', 'tout_social_buttons_settings' );
+define( 'TOUT_SOCIAL_BUTTONS_VERSION', '1.0.0' );
+define( 'TOUT_SOCIAL_BUTTON_CUSTOMIZER', 'tout_social_buttons' );
 
 /**
- * The code that runs during plugin activation.
- * This action is documented in includes/class-tout-social-buttons-activator.php
+ * Include the autoloader.
  */
-function activate_tout_social_buttons() {
-	require_once plugin_dir_path( __FILE__ ) . 'includes/class-tout-social-buttons-activator.php';
-	Tout_Social_Buttons_Activator::activate();
-}
+require_once plugin_dir_path( __FILE__ ) . 'includes/class-autoloader.php';
 
 /**
- * The code that runs during plugin deactivation.
- * This action is documented in includes/class-tout-social-buttons-deactivator.php
+ * Activation and Deactivation Hooks.
  */
-function deactivate_tout_social_buttons() {
-	require_once plugin_dir_path( __FILE__ ) . 'includes/class-tout-social-buttons-deactivator.php';
-	Tout_Social_Buttons_Deactivator::deactivate();
-}
-
-register_activation_hook( __FILE__, 'activate_tout_social_buttons' );
-register_deactivation_hook( __FILE__, 'deactivate_tout_social_buttons' );
+register_activation_hook( __FILE__, array( 'ToutSocialButtons\Includes\Activator', 'activate' ) );
+register_deactivation_hook( __FILE__, array( 'ToutSocialButtons\Includes\Deactivator', 'deactivate' ) );
 
 /**
- * The core plugin class that is used to define internationalization,
- * admin-specific hooks, and public-facing site hooks.
+ * Initializes each class and adds the hooks action in each to init.
  */
-require plugin_dir_path( __FILE__ ) . 'includes/class-tout-social-buttons.php';
+function tout_social_buttons_init() {
 
-/**
- * Begins execution of the plugin.
- *
- * Since everything within the plugin is registered via hooks,
- * then kicking off the plugin from this point in the file does
- * not affect the page life cycle.
- *
- * @since    1.0.0
- */
-function run_tout_social_buttons() {
+	$classes[] = new Inc\i18n();
+	$classes[] = new Admin\Admin();
+	$classes[] = new Admin\Ajax_Save_Buttons();
+	$classes[] = new Admin\Customizer();
+	$classes[] = new Buttons\Button_Set();
+	$classes[] = new Frontend\Frontend();
+	$classes[] = new Frontend\Shortcode_Clicktotweet();
+	//$classes[] = new Blocks\Blocks();
 
-	$plugin = new Tout_Social_Buttons();
-	$plugin->run();
+	foreach ( $classes as $class ) {
 
-}
-run_tout_social_buttons();
+		add_action( 'init', array( $class, 'hooks' ) );
+
+	}
+
+} // tout_social_buttons_init()
+
+add_action( 'plugins_loaded', 'tout_social_buttons_init' );

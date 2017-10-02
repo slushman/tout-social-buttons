@@ -3,3 +3,9 @@
 	margin 		: 0;
 	padding 	: 0;
 }
+
+@mixin clear() {
+	clear 	: both;
+	content : "";
+	display	: table;
+}

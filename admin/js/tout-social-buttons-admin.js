@@ -1,119 +1,3 @@
-(function() {
-
-	'use strict';
-
-	/**
-	 * Gets the event target, gets the parent wrap element,
-	 * then on focusin it adds the focus class or on focusout
-	 * it removes the focus class.
-	 *
-	 * @since 		1.0.0
-	 * @param 		object 		event 		The event.
-	 */
-	function processEvent( event ) {
-
-		var target = getEventTarget( event );
-
-		if ( 'INPUT' !== target.nodeName ) { return; }
-
-		var wrap = getParent( target, 'tout-social-button-wrap' );
-
-		if ( ! wrap ) { return; }
-
-		if ( 'focusin' === event.type && ! wrap.classList.contains( 'focus' ) ) {
-
-			wrap.classList.add( 'focus' );
-
-		} else if ( 'focusout' === event.type && wrap.classList.contains( 'focus' ) ) {
-
-			wrap.classList.remove( 'focus' );
-
-		}
-
-	} // processEvent()
-
-	var buttons = document.querySelector( '.tout-social-buttons' );
-
-	if ( ! buttons ) { return; }
-
-	buttons.addEventListener( 'focusin', processEvent, true );
-	buttons.addEventListener( 'focusout', processEvent, true );
-
-})();
-
-(function( $ ) {
-
-	'use strict';
-
-	/**
-	 * Checks the hidden checkbox input when the icon is clicked.
-	 * Returns boolean: TRUE if the box was checked, otherwise FALSE.
-	 *
-	 * @since 		1.0.0
-	 * @param 		object 		target 		The event target object.
-	 * @return 		bool 					Whether the box was checked or not.
-	 */
-	function checkBox( target ) {
-
-		var parent = getParent( target, 'tout-social-button' );
-		var checkbox = parent.querySelector( '.tout-social-button-checkbox' );
-		var checked = '';
-
-		if ( 'checked' === checkbox.getAttribute( 'checked' ) ) { // checkbox is checked
-
-			checkbox.removeAttribute( 'checked' );
-			checked = 0;
-
-		} else {
-
-			checkbox.setAttribute( 'checked', 'checked' );
-			checked = 1;
-
-		}
-
-		parent.classList.toggle( 'checked' );
-
-		return checked;
-
-	} // checkBox()
-
-	/**
-	 * Gets the event target, then gets the checkbox,
-	 * then checks the box.
-	 *
-	 * @since 		1.0.0
-	 * @param 		object 		event 		The event.
-	 */
-	function processEvent( event ) {
-
-		var target = getEventTarget( event );
-
-		if ( 'path' !== target.nodeName && 'INPUT' !== target.nodeName && 'svg' !== target.nodeName ) { return; }
-
-		// Check the hidden checkbox input for the selected icon.
-		var checked = checkBox( target );
-
-		// save the selection via AJAX.
-		var wrap = getParent( target, 'tout-social-button-wrap' );
-		var selection = wrap.getAttribute( 'data-id' );
-
-		tout.saveAjax( {
-			action: 'save_button_selection',
-			tbSelectionNonce: Tout_Social_Buttons_Ajax.tbSelectionNonce,
-			selection: selection,
-			checked: checked
-		});
-
-	} // processEvent()
-
-	var buttons = document.querySelector( '.tout-social-buttons' );
-
-	if ( ! buttons ) { return; }
-
-	buttons.addEventListener( 'click', processEvent );
-
-})( jQuery );
-
 /**
  * Returns the event target.
  *
@@ -142,7 +26,7 @@ function getEventTarget( event ) {
  */
 function getParent( el, className ) {
 
-	var parent = el.parentNode;
+	let parent = el.parentNode;
 
 	if ( '' !== parent.classList && parent.classList.contains( className ) ) {
 
@@ -153,6 +37,38 @@ function getParent( el, className ) {
 	return getParent( parent, className );
 
 } // getParent()
+
+function ajaxFetch( data ) {
+
+	let formData = new FormData();
+	formData.append( 'action', data.action );
+	formData.append( 'nonce', data.nonce );
+	formData.append( 'data', data.order );
+
+	let request = new Request( ajaxurl, {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8'
+		},
+		body: formData,
+		//body: 'action=' + data.action + '&nonce=' + data.nonce + '&active=' + data.active + '&inactive=' + data.inactive,
+		credentials: 'same-origin'
+	});
+
+	fetch( request )
+	.then( function( response ) {
+
+
+		let output = document.querySelector( '.buttons-status' );
+		return response;
+		//let text = response.json().message;
+
+		//console.log( text );
+
+	})
+	.catch( error => console.error( 'DB error: ', error ) );
+
+} // ajaxFetch
 
 /**
  * Sends data to a PHP handler for saving via AJAX.
@@ -170,62 +86,104 @@ tout.saveAjax = function( paramData ) {
 		cache: false,
 		data: paramData,
 		success: function ( response ) {
-			jQuery( '.button-status' ).html( '<span class="status">' + response  + '</span>' );
-			jQuery( '.button-status' ).addClass( 'updated' );
-			jQuery( '.button-status' ).fadeIn( 'fast' );
-			jQuery( '.button-status' ).fadeOut( 2000 );
+			jQuery( '.buttons-status' ).html( '<span class="status">' + response.data  + '</span>' );
+			jQuery( '.buttons-status' ).addClass( 'updated' );
+			jQuery( '.buttons-status' ).fadeIn( 'fast' );
+			jQuery( '.buttons-status' ).fadeOut( 2000 );
 
 			return;
 		},
 		error: function (xhr, testStatus, error ) {
-			jQuery( '.button-status' ).html( '<span class="status">' + error + '</span>' );
-			jQuery( '.button-status' ).addClass( 'error' );
-			jQuery( '.button-status' ).fadeIn( 'fast' );
-			jQuery( '.button-status' ).fadeOut( 2000 );
+			jQuery( '.buttons-status' ).html( '<span class="status">' + error + '</span>' );
+			jQuery( '.buttons-status' ).addClass( 'error' );
+			jQuery( '.buttons-status' ).fadeIn( 'fast' );
+			jQuery( '.buttons-status' ).fadeOut( 2000 );
 
 			return;
 		}
 	});
 };
 
+/**
+ * Makes the icons in the admin sortable using Ruxaba's Sortable.
+ * Saves the inactive buttons and the active button order via AJAX.
+ */
 (function( $ ) {
 
 	'use strict';
 
+	const activeButtons = document.querySelector( '#tout-social-active-buttons' );
+	const inactiveButtons = document.querySelector( '#tout-social-inactive-buttons' );
+	const activeButtonsField = document.querySelector( 'input#active-buttons' );
+	const inactiveButtonsField = document.querySelector( 'input#inactive-buttons' );
+	const statusBanner = document.querySelector( 'buttons-status' );
+
+	if ( ! inactiveButtons ) { return; }
+
 	/**
-	 * Makes the icons in the admin sortable using Johnny's Sortable jQuery plugin.
-	 * Saves the button order via AJAX and in the button-order hidden field.
+	 * Returns a string created from an array of items.
+	 *
+	 * @param 		array 		items 		The source array.
+	 * @return 		string 					The source array items as a comma-separated string.
 	 */
+	function getArrayString( items ) {
 
-	var sorter = $('#tout-social-button-sort');
+		let collection = [];
 
-	if ( ! sorter ) { return; }
+		for ( let i = 0; i < items.length; i++ ) {
 
-	sorter.sortable({
-		placeholder: '<li class="placeholder"></li>',
-		placeholderClass: 'placeholder',
-		//pullPlaceholder: true,
-		onDrop: function ( $item, container, _super, event ) {
+			collection.push( items[i].getAttribute('data-id') );
 
-			var btnOrderField = $('#tout-social-button-order');
-			var newOrderObjects = sorter.sortable('serialize').get();
-			var newOrder = newOrderObjects[0].map( function ( item ){
+		}
 
-				return item.id;
+		return collection.toString();
 
-			}).toString();
+	} // getChildrenArray()
 
-			// Save the order to the hidden order field.
-			btnOrderField.val( newOrder );
+	const sortableInactiveButtons = Sortable.create( inactiveButtons, {
+		animation: 150,
+		group: 'toutSocialButtons'
+	} );
 
-			// Save the order in plugin settings via AJAX.
+	const sortableActiveButtons = Sortable.create( activeButtons, {
+		animation: 150,
+		group: 'toutSocialButtons',
+		onSort: function( event ) {
+
+			// Get the new order and add each item to the order array.
+			let activeButtons = getArrayString( event.to.children );
+			let inactiveButtons = getArrayString( event.from.children );
+
+			// Save the order array in the order field.
+			activeButtonsField.value = activeButtons;
+			inactiveButtonsField.value = inactiveButtons;
+
+			// Save the order via AJAX and the Fetch API.
+			// Fetch API simply doesn't work. Not sure why.
+			// I get a 200 response, but it appears that its
+			// simply telling me to accessed admin-ajax.php
+			// successfully, not that it completed by actions
+			// successfully. Cannot seem to get my messages
+			// back from the PHP functions.
+			//
+			// let response = ajaxFetch({
+			// 	action: 'save_buttons_order',
+			// 	nonce: Tout_Social_Buttons_Ajax.toutOrderNonce,
+			// 	active: activeButtons,
+			// 	inactive: inactiveButtons
+			// });
+			//
+			// console.log( response );
+
+			// Save the orders via AJAX and jQuery.
 			tout.saveAjax( {
-				action: 'save_button_order',
-				tbOrderNonce: Tout_Social_Buttons_Ajax.tbOrderNonce,
-				order: newOrder
+				action: 'save_button_orders',
+				toutButtonNonce: Tout_Social_Buttons_Ajax.toutButtonNonce,
+				active: activeButtons,
+				inactive: inactiveButtons
 			});
 
 		}
-	});
+	} );
 
 })( jQuery );

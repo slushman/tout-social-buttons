@@ -26,7 +26,7 @@ function getEventTarget( event ) {
  */
 function getParent( el, className ) {
 
-	var parent = el.parentNode;
+	let parent = el.parentNode;
 
 	if ( '' !== parent.classList && parent.classList.contains( className ) ) {
 
@@ -37,6 +37,38 @@ function getParent( el, className ) {
 	return getParent( parent, className );
 
 } // getParent()
+
+function ajaxFetch( data ) {
+
+	let formData = new FormData();
+	formData.append( 'action', data.action );
+	formData.append( 'nonce', data.nonce );
+	formData.append( 'data', data.order );
+
+	let request = new Request( ajaxurl, {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8'
+		},
+		body: formData,
+		//body: 'action=' + data.action + '&nonce=' + data.nonce + '&active=' + data.active + '&inactive=' + data.inactive,
+		credentials: 'same-origin'
+	});
+
+	fetch( request )
+	.then( function( response ) {
+
+
+		let output = document.querySelector( '.buttons-status' );
+		return response;
+		//let text = response.json().message;
+
+		//console.log( text );
+
+	})
+	.catch( error => console.error( 'DB error: ', error ) );
+
+} // ajaxFetch
 
 /**
  * Sends data to a PHP handler for saving via AJAX.
@@ -54,18 +86,18 @@ tout.saveAjax = function( paramData ) {
 		cache: false,
 		data: paramData,
 		success: function ( response ) {
-			jQuery( '.button-status' ).html( '<span class="status">' + response  + '</span>' );
-			jQuery( '.button-status' ).addClass( 'updated' );
-			jQuery( '.button-status' ).fadeIn( 'fast' );
-			jQuery( '.button-status' ).fadeOut( 2000 );
+			jQuery( '.buttons-status' ).html( '<span class="status">' + response.data  + '</span>' );
+			jQuery( '.buttons-status' ).addClass( 'updated' );
+			jQuery( '.buttons-status' ).fadeIn( 'fast' );
+			jQuery( '.buttons-status' ).fadeOut( 2000 );
 
 			return;
 		},
 		error: function (xhr, testStatus, error ) {
-			jQuery( '.button-status' ).html( '<span class="status">' + error + '</span>' );
-			jQuery( '.button-status' ).addClass( 'error' );
-			jQuery( '.button-status' ).fadeIn( 'fast' );
-			jQuery( '.button-status' ).fadeOut( 2000 );
+			jQuery( '.buttons-status' ).html( '<span class="status">' + error + '</span>' );
+			jQuery( '.buttons-status' ).addClass( 'error' );
+			jQuery( '.buttons-status' ).fadeIn( 'fast' );
+			jQuery( '.buttons-status' ).fadeOut( 2000 );
 
 			return;
 		}

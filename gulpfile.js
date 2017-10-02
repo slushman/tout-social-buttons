@@ -6,7 +6,7 @@
  *
  * npm init
  * sudo npm install --save-dev gulp gulp-util gulp-load-plugins browser-sync fs path event-stream gulp-plumber
- * sudo npm install --save-dev gulp-sourcemaps gulp-autoprefixer gulp-filter gulp-merge-media-queries gulp-cssnano gulp-sass gulp-concat gulp-uglify gulp-notify gulp-imagemin gulp-rename gulp-wp-pot gulp-sort gulp-parker gulp-svgmin gulp-size gulp-readme-to-markdown
+ * sudo npm install --save-dev gulp-sourcemaps gulp-autoprefixer gulp-filter gulp-merge-media-queries gulp-cssnano gulp-sass gulp-concat gulp-uglify-es gulp-notify gulp-imagemin gulp-rename gulp-wp-pot gulp-sort gulp-parker gulp-svgmin gulp-size gulp-readme-to-markdown
  * gulp
  *
  * Implements:
@@ -54,18 +54,27 @@ var watch = {
 			source: './admin/SVGs/**/*.svg',
 		},
 	},
-	public: {
+	frontend: {
 		scripts: {
 			filename: 'tout-social-buttons-',
-			folders: './public/js/src/',
-			path: './public/js/',
-			source: './public/js/src/**/*.js',
+			folders: './frontend/js/src/',
+			path: './frontend/js/',
+			source: './frontend/js/src/**/*.js',
 		},
-		styles: './public/css/src/*.scss',
+		styles: './frontend/css/src/*.scss',
 		svgs: {
-			path: './public/SVGs/',
-			source: './public/SVGs/**/*.svg',
+			path: './frontend/SVGs/',
+			source: './frontend/SVGs/**/*.svg',
 		},
+	},
+	blocks: {
+		scripts: {
+			filename: '',
+			folders: './blocks/js/src/',
+			path: './blocks/js/',
+			source: './blocks/js/src/**/*.js',
+		},
+		styles: './blocks/css/src/**/*.scss'
 	}
 }
 
@@ -95,6 +104,7 @@ var reload 			= browserSync.reload; // For manual browser reload.
 var fs 				= require( 'fs' );
 var path 			= require( 'path' );
 var es 				= require( 'event-stream' );
+var uglify 			= require( 'gulp-uglify-es' ).default;
 
 var onError = function(err) { console.log(err); }
 
@@ -152,10 +162,10 @@ gulp.task( 'adminStyles', function () {
 });
 
 /**
- * Processes public SASS files and creates the public.css file.
+ * Processes frontend SASS files and creates the frontend.css file.
  */
-gulp.task( 'publicStyles', function () {
-	gulp.src( watch.public.styles )
+gulp.task( 'frontendStyles', function () {
+	gulp.src( watch.frontend.styles )
 		.pipe( plugins.plumber({ errorHandler: onError }) )
 		.pipe( plugins.sourcemaps.init() )
 		.pipe( plugins.sass( {
@@ -170,7 +180,7 @@ gulp.task( 'publicStyles', function () {
 		.pipe( plugins.filter( '**/*.css' ) ) // Filtering stream to only css files
 		.pipe( plugins.mergeMediaQueries( { log: true } ) ) // Merge Media Queries
 		.pipe( plugins.cssnano() )
-		.pipe( gulp.dest( './public/css/' ) )
+		.pipe( gulp.dest( './frontend/css/' ) )
 
 		.pipe( plugins.filter( '**/*.css' ) ) // Filtering stream to only css files
 		.pipe( browserSync.stream() ) // Reloads style.css if that is enqueued.
@@ -189,8 +199,51 @@ gulp.task( 'publicStyles', function () {
 				'UniqueColours'
 			]
 		}) )
-		.pipe( plugins.notify( { message: 'TASK: "publicStyles" Completed! 💯', onLast: true } ) )
+		.pipe( plugins.notify( { message: 'TASK: "frontendStyles" Completed! 💯', onLast: true } ) )
 });
+
+/**
+ * Processes blocks SASS files and creates the CSS files for each block.
+ */
+gulp.task( 'blockStyles', function () {
+	gulp.src( watch.blocks.styles )
+		.pipe( plugins.plumber({ errorHandler: onError }) )
+		.pipe( plugins.sourcemaps.init() )
+		.pipe( plugins.sass( {
+			errLogToConsole: true,
+			//includePaths: ['./sass'],
+			outputStyle: 'compact',
+			precision: 10
+		} ) )
+		.pipe( plugins.autoprefixer( AUTOPREFIXER_BROWSERS ) )
+		.pipe( plugins.sourcemaps.write ( './', { includeContent: false } ) )
+		.pipe( plugins.sourcemaps.init( { loadMaps: true } ) )
+		.pipe( plugins.filter( '**/*.css' ) ) // Filtering stream to only css files
+		.pipe( plugins.mergeMediaQueries( { log: true } ) ) // Merge Media Queries
+		.pipe( plugins.cssnano() )
+		.pipe( gulp.dest( './blocks/css/' ) )
+
+		.pipe( plugins.filter( '**/*.css' ) ) // Filtering stream to only css files
+		.pipe( browserSync.stream() ) // Reloads style.css if that is enqueued.
+		.pipe( plugins.parker({
+			file: false,
+			title: 'Parker Results',
+			metrics: [
+				'TotalStylesheetSize',
+				'MediaQueries',
+				'SelectorsPerRule',
+				'IdentifiersPerSelector',
+				'SpecificityPerSelector',
+				'TopSelectorSpecificity',
+				'TopSelectorSpecificitySelector',
+				'TotalUniqueColours',
+				'UniqueColours'
+			]
+		}) )
+		.pipe( plugins.notify( { message: 'TASK: "blockStyles" Completed! 💯', onLast: true } ) )
+});
+
+
 
 /**
  * Creates a minified javascript file for each folder in the admin/src directory.
@@ -203,10 +256,10 @@ gulp.task( 'adminScripts', function() {
 		return gulp.src( path.join( watch.admin.scripts.folders, folder, '/*.js' ) )
 			.pipe( plugins.plumber({ errorHandler: onError }) )
 			.pipe( plugins.sourcemaps.init() )
-			.pipe( plugins.concat( watch.public.scripts.filename + folder + '.js' ) )
+			.pipe( plugins.concat( watch.admin.scripts.filename + folder + '.js' ) )
 			.pipe( gulp.dest( watch.admin.scripts.path ) )
-			.pipe( plugins.uglify() )
-			.pipe( plugins.rename( watch.public.scripts.filename + folder + '.min.js' ) )
+			.pipe( uglify() )
+			.pipe( plugins.rename( watch.admin.scripts.filename + folder + '.min.js' ) )
 			.pipe( plugins.sourcemaps.write( 'maps' ) )
 			.pipe( gulp.dest( watch.admin.scripts.path ) );
 	});
@@ -218,25 +271,51 @@ gulp.task( 'adminScripts', function() {
 /**
  * Creates a minified javascript file for each folder in the admin/src directory.
  */
-gulp.task( 'publicScripts', function() {
-	var folders = getFolders( watch.public.scripts.folders );
+gulp.task( 'frontendScripts', function() {
+	var folders = getFolders( watch.frontend.scripts.folders );
 
 	var tasks = folders.map( function( folder ) {
 
-		return gulp.src( path.join( watch.public.scripts.folders, folder, '/*.js' ) )
+		return gulp.src( path.join( watch.frontend.scripts.folders, folder, '/*.js' ) )
 			.pipe( plugins.plumber({ errorHandler: onError }) )
 			.pipe( plugins.sourcemaps.init() )
-			.pipe( plugins.concat( watch.public.scripts.filename + folder + '.js' ) )
-			.pipe( gulp.dest( watch.public.scripts.path ) )
-			.pipe( plugins.uglify() )
-			.pipe( plugins.rename( watch.public.scripts.filename + folder + '.min.js' ) )
+			.pipe( plugins.concat( watch.frontend.scripts.filename + folder + '.js' ) )
+			.pipe( gulp.dest( watch.frontend.scripts.path ) )
+			.pipe( uglify() )
+			.pipe( plugins.rename( watch.frontend.scripts.filename + folder + '.min.js' ) )
 			.pipe( plugins.sourcemaps.write( 'maps' ) )
-			.pipe( gulp.dest( watch.public.scripts.path ) );
+			.pipe( gulp.dest( watch.frontend.scripts.path ) );
 	});
 
 	return es.concat.apply( null, tasks )
-		.pipe( plugins.notify( { message: 'TASK: "publicScripts" Completed! 💯', onLast: true } ) );
+		.pipe( plugins.notify( { message: 'TASK: "frontendScripts" Completed! 💯', onLast: true } ) );
 });
+
+/**
+ * Creates a minified javascript file for each folder in the admin/src directory.
+ */
+gulp.task( 'blockScripts', function() {
+	var folders = getFolders( watch.blocks.scripts.folders );
+
+	var tasks = folders.map( function( folder ) {
+
+		return gulp.src( path.join( watch.blocks.scripts.folders, folder, '/*.js' ) )
+			.pipe( plugins.plumber({ errorHandler: onError }) )
+			.pipe( plugins.sourcemaps.init() )
+			.pipe( plugins.concat( watch.blocks.scripts.filename + folder + '.js' ) )
+			.pipe( gulp.dest( watch.blocks.scripts.path ) )
+			.pipe( uglify() )
+			.pipe( plugins.rename( watch.blocks.scripts.filename + folder + '.min.js' ) )
+			.pipe( plugins.sourcemaps.write( 'maps' ) )
+			.pipe( gulp.dest( watch.blocks.scripts.path ) );
+	});
+
+	return es.concat.apply( null, tasks )
+		.pipe( plugins.notify( { message: 'TASK: "blockScripts" Completed! 💯', onLast: true } ) );
+});
+
+
+
 
 /**
  * Live Reloads, CSS injections, Localhost tunneling.
@@ -270,10 +349,10 @@ gulp.task( 'adminImages', function() {
 });
 
 /**
- * Minifies PNG, JPEG, GIF and SVG images in the public folder.
+ * Minifies PNG, JPEG, GIF and SVG images in the frontend folder.
  */
-gulp.task( 'publicImages', function() {
-	gulp.src( './public/images/*.{png,jpg,gif}' )
+gulp.task( 'frontendImages', function() {
+	gulp.src( './frontend/images/*.{png,jpg,gif}' )
 		.pipe( plugins.plumber({ errorHandler: onError }) )
 		.pipe( plugins.imagemin({
 			progressive: true,
@@ -281,8 +360,8 @@ gulp.task( 'publicImages', function() {
 			interlaced: true,
 			svgoPlugins: [{removeViewBox: false}]
 		}))
-		.pipe( gulp.dest( './public/images/' ) )
-		.pipe( plugins.notify( { message: 'TASK: "publicImages" Completed! 💯', onLast: true } ) );
+		.pipe( gulp.dest( './frontend/images/' ) )
+		.pipe( plugins.notify( { message: 'TASK: "frontendImages" Completed! 💯', onLast: true } ) );
 });
 
 /**
@@ -302,18 +381,18 @@ gulp.task( 'adminSVGs', function() {
 });
 
 /**
- * Creates minified SVGs files for the public.
+ * Creates minified SVGs files for the frontend.
  */
-gulp.task( 'publicSVGs', function() {
-	var folders = getFolders( watch.public.svgs.path );
+gulp.task( 'frontendSVGs', function() {
+	var folders = getFolders( watch.frontend.svgs.path );
 
 	var tasks = folders.map( function( folder ) {
 
-		return gulp.src( path.join( watch.public.svgs.path, folder, '/*.svg' ) )
+		return gulp.src( path.join( watch.frontend.svgs.path, folder, '/*.svg' ) )
 			.pipe( plugins.plumber({ errorHandler: onError }) )
 			.pipe( plugins.svgmin() )
-			.pipe( gulp.dest( './public/SVGs/' + folder + '/' ) )
-			.pipe( plugins.notify( { message: 'TASK: "publicSVGs" Completed! 💯', onLast: true } ) );
+			.pipe( gulp.dest( './frontend/SVGs/' + folder + '/' ) )
+			.pipe( plugins.notify( { message: 'TASK: "frontendSVGs" Completed! 💯', onLast: true } ) );
 	});
 });
 
@@ -345,11 +424,13 @@ gulp.task( 'readme', function() {
 /**
  * Watches for file changes and runs specific tasks.
  */
-gulp.task( 'default', ['adminStyles', 'publicStyles', 'adminScripts', 'publicScripts', 'adminImages', 'publicImages', 'adminSVGs', 'publicSVGs', 'translate', 'browser-sync', 'readme'], function () {
+gulp.task( 'default', ['adminStyles', 'frontendStyles', 'adminScripts', 'frontendScripts', 'adminImages', 'frontendImages', 'adminSVGs', 'frontendSVGs', 'translate', 'browser-sync', 'readme'], function () {
 	gulp.watch( watch.php, reload ); // Reload on PHP file changes.
 	gulp.watch( watch.admin.styles, ['adminStyles', reload] ); // Reload on SCSS file changes.
-	gulp.watch( watch.public.styles, ['publicStyles', reload] ); // Reload on SCSS file changes.
+	gulp.watch( watch.frontend.styles, ['frontendStyles', reload] ); // Reload on SCSS file changes.
+	gulp.watch( watch.blocks.styles, ['blockStyles', reload] ); // Reload on SCSS file changes.
 	gulp.watch( watch.admin.scripts.source, [ 'adminScripts', reload ] ); // Reload on admin JS file changes.
-	gulp.watch( watch.public.scripts.source, [ 'publicScripts', reload ] ); // Reload on public JS file changes
+	gulp.watch( watch.frontend.scripts.source, [ 'frontendScripts', reload ] ); // Reload on frontend JS file changes
+	gulp.watch( watch.blocks.scripts.source, [ 'blockScripts', reload ] ); // Reload on blocks JS file changes
 	gulp.watch( 'README.txt', ['readme'] );
 });
