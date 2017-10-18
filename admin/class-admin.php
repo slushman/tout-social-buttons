@@ -67,6 +67,9 @@ class Admin {
 		add_action( 'wp_head', 							array( $this, 'print_button_styles' ) );
 		add_action( 'admin_head', 						array( $this, 'print_button_styles' ) );
 
+		add_filter( 'tout_social_buttons_button_set_id', 		array( $this, 'change_button_id' ), 10, 2 );
+		add_filter( 'tout_social_buttons_button_set_classes', 	array( $this, 'button_set_classes' ), 10, 2 );
+
 	} // hooks()
 
 	/**
@@ -124,6 +127,43 @@ class Admin {
 		);
 
 	} // add_menu()
+
+	public function button_set_classes( $classes, $context ) {
+
+		if ( 'active' !== $context ) { return $classes; }
+
+		$classes[] = 'tout-social-active-buttons';
+
+		return $classes;
+
+	} // button_set_classes()
+
+	/**
+	 * Changes the button set id attribute in the admin for the active and inactive button sets.
+	 *
+	 * @since 		1.0.0
+	 * @param  		string 		$id 			The current button set id.
+	 * @param 		string 		$context 		Where this is being used.
+	 * @return 		string 						The button set ID.
+	 */
+	public function change_button_id( $id, $context ) {
+
+		if ( 'active' === $context ) {
+
+			return 'tout-social-active-buttons';
+
+		} elseif ( 'inactive' === $context ) {
+
+			return 'tout-social-inactive-buttons';
+
+
+		} else {
+
+			return $id;
+
+		}
+
+	} // change_button_id()
 
 	/**
 	 * Register the stylesheets for the admin area.
@@ -323,22 +363,18 @@ class Admin {
 
 		}
 
-		/**
-		 * The tout_social_buttons_admin_buttons filter.
-		 *
-		 * @param 		array 		$buttons 		Array of button objects.
-		 */
-		$buttons = apply_filters( 'tout_social_buttons_admin_buttons', array() );
+		global $tout_social_buttons;
 
-		if ( empty( $buttons ) ) { return; }
+		if ( empty( $tout_social_buttons ) ) { return; }
 
 		?><style type="text/css"><?php
 
-		foreach ( $buttons as $button => $object ) :
+		foreach ( $tout_social_buttons as $button => $object ) :
 
 			$colors = $object->get_colors();
 
-			echo '.tout-social-button-wrap-' . $button . '{color:' . $colors['contrast'] . ';background-color:' . $colors['brand'] . ';}';
+			echo '.tout-social-button-' . $button . '{background-color:' . $colors['brand'] . ';}';
+			echo '.tout-social-button-link-' . $button . '{color:' . $colors['contrast'] . ';}';
 			echo '.tout-social-button-icon-' . $button . '{fill:' . $colors['contrast'] . ';}';
 
 		endforeach;

@@ -23,14 +23,41 @@ class tumblr extends Tout_Social_Button {
 		$this->set_customizer();
 
 		$this->colors 	= array( 'brand' => '#35465c', 'contrast' => '#fff' );
-		$this->icon 	= '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" class="tout-social-button-icon tout-social-button-icon-tumblr"><path d="M15.7 18.7c-.4.5-2 1.1-3.4 1.2-4.3.1-5.9-3.1-5.9-5.3V8.1h-2V5.6c3-1.1 3.7-3.8 3.9-5.3 0-.1.1-.1.1-.1h2.9v5h4v3h-4v6.1c0 .8.3 2 1.9 1.9.5 0 1.2-.2 1.6-.3l.9 2.8z"/></svg>';
 		$this->id 		= 'tumblr';
+		$this->icon 	= '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" class="' . esc_attr( $this->get_svg_classes() ) . '"><path d="M15.7 18.7c-.4.5-2 1.1-3.4 1.2-4.3.1-5.9-3.1-5.9-5.3V8.1h-2V5.6c3-1.1 3.7-3.8 3.9-5.3 0-.1.1-.1.1-.1h2.9v5h4v3h-4v6.1c0 .8.3 2 1.9 1.9.5 0 1.2-.2 1.6-.3l.9 2.8z"/></svg>';
 		$this->name 	= esc_html__( 'tumblr', 'tout-social-buttons' );
 
 		$this->set_a11y_text();
 		$this->set_url();
 
 	} // __construct()
+
+	/**
+	 * Registers all the WordPress hooks and filters related to this class.
+	 *
+	 * @hooked 		init
+	 * @since 		1.0.0
+	 */
+	public function hooks() {
+
+		add_filter( 'tout_social_buttons_frontend_buttons', array( $this, 'add_button' ), 5, 1 );
+
+	} // hooks()
+
+	/**
+	 * Add buttons to the button set for the plugin admin, along with an
+	 * instance of the button class.
+	 *
+	 * @hooked 		tout_social_buttons_admin_buttons
+	 * @since 		1.0.0
+	 */
+	public function add_button( $buttons ) {
+
+		$buttons[] = $this->id;
+
+		return $buttons;
+
+	} // add_button()
 
 	/**
 	 * Sets the content for button URL.

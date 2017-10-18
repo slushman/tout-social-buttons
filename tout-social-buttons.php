@@ -50,6 +50,7 @@ define( 'TOUT_SOCIAL_BUTTONS_SLUG', 'tout-social-buttons' );
 define( 'TOUT_SOCIAL_BUTTONS_SETTINGS', 'tout_social_buttons_settings' );
 define( 'TOUT_SOCIAL_BUTTONS_VERSION', '1.0.0' );
 define( 'TOUT_SOCIAL_BUTTON_CUSTOMIZER', 'tout_social_buttons' );
+define( 'TOUT_SOCIAL_BUTTONS_PATH', plugin_dir_path( __FILE__ ) );
 
 /**
  * Include the autoloader.
@@ -64,17 +65,30 @@ register_deactivation_hook( __FILE__, array( 'ToutSocialButtons\Includes\Deactiv
 
 /**
  * Initializes each class and adds the hooks action in each to init.
+ *
+ * @global 		$tout_social_buttons
  */
 function tout_social_buttons_init() {
+
+	global $tout_social_buttons;
 
 	$classes[] = new Inc\i18n();
 	$classes[] = new Admin\Admin();
 	$classes[] = new Admin\Ajax_Save_Buttons();
 	$classes[] = new Admin\Customizer();
-	$classes[] = new Buttons\Button_Set();
 	$classes[] = new Frontend\Frontend();
+	$classes[] = new Frontend\AutoPost();
 	$classes[] = new Frontend\Shortcode_Clicktotweet();
 	//$classes[] = new Blocks\Blocks();
+
+	$classes[] = $tout_social_buttons['email'] 			= new Buttons\Email();
+	$classes[] = $tout_social_buttons['facebook'] 		= new Buttons\Facebook();
+	$classes[] = $tout_social_buttons['google'] 		= new Buttons\Google();
+	$classes[] = $tout_social_buttons['linkedin'] 		= new Buttons\LinkedIn();
+	$classes[] = $tout_social_buttons['pinterest'] 		= new Buttons\Pinterest();
+	$classes[] = $tout_social_buttons['stumbleupon'] 	= new Buttons\Stumbleupon();
+	$classes[] = $tout_social_buttons['tumblr'] 		= new Buttons\tumblr();
+	$classes[] = $tout_social_buttons['twitter'] 		= new Buttons\Twitter();
 
 	foreach ( $classes as $class ) {
 

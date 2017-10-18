@@ -21,13 +21,6 @@ class Active_Buttons extends Field {
 	var $buttons = array();
 
 	/**
-	 * The button order.
-	 *
-	 * @var 	string 		The button order.
-	 */
-	var $button_order;
-
-	/**
 	 * Class constructor.
 	 *
 	 * @since 		1.0.0
@@ -43,7 +36,6 @@ class Active_Buttons extends Field {
 		$this->set_setting_name( $args );
 
 		$this->set_settings( $args );
-		$this->set_buttons( $args );
 
 		$this->set_default_attributes();
 		$this->set_attributes( $args );
@@ -54,8 +46,6 @@ class Active_Buttons extends Field {
 		$this->set_default_button_properties( $args );
 		$this->set_properties( $args );
 
-		$this->set_button_order( $args );
-
 		$this->output_fieldset_begin();
 		$this->output_description_legend();
 		$this->output_field();
@@ -65,92 +55,53 @@ class Active_Buttons extends Field {
 	} // __construct()
 
 	/**
-	 * Includes the button field HTML file.
+	 * Returns the active buttons in order.
 	 *
 	 * @since 		1.0.0
+	 * @return 		array 		$return 		Array of button IDs.
 	 */
-	public function output_field() {
+	protected function get_buttons() {
 
-		include( plugin_dir_path( dirname( __FILE__ ) ) . 'fields/partials/active-buttons.php' );
+		if ( ! isset( $this->settings['active-buttons'] ) ) {
 
-	} // output_field()
+			$active = array();
 
-	/**
-	 * Sets the $buttons class variable.
-	 *
-	 * Adds all the buttons and their objects to an array.
-	 * Filters out the buttons saved in the inactive-buttons setting.
-	 *
-	 * @since 		1.0.0
-	 * @param 		array 		$args 		The field arguments.
-	 */
-	protected function set_buttons( $args ) {
+		} else {
 
-		/**
-		 * The tout_social_buttons_admin_buttons filter.
-		 *
-		 * @param 		array 		$buttons 		Array of button objects.
-		 */
-		$buttons = apply_filters( 'tout_social_buttons_admin_buttons', array() );
-
-		// If there are no inactive buttons or that settings isn't set, set the active buttons to a blank array.
-		if ( ! isset( $this->settings['inactive-buttons'] ) || empty( $this->settings['inactive-buttons'] ) ) { $this->buttons = array(); return; }
-
-		$inactive 	= explode( ',', $this->settings['inactive-buttons'] );
-		$active 	= explode( ',', $this->settings['active-buttons'] );
-		$ordered 	= array();
-
-		// Remove buttons that appear in the inactive array.
-		foreach ( $buttons as $button => $obj ) {
-
-			if ( in_array( $button, $inactive ) ) {
-
-				unset( $buttons[$button] );
-
-			}
-
-		}
-
-		// Put the active buttons in order.
-		foreach ( $active as $button ) {
-
-			$ordered[$button] = $buttons[$button];
+			$active = explode( ',', $this->settings['active-buttons'] );
 
 		}
 
 		/**
 		 * The tout_social_buttons_admin_active_buttons filter.
 		 *
-		 * @param 		array 		$ordered 		Array of button objects.
-		 * @param 		array 		$active 		Active buttons from settings.
-		 * @param 		array 		$inactive 		Inactive buttons from settings.
+		 * @param 		array 		$active 		Array of active buttons from settings.
 		 */
-		$this->buttons = apply_filters( 'tout_social_buttons_admin_active_buttons', $ordered, $active, $inactive );
+		return apply_filters( 'tout_social_buttons_admin_active_buttons', $active );
 
-	} // set_buttons()
+	} // get_buttons()
 
 	/**
-	 * Sets the value for the button-order field.
+	 * Includes the button field HTML file.
 	 *
 	 * @since 		1.0.0
 	 */
-	protected function set_button_order() {
+	public function output_field() {
 
-		//wp_die( print_r( $this->properties ) );
+		$buttons = $this->get_buttons();
 
-		if ( array_key_exists( 'button-order', $this->settings ) && ! empty( $this->settings['button-order'] ) ) {
+		//if ( empty( $buttons ) || ! is_array( $buttons ) ) { return; }
 
-			$this->button_order = $this->settings['button-order'];
+		$set = new Buttons\Button_Set( 'active', $buttons );
 
-		} else {
+		$args['attributes']['id'] 		= 'active-buttons';
+		$args['attributes']['value'] 	= isset( $this->settings['active-buttons'] ) ? $this->settings['active-buttons'] : '';
 
-			//$this->button_order = $this->properties['default-order'];
+		new Hidden( 'settings', $args );
 
-		}
+		include( plugin_dir_path( dirname( __FILE__ ) ) . 'fields/partials/button-status.php' );
 
-		//wp_die( print_r( $this->button_order ) );
-
-	} // set_button_order()
+	} // output_field()
 
 	/**
 	 * Sets the default properties for the buttons field.

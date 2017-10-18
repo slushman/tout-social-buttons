@@ -3,27 +3,16 @@
  * included in this file.
  */
 
-@import '../../../includes/css/src/buttons';
-@import '../../../includes/css/src/mixins';
+@import '../../../buttons/css/src/buttons';
 
-.tout-social-button-wrap {
-	align-items 	: center;
-	cursor 			: move;
-	display 		: flex;
-	flex 			: 1;
-	margin 			: 0.25em;
-	max-width 		: 5em;
-	min-width 		: 120px;
-	padding 		: 0.5em;
+.tout-social-button {
+	cursor 		: move;
+	flex 		: 1;
+	max-width 	: 5em;
+	min-width 	: 130px;
 
 	& * {
 		cursor 	: move;
-	}
-
-	&.focus {
-		outline-style: auto;
-		outline-color: inherit;
-		outline-width: 5px;
 	}
 }
 
@@ -35,6 +24,15 @@
 		border-radius 	: 1em;
 		min-height		: 4em;
 	}
+}
+
+.tout-social-button-link {
+	pointer-events	: none;
+	text-decoration	: none;
+}
+
+.tout-social-button-icon {
+	margin-right 	: 0.5em;
 }
 
 .field-alert {

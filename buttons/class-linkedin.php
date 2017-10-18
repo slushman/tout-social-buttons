@@ -23,8 +23,8 @@ class LinkedIn extends Tout_Social_Button {
 		$this->set_customizer();
 
 		$this->colors 	= array( 'brand' => '#0077b5', 'contrast' => '#fff' );
-		$this->icon 	= '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" class="tout-social-button-icon tout-social-button-icon-linkedin"><path d="M2.5 5C1 5 .1 4 .1 2.8.1 1.6 1.1.6 2.5.6c1.5 0 2.4 1 2.4 2.2C4.9 4 4 5 2.5 5zm2.1 14.4H.4V6.7h4.2v12.7zm15.3 0h-4.2v-6.8c0-1.7-.6-2.9-2.1-2.9-1.2 0-1.9.8-2.2 1.5-.1.3-.1.7-.1 1v7.1H6.9c.1-11.4 0-12.6 0-12.6h4.2v1.9c.6-.9 1.6-2.1 3.8-2.1 2.8 0 4.9 1.8 4.9 5.7v7.2z"/></svg>';
 		$this->id 		= 'linkedin';
+		$this->icon 	= '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" class="' . esc_attr( $this->get_svg_classes() ) . '"><path d="M2.5 5C1 5 .1 4 .1 2.8.1 1.6 1.1.6 2.5.6c1.5 0 2.4 1 2.4 2.2C4.9 4 4 5 2.5 5zm2.1 14.4H.4V6.7h4.2v12.7zm15.3 0h-4.2v-6.8c0-1.7-.6-2.9-2.1-2.9-1.2 0-1.9.8-2.2 1.5-.1.3-.1.7-.1 1v7.1H6.9c.1-11.4 0-12.6 0-12.6h4.2v1.9c.6-.9 1.6-2.1 3.8-2.1 2.8 0 4.9 1.8 4.9 5.7v7.2z"/></svg>';
 		$this->name 	= esc_html__( 'LinkedIn', 'tout-social-buttons' );
 
 		$this->set_a11y_text();
@@ -32,6 +32,33 @@ class LinkedIn extends Tout_Social_Button {
 		$this->set_content();
 
 	} // __construct()
+
+	/**
+	 * Registers all the WordPress hooks and filters related to this class.
+	 *
+	 * @hooked 		init
+	 * @since 		1.0.0
+	 */
+	public function hooks() {
+
+		add_filter( 'tout_social_buttons_frontend_buttons', array( $this, 'add_button' ), 5, 1 );
+
+	} // hooks()
+
+	/**
+	 * Add buttons to the button set for the plugin admin, along with an
+	 * instance of the button class.
+	 *
+	 * @hooked 		tout_social_buttons_admin_buttons
+	 * @since 		1.0.0
+	 */
+	public function add_button( $buttons ) {
+
+		$buttons[] = $this->id;
+
+		return $buttons;
+
+	} // add_button()
 
 	/**
 	 * Sets the content for button URL.

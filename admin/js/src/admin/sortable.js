@@ -10,7 +10,6 @@
 	const inactiveButtons = document.querySelector( '#tout-social-inactive-buttons' );
 	const activeButtonsField = document.querySelector( 'input#active-buttons' );
 	const inactiveButtonsField = document.querySelector( 'input#inactive-buttons' );
-	const statusBanner = document.querySelector( 'buttons-status' );
 
 	if ( ! inactiveButtons ) { return; }
 
@@ -52,6 +51,14 @@
 			activeButtonsField.value = activeButtons;
 			inactiveButtonsField.value = inactiveButtons;
 
+			// Save the orders via AJAX and jQuery.
+			let paramData = {
+				action: 'save_button_orders',
+				toutButtonNonce: Tout_Social_Buttons_Ajax.toutButtonNonce,
+				active: activeButtons,
+				inactive: inactiveButtons
+			};
+
 			// Save the order via AJAX and the Fetch API.
 			// Fetch API simply doesn't work. Not sure why.
 			// I get a 200 response, but it appears that its
@@ -60,21 +67,34 @@
 			// successfully. Cannot seem to get my messages
 			// back from the PHP functions.
 			//
-			// let response = ajaxFetch({
-			// 	action: 'save_buttons_order',
-			// 	nonce: Tout_Social_Buttons_Ajax.toutOrderNonce,
-			// 	active: activeButtons,
-			// 	inactive: inactiveButtons
-			// });
+			// let response = ajaxFetch( paramData );
 			//
 			// console.log( response );
 
-			// Save the orders via AJAX and jQuery.
-			tout.saveAjax( {
-				action: 'save_button_orders',
-				toutButtonNonce: Tout_Social_Buttons_Ajax.toutButtonNonce,
-				active: activeButtons,
-				inactive: inactiveButtons
+			let output = $( '.buttons-status' );
+
+			$.ajax({
+				url: ajaxurl,
+				type: 'POST',
+				async: true,
+				cache: false,
+				data: paramData,
+				success: function ( response ) {
+					output.html( '<span class="status">' + response.data  + '</span>' );
+					output.addClass( 'updated' );
+					output.fadeIn( 'fast' );
+					output.fadeOut( 2000 );
+
+					return;
+				},
+				error: function (xhr, testStatus, error ) {
+					output.html( '<span class="status">' + error + '</span>' );
+					output.addClass( 'error' );
+					output.fadeIn( 'fast' );
+					output.fadeOut( 2000 );
+
+					return;
+				}
 			});
 
 		}

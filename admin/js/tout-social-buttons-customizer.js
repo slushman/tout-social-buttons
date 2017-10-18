@@ -48,7 +48,7 @@
 		value.bind( function( to ){
 
 			var labels = $('.tout-social-button-text');
-			var icons = $('.tout-social-button-icon-wrap');
+			var icons = $('.tout-social-button-icon');
 			var classyLabels = labels.hasClass( 'screen-reader-text' );
 			var classyIcons = icons.hasClass( 'hidden' );
 

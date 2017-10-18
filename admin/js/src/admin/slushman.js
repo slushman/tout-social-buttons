@@ -69,37 +69,3 @@ function ajaxFetch( data ) {
 	.catch( error => console.error( 'DB error: ', error ) );
 
 } // ajaxFetch
-
-/**
- * Sends data to a PHP handler for saving via AJAX.
- *
- * @since 		1.0.0
- * @param 		array 		paramData 		The data to send to the PHP handler.
- */
-var tout = {};
-
-tout.saveAjax = function( paramData ) {
-	jQuery.ajax({
-		url: ajaxurl,
-		type: 'POST',
-		async: true,
-		cache: false,
-		data: paramData,
-		success: function ( response ) {
-			jQuery( '.buttons-status' ).html( '<span class="status">' + response.data  + '</span>' );
-			jQuery( '.buttons-status' ).addClass( 'updated' );
-			jQuery( '.buttons-status' ).fadeIn( 'fast' );
-			jQuery( '.buttons-status' ).fadeOut( 2000 );
-
-			return;
-		},
-		error: function (xhr, testStatus, error ) {
-			jQuery( '.buttons-status' ).html( '<span class="status">' + error + '</span>' );
-			jQuery( '.buttons-status' ).addClass( 'error' );
-			jQuery( '.buttons-status' ).fadeIn( 'fast' );
-			jQuery( '.buttons-status' ).fadeOut( 2000 );
-
-			return;
-		}
-	});
-};

@@ -28,7 +28,7 @@
  * Project Configuration for gulp tasks.
  */
 var project = {
-	'url': 'tout.dev',
+	'url': 'tout.test',
 	'i18n': {
 		'domain': 'tout-social-buttons',
 		'destFile': 'languages/tout-social-buttons.pot',

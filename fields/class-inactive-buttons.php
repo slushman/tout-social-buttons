@@ -36,7 +36,6 @@ class Inactive_Buttons extends Field {
 		$this->set_setting_name( $args );
 
 		$this->set_settings( $args );
-		$this->set_buttons( $args );
 
 		$this->set_default_attributes();
 		$this->set_attributes( $args );
@@ -56,53 +55,50 @@ class Inactive_Buttons extends Field {
 	} // __construct()
 
 	/**
-	 * Includes the button field HTML file.
+	 * Returns the inactive buttons in order.
 	 *
 	 * @since 		1.0.0
+	 * @return 		array 		$return 		Array of button IDs.
 	 */
-	public function output_field() {
+	protected function get_buttons() {
 
-		include( plugin_dir_path( dirname( __FILE__ ) ) . 'fields/partials/inactive-buttons.php' );
+		if ( ! isset( $this->settings['inactive-buttons'] ) ) {
 
-	} // output_field()
+			global $tout_social_buttons;
 
-	/**
-	 * Sets the $buttons class variable.
-	 *
-	 * @since 		1.0.0
-	 * @param 		array 		$args 		The field arguments.
-	 */
-	protected function set_buttons( $args ) {
+			$inactive = $tout_social_buttons;
 
-		/**
-		 * The tout_social_buttons_admin_buttons filter.
-		 *
-		 * @param 		array 		$buttons 		Array of buttons objects.
-		 */
-		$buttons = apply_filters( 'tout_social_buttons_admin_buttons', array() );
+		} else {
 
-		if ( ! isset( $this->settings['active-buttons'] ) || empty( $this->settings['active-buttons'] ) ) { $this->buttons = $buttons; return; }
-
-		$active = explode( ',', $this->settings['active-buttons'] );
-
-		foreach ( $buttons as $button => $obj ) {
-
-			if ( in_array( $button, $active ) ) {
-
-				unset( $buttons[$button] );
-
-			}
+			$inactive = explode( ',', $this->settings['inactive-buttons'] );
 
 		}
 
 		/**
 		 * The tout_social_buttons_admin_inactive_buttons filter.
 		 *
-		 * @param 		array 		$buttons 		Array of buttons derived from the button-order setting.
+		 * @param 		array 		$inactive 		Array of inactive buttons from settings.
 		 */
-		$this->buttons = apply_filters( 'tout_social_buttons_admin_inactive_buttons', $buttons );
+		return apply_filters( 'tout_social_buttons_admin_inactive_buttons', $inactive );
 
-	} // set_buttons()
+	} // get_buttons()
+
+	/**
+	 * Includes the button field HTML file.
+	 *
+	 * @since 		1.0.0
+	 */
+	public function output_field() {
+
+		$buttons 	= $this->get_buttons();
+		$set 		= new Buttons\Button_Set( 'inactive', $buttons );
+
+		$args['attributes']['id'] 		= 'inactive-buttons';
+		$args['attributes']['value'] 	= isset( $this->settings['inactive-buttons'] ) ? $this->settings['inactive-buttons'] : '';
+
+		new Hidden( 'settings', $args );
+
+	} // output_field()
 
 	/**
 	 * Sets the default properties for the buttons field.

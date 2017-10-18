@@ -22,6 +22,15 @@ class Tout_Social_Button {
 	protected $a11y_text;
 
 	/**
+	 * Can this button be used to share content along with the URL?
+	 *
+	 * @since 		1.0.0
+	 * @access 		private
+	 * @var 		bool 		$can_quote 		Can this button be used for quotes?
+	 */
+	protected $can_quote;
+
+	/**
 	 * An array of colors for the button.
 	 * Includes a background and icon color.
 	 *
@@ -176,19 +185,19 @@ class Tout_Social_Button {
 
 		foreach ( $this->link_attributes as $key => $value ) :
 
-		    if ( 'data' === $key ) :
+			if ( 'data' === $key ) :
 
-		        foreach ( $this->link_attributes['data'] as $key => $value ) :
+				foreach ( $this->link_attributes['data'] as $key => $value ) :
 
-		            $return .= ' data-' . $key . '="' . esc_attr( $value ) . '" ';
+					$return .= ' data-' . $key . '="' . esc_attr( $value ) . '" ';
 
-		        endforeach;
+				endforeach;
 
-		    else :
+			else :
 
-		        $return .= ' ' . $key . '="' . esc_attr( $value ) . '" ';
+				$return .= ' ' . $key . '="' . esc_attr( $value ) . '" ';
 
-		    endif;
+			endif;
 
 		endforeach;
 
@@ -210,9 +219,10 @@ class Tout_Social_Button {
 		 * Allows for change the button text.
 		 *
 		 * @since 		1.0.0
-		 * @var 		string 		$name
+		 * @param 		string 		$name 		The current name.
+		 * @param 		string 		$id 		The button ID.
 		 */
-		return apply_filters( 'tout_social_buttons_button_name',  $this->name );
+		return apply_filters( 'tout_social_buttons_button_name', $this->name, $this->id );
 
 	} // get_name()
 
@@ -228,6 +238,33 @@ class Tout_Social_Button {
 		return NULL;
 
 	} // get_protocols()
+
+	/**
+	 * Returns the SVG classes.
+	 *
+	 * @since 		1.0.0
+	 * @return 		string 		$classes 		The classes for the SVG.
+	 */
+	protected function get_svg_classes() {
+
+		$return 	= '';
+		$classes[] 	= 'tout-social-button-icon';
+		$classes[] 	= 'tout-social-button-icon-' . $this->id;
+
+		/**
+		 * The tout_social_buttons_icon_svg_classes filter.
+		 *
+		 * Allows for changing classes for the SVGs.
+		 *
+		 * @param 		array 		$classes 		The current classes.
+		 * @param 		string 		$id 			The button ID.
+		 */
+		$classes 	= apply_filters( 'tout_social_buttons_icon_svg_classes', $classes, $this->id );
+		$return 	= implode( ' ', $classes );
+
+		return $return;
+
+	} // get_svg_classes()
 
 	/**
 	 * Returns the name for this button.
@@ -354,5 +391,17 @@ class Tout_Social_Button {
 		$this->url = '';
 
 	} // set_url()
+
+	/**
+	 * Returns the can_quote value for this button.
+	 *
+	 * @since 		1.0.0
+	 * @return 		bool 		The can_quote class variable.
+	 */
+	public function use_for_quotes() {
+
+		return $this->can_quote;
+
+	} // use_for_quotes()
 
 } // class

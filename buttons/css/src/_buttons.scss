@@ -1,0 +1,39 @@
+/**
+ * All of the SASS for your admin-specific functionality should be
+ * included in this file.
+ */
+
+@import '../../../includes/css/src/mixins';
+
+.hidden {
+	display: none;
+}
+
+.tout-social-buttons {
+	@include resetlist();
+
+	display			: flex;
+	flex-wrap		: wrap;
+	justify-content	: start;
+}
+
+.tout-social-button {
+	margin 			: 0.25em;
+
+	&.focus {
+		outline-style: auto;
+		outline-color: inherit;
+		outline-width: 5px;
+	}
+}
+
+.tout-social-button-icon {
+	height 			: 1.5em;
+	width 			: 1.5em;
+}
+
+.tout-social-button-link {
+	align-items 	: center;
+	display 		: flex;
+	padding 		: 0.5em;
+}

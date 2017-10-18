@@ -71,40 +71,6 @@ function ajaxFetch( data ) {
 } // ajaxFetch
 
 /**
- * Sends data to a PHP handler for saving via AJAX.
- *
- * @since 		1.0.0
- * @param 		array 		paramData 		The data to send to the PHP handler.
- */
-var tout = {};
-
-tout.saveAjax = function( paramData ) {
-	jQuery.ajax({
-		url: ajaxurl,
-		type: 'POST',
-		async: true,
-		cache: false,
-		data: paramData,
-		success: function ( response ) {
-			jQuery( '.buttons-status' ).html( '<span class="status">' + response.data  + '</span>' );
-			jQuery( '.buttons-status' ).addClass( 'updated' );
-			jQuery( '.buttons-status' ).fadeIn( 'fast' );
-			jQuery( '.buttons-status' ).fadeOut( 2000 );
-
-			return;
-		},
-		error: function (xhr, testStatus, error ) {
-			jQuery( '.buttons-status' ).html( '<span class="status">' + error + '</span>' );
-			jQuery( '.buttons-status' ).addClass( 'error' );
-			jQuery( '.buttons-status' ).fadeIn( 'fast' );
-			jQuery( '.buttons-status' ).fadeOut( 2000 );
-
-			return;
-		}
-	});
-};
-
-/**
  * Makes the icons in the admin sortable using Ruxaba's Sortable.
  * Saves the inactive buttons and the active button order via AJAX.
  */
@@ -116,7 +82,6 @@ tout.saveAjax = function( paramData ) {
 	const inactiveButtons = document.querySelector( '#tout-social-inactive-buttons' );
 	const activeButtonsField = document.querySelector( 'input#active-buttons' );
 	const inactiveButtonsField = document.querySelector( 'input#inactive-buttons' );
-	const statusBanner = document.querySelector( 'buttons-status' );
 
 	if ( ! inactiveButtons ) { return; }
 
@@ -158,6 +123,14 @@ tout.saveAjax = function( paramData ) {
 			activeButtonsField.value = activeButtons;
 			inactiveButtonsField.value = inactiveButtons;
 
+			// Save the orders via AJAX and jQuery.
+			let paramData = {
+				action: 'save_button_orders',
+				toutButtonNonce: Tout_Social_Buttons_Ajax.toutButtonNonce,
+				active: activeButtons,
+				inactive: inactiveButtons
+			};
+
 			// Save the order via AJAX and the Fetch API.
 			// Fetch API simply doesn't work. Not sure why.
 			// I get a 200 response, but it appears that its
@@ -166,21 +139,34 @@ tout.saveAjax = function( paramData ) {
 			// successfully. Cannot seem to get my messages
 			// back from the PHP functions.
 			//
-			// let response = ajaxFetch({
-			// 	action: 'save_buttons_order',
-			// 	nonce: Tout_Social_Buttons_Ajax.toutOrderNonce,
-			// 	active: activeButtons,
-			// 	inactive: inactiveButtons
-			// });
+			// let response = ajaxFetch( paramData );
 			//
 			// console.log( response );
 
-			// Save the orders via AJAX and jQuery.
-			tout.saveAjax( {
-				action: 'save_button_orders',
-				toutButtonNonce: Tout_Social_Buttons_Ajax.toutButtonNonce,
-				active: activeButtons,
-				inactive: inactiveButtons
+			let output = $( '.buttons-status' );
+
+			$.ajax({
+				url: ajaxurl,
+				type: 'POST',
+				async: true,
+				cache: false,
+				data: paramData,
+				success: function ( response ) {
+					output.html( '<span class="status">' + response.data  + '</span>' );
+					output.addClass( 'updated' );
+					output.fadeIn( 'fast' );
+					output.fadeOut( 2000 );
+
+					return;
+				},
+				error: function (xhr, testStatus, error ) {
+					output.html( '<span class="status">' + error + '</span>' );
+					output.addClass( 'error' );
+					output.fadeIn( 'fast' );
+					output.fadeOut( 2000 );
+
+					return;
+				}
 			});
 
 		}

@@ -10,76 +10,414 @@
  */
 
 namespace ToutSocialButtons\Buttons;
-use ToutSocialButtons\Buttons as Buttons;
 
 class Button_Set {
 
 	/**
-	 * Initialize the class and set its properties.
+	 * Array of buttons for this set.
 	 *
 	 * @since 		1.0.0
+	 * @access 		private
+	 * @var 		array 		$button
 	 */
-	public function __construct() {
+	private $buttons;
 
-		//
+	/**
+	 * Array of customzier settings.
+	 *
+	 * @since 		1.0.0
+	 * @access 		private
+	 * @var 		array
+	 */
+	private $customizer;
+
+	/**
+	 * Array of plugin settings to validate before saving to the database.
+	 *
+	 * @since 		1.0.0
+	 * @access 		private
+	 * @var 		array
+	 */
+	private $settings;
+
+	/**
+	 * Constructor
+	 *
+	 * @since 		1.0.0
+	 * @param 		string 		$context 		Where this class is used.
+	 * @param 		array 		$buttons 		Array of buttons IDs for this set.
+	 */
+	public function __construct( $context, $buttons ) {
+
+		$this->set_settings();
+		$this->set_customizer();
+
+		$this->context = $context;
+
+		$this->set_buttons( $buttons );
+		$this->output_button_set();
 
 	} // __construct()
 
 	/**
-	 * Registers all the WordPress hooks and filters related to this class.
+	 * Returns the classes for each button.
 	 *
-	 * @hooked 		init
 	 * @since 		1.0.0
+	 * @param 		string 		$button 		The button ID.
+	 * @param 		array 		$classes		The classes passed in.
+	 * @return 		string 						The classes for each button.
 	 */
-	public function hooks() {
+	public function get_button_classes( $button, $classes = array() ) {
 
-		add_filter( 'tout_social_buttons_admin_buttons', array( $this, 'add_buttons' ), 5, 1 );
-		add_filter( 'tout_social_buttons_frontend_buttons', array( $this, 'add_buttons' ), 5, 1 );
-		add_filter( 'tout_social_buttons_quote_buttons', array( $this, 'add_quote_buttons' ), 10, 1 );
+		$return 	= '';
+		$classes[] 	= 'tout-social-button';
+		$classes[] 	= 'tout-social-button-' . $button;
 
-	} // hooks()
+		/**
+		 * The tout_social_buttons_button_classes filter.
+		 *
+		 * Allows for changing classes on each button.
+		 *
+		 * @param 		array 		$classes 		The current classes.
+		 * @param 		string 		$context 		Where this is being used.
+		 * @param 		string 		$button 		The button ID.
+		 */
+		$classes 	= apply_filters( 'tout_social_buttons_button_classes', $classes, $this->context, $button );
+		$return 	= implode( ' ', $classes );
+
+		return $return;
+
+	} // get_button_classes()
 
 	/**
-	 * Add buttons to the button set, along with an
-	 * instance of the button class.
+	 * Returns the classes for the button icon wrap.
 	 *
-	 * @hooked 		tout_social_buttons_admin_buttons
-	 * @hooked 		tout_social_buttons_frontend_buttons
 	 * @since 		1.0.0
+	 * @param 		object 		$instance 		The button instance object.
+	 * @param 		string 		$context 		Where this is being used.
+	 * @param 		array 		$classes		The classes passed in.
+	 * @return 		string 						The classes for the button icon wrap.
 	 */
-	public function add_buttons( $buttons ) {
+	public function get_button_icon_wrap_classes( $instance, $classes = array() ) {
 
-		$buttons['email'] 		= new Buttons\Email();
-		$buttons['facebook'] 	= new Buttons\Facebook();
-		$buttons['google'] 		= new Buttons\Google();
-		$buttons['linkedin'] 	= new Buttons\Linkedin();
-		$buttons['pinterest'] 	= new Buttons\Pinterest();
-		$buttons['stumbleupon'] = new Buttons\Stumbleupon();
-		$buttons['tumblr'] 		= new Buttons\tumblr();
-		$buttons['twitter'] 	= new Buttons\Twitter();
+		$return 	= '';
+		$classes[] 	= 'tout-social-button-icon-wrap';
 
-		//wp_die( print_r( $buttons ) );
+		if ( 'text' === $instance->get_type() ) {
 
-		return $buttons;
+			$classes[] = 'hidden';
 
-	} // add_buttons()
+		}
+
+		/**
+		 * The tout_social_buttons_button_icon_wrap_classes filter.
+		 *
+		 * Allows for changing classes on the button icon wrap.
+		 *
+		 * @param 		array 		$classes 		The current classes.
+		 * @param 		string 		$context 		Where this is being used.
+		 */
+		$classes 	= apply_filters( 'tout_social_buttons_button_icon_wrap_classes', $classes, $this->context );
+		$return 	= implode( ' ', $classes );
+
+		return $return;
+
+	} // get_button_icon_wrap_classes()
 
 	/**
-	 * Add buttons to the wuote button set, along with an
-	 * instance of each button class.
+	 * Returns the classes for the button link.
 	 *
-	 * @hooked 		tout_social_buttons_quote_buttons
+	 * @since 		1.0.0
+	 * @param 		string 		$button 		The button.
+	 * @param 		array 		$classes		The classes passed in.
+	 * @return 		string 						The classes for the button link.
+	 */
+	public function get_button_link_classes( $button, $classes = array() ) {
+
+		$return 	= '';
+		$classes[] 	= 'tout-social-button-link';
+		$classes[] 	= 'tout-social-button-link-' . $button;
+
+		if ( 'popup' === $this->settings['button-behavior'] ) {
+
+			$classes[] = 'tout-social-button-popup-link';
+
+		}
+
+		/**
+		 * The tout_social_buttons_button_link_classes filter.
+		 *
+		 * Allows for changing classes on the button links.
+		 *
+		 * @param 		array 		$classes 		The current classes.
+		 * @param 		string 		$context 		Where this is being used.
+		 * @param 		string 		$button 		The button ID.
+		 */
+		$classes 	= apply_filters( 'tout_social_buttons_button_link_classes', $classes, $this->context, $button );
+		$return 	= implode( ' ', $classes );
+
+		return $return;
+
+	} // get_button_link_classes()
+
+	/**
+	 * Returns the classes for the button set.
+	 *
+	 * @since 		1.0.0
+	 * @param 		array 		$classes		The classes passed in.
+	 * @return 		string 						The classes for the button set.
+	 */
+	public function get_button_set_classes( $classes = array() ) {
+
+		$return 	= '';
+		$classes[] 	= 'tout-social-buttons';
+		$classes[] 	= 'icon-color-brand';
+		$classes[] 	= 'bg-color-none';
+
+		/**
+		 * The tout_social_buttons_button_set_classes filter.
+		 *
+		 * Allows for changing classes on the button set.
+		 *
+		 * @param 		array 		$classes 		The current classes.
+		 * @param 		string 		$context 		Where this is being used.
+		 */
+		$classes 	= apply_filters( 'tout_social_buttons_button_set_classes', $classes, $this->context );
+		$return 	= implode( ' ', $classes );
+
+		return $return;
+
+	} // get_button_set_classes()
+
+	/**
+	 * Returns the ID attribute for the button set.
+	 *
+	 * @since 		1.0.0
+	 * @return 		string 						The ID attribute for the button set.
+	 */
+	public function get_button_set_id() {
+
+		/**
+		 * The tout_social_buttons_button_set_id filter.
+		 *
+		 * Allows for changing id attribute on the button set.
+		 *
+		 * @param 		string 		$id 			The current id attribute.
+		 * @param 		string 		$context 		Where this is being used.
+		 */
+		return apply_filters( 'tout_social_buttons_button_set_id', 'tout-social-buttons', $this->context );
+
+	} // get_button_set_id()
+
+	/**
+	 * Returns the classes for the button set wrap element.
+	 *
+	 * @since 		1.0.0
+	 * @param 		array 		$classes 		The classes passed in.
+	 * @return 		string 						The classes for the button set wrap.
+	 */
+	public function get_button_set_wrap_classes( $classes = array() ) {
+
+		$return 	= '';
+		$classes[] 	= 'tout-social-buttons-wrap';
+
+		/**
+		 * The tout_social_buttons_button_set_wrap_classes filter.
+		 *
+		 * Allows for changing classes on the button set.
+		 *
+		 * @param 		array 		$classes 		The current classes.
+		 * @param 		string 		$context 		Where this is being used.
+		 */
+		$classes 	= apply_filters( 'tout_social_buttons_button_set_wrap_classes', $classes, $this->context );
+		$return 	= implode( ' ', $classes );
+
+		return $return;
+
+	} // get_button_set_wrap_classes()
+
+	/**
+	 * Returns the classes for the button text span.
+	 *
+	 * @since 		1.0.0
+	 * @param 		object 		$instance 		The button instance object.
+	 * @param 		array 		$classes 		The classes passed in.
+	 * @return 		string 						The classes for the button text span.
+	 */
+	public function get_button_text_classes( $instance, $classes = array() ) {
+
+		$return 	= '';
+		$classes[] 	= 'tout-social-button-text';
+
+		if ( 'icon' === $instance->get_type() ) :
+
+			$classes[] = 'screen-reader-text';
+
+		endif;
+
+		/**
+		 * The tout_social_buttons_button_text_classes filter.
+		 *
+		 * Allows for changing classes on the button text span.
+		 *
+		 * @param 		array 		$classes 		The current classes.
+		 * @param 		string 		$context 		Where this is being used.
+		 */
+		$classes 	= apply_filters( 'tout_social_buttons_button_text_classes', $classes, $this->context );
+		$return 	= implode( ' ', $classes );
+
+		return $return;
+
+	} // get_button_text_classes()
+
+	/**
+	 * Returns the classes for the blockquote element.
+	 *
+	 * @since 		1.0.0
+	 * @param 		array 		$classes 		The classes passed in.
+	 * @return 		string 						The classes for the blockquote element.
+	 */
+	// public function get_quote_classes( $classes = array() ) {
+	//
+	// 	$return 	= '';
+	// 	$classes[] 	= 'tout-social-buttons-quote';
+	//
+	// 	/**
+	// 	 * The tout_social_buttons_quote_classes filter.
+	// 	 *
+	// 	 * Allows for changing classes on the blockquote element.
+	// 	 *
+	// 	 * @param 		array 		$classes 		The current classes.
+	// 	 * @param 		string 		$context 		Where this is being used.
+	// 	 */
+	// 	$classes 	= apply_filters( 'tout_social_buttons_quote_classes', $classes, $context );
+	// 	$return 	= implode( ' ', $classes );
+	//
+	// 	return $return;
+	//
+	// } // get_quote_classes()
+
+	/**
+	 * Returns the classes for the quote wrap.
+	 *
+	 * @since 		1.0.0
+	 * @param 		string 		$context 		Where this function is being used.
+	 * @param 		array 		$classes 		The classes passed in.
+	 * @return 		string 						The classes for the quote wrap.
+	 */
+	// public function get_quote_wrap_classes( $context, $classes = array() ) {
+	//
+	// 	$return 	= '';
+	// 	$classes[] 	= 'tout-this-wrap';
+	//
+	// 	if ( 'clicktotweet' === $context ) {
+	//
+	// 		$classes[] 	= $this->customizer['clicktotweet_style'];
+	//
+	// 	}
+	//
+	// 	/**
+	// 	 * The tout_social_buttons_quote_wrap_classes filter.
+	// 	 *
+	// 	 * Allows for changing classes on the quote wrap element.
+	// 	 *
+	// 	 * @param 		array 		$classes 		The current classes.
+	// 	 * @param 		string 		$context 		Where this is being used.
+	// 	 */
+	// 	$classes 	= apply_filters( 'tout_social_buttons_quote_wrap_classes', $classes, $context );
+	// 	$return 	= implode( ' ', $classes );
+	//
+	// 	return $return;
+	//
+	// } // get_quote_wrap_classes()
+
+	/**
+	 * Return the $context class variable.
+	 *
+	 * @since 		1.0.0
+	 * @return 		string 		The $context class variable.
+	 */
+	public function get_context() {
+
+		return $this->context;
+
+	} // get_context()
+
+	/**
+	 * Includes the button-set partial file.
+	 *
 	 * @since 		1.0.0
 	 */
-	public function add_quote_buttons( $buttons ) {
+	protected function output_button_set() {
 
-		$buttons['email'] 		= new Buttons\Email();
-		$buttons['linkedin'] 	= new Buttons\Linkedin();
-		$buttons['tumblr'] 		= new Buttons\tumblr();
-		$buttons['twitter'] 	= new Buttons\Twitter();
+		include( plugin_dir_path( dirname( __FILE__ ) ) . 'buttons/partials/button-set.php' );
 
-		return $buttons;
+	} // output_button_set()
 
-	} // add_quote_buttons()
+	/**
+	 * Sets the $buttons class variable.
+	 *
+	 * @exits 		If $buttons is empty.
+	 * @exits 		If $buttons is already an array of objects.
+	 * @since 		1.0.0
+	 * @param 		array 		$buttons 		Array of button IDs.
+	 */
+	protected function set_buttons( $buttons ) {
+
+		if ( empty( $buttons ) ) { return array(); }
+
+		if ( is_array( $buttons ) ) {
+
+			$first = key( $buttons );
+
+			if ( is_object( $buttons[$first] ) ) {
+
+				$this->buttons = $buttons;
+				return;
+
+			}
+
+		}
+
+		global $tout_social_buttons;
+
+		$return = array();
+
+		// Remove buttons that appear in the inactive array.
+		foreach ( $tout_social_buttons as $button => $obj ) {
+
+			if ( in_array( $button, $buttons ) ) {
+
+				$return[$button] = $obj;
+
+			}
+
+		}
+
+		$this->buttons = $return;
+
+	} // set_button()
+
+	/**
+	 * Sets the class variable $customizer with the plugin's customizer settings.
+	 *
+	 * @since 		1.0.0
+	 */
+	public function set_customizer() {
+
+		$this->customizer = get_option( 'tout_social_buttons' );
+
+	} // set_customizer()
+
+	/**
+	 * Sets the class variable $settings with the plugin settings.
+	 *
+	 * @since 		1.0.0
+	 */
+	public function set_settings() {
+
+		$this->settings = get_option( TOUT_SOCIAL_BUTTONS_SETTINGS );
+
+	} // set_settings()
 
 } // class
