@@ -66,7 +66,7 @@
 
 		settings_fields( TOUT_SOCIAL_BUTTONS_SETTINGS );
 
-		do_settings_sections( TOUT_SOCIAL_BUTTONS_SLUG );
+		do_settings_sections( TOUT_SOCIAL_BUTTONS_SETTINGS );
 
 		submit_button( 'Save Settings' );
 

@@ -26,7 +26,7 @@ class Checkbox extends \ToutSocialButtons\Fields\Field {
 
 		$this->set_context( $context );
 		$this->set_setting_name( $args );
-		$this->set_settings( $args );
+		$this->set_settings( $args);
 
 		$this->set_default_attributes();
 		$this->set_default_checkbox_attributes();

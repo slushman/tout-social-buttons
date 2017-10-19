@@ -300,18 +300,27 @@ class Tout_Social_Button {
 	 */
 	public function get_url() {
 
-	//	return add_query_arg( $this->url['args'], $this->url['base_url'] );
-
 		$title 		= urlencode( get_the_title() );
 		$excerpt 	= urlencode( get_the_excerpt() );
 		$link 		= urlencode( get_permalink() );
 		$image 		= urlencode( wp_get_attachment_url( get_post_thumbnail_id() ) );
-
-		$url = add_query_arg( $this->url['args'], $this->url['base_url'] );
+		$url 		= add_query_arg( $this->url['args'], $this->url['base_url'] );
 
 		return $url;
 
 	} // get_url()
+
+	/**
+	 * Returns the url array for this button.
+	 *
+	 * @since 		1.0.0
+	 * @return 		string 		The url array.
+	 */
+	public function get_url_array() {
+
+		return $this->url;
+
+	} // get_url_array()
 
 	/**
 	 * Checks if the button is in the active buttons.

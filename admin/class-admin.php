@@ -126,6 +126,24 @@ class Admin {
 			array( $this, 'page_settings' )
 		);
 
+		add_submenu_page(
+			TOUT_SOCIAL_BUTTONS_SETTINGS,
+			esc_html__( 'Accounts', 'tout-social-buttons' ),
+			esc_html__( 'Accounts', 'tout-social-buttons' ),
+			'manage_options',
+			TOUT_SOCIAL_BUTTONS_SETTINGS . '_accounts',
+			array( $this, 'page_accounts' )
+		);
+
+		add_submenu_page(
+			TOUT_SOCIAL_BUTTONS_SETTINGS,
+			esc_html__( 'Pin It', 'tout-social-buttons' ),
+			esc_html__( 'Pin It', 'tout-social-buttons' ),
+			'manage_options',
+			TOUT_SOCIAL_BUTTONS_SETTINGS . '_pinit',
+			array( $this, 'page_pinit' )
+		);
+
 	} // add_menu()
 
 	public function button_set_classes( $classes, $context ) {
@@ -336,6 +354,28 @@ class Admin {
 	} // localize_scripts()
 
 	/**
+	 * Includes the accounts page partial file.
+	 *
+	 * @since 		1.0.0
+	 */
+	public function page_accounts() {
+
+		include( plugin_dir_path( dirname( __FILE__ ) ) . 'admin/partials/page-accounts.php' );
+
+	} // page_accounts()
+
+	/**
+	 * Includes the pinit page partial file.
+	 *
+	 * @since 		1.0.0
+	 */
+	public function page_pinit() {
+
+		include( plugin_dir_path( dirname( __FILE__ ) ) . 'admin/partials/page-pinit.php' );
+
+	} // page_pinit()
+
+	/**
 	 * Includes the options page partial file.
 	 *
 	 * @since 		1.0.0
@@ -399,7 +439,7 @@ class Admin {
 			'active-buttons',
 			esc_html__( 'Active Buttons', 'tout-social-buttons' ),
 			array( $this, 'field_active_buttons' ),
-			TOUT_SOCIAL_BUTTONS_SLUG,
+			TOUT_SOCIAL_BUTTONS_SETTINGS,
 			TOUT_SOCIAL_BUTTONS_SETTINGS . '_buttons',
 			array(
 				'attributes' 	=> array(
@@ -416,7 +456,7 @@ class Admin {
 			'inactive-buttons',
 			esc_html__( 'Inactive Buttons', 'tout-social-buttons' ),
 			array( $this, 'field_inactive_buttons' ),
-			TOUT_SOCIAL_BUTTONS_SLUG,
+			TOUT_SOCIAL_BUTTONS_SETTINGS,
 			TOUT_SOCIAL_BUTTONS_SETTINGS . '_buttons',
 			array(
 				'attributes' 	=> array(
@@ -433,7 +473,7 @@ class Admin {
 			'button-behavior',
 			esc_html__( 'Button Behavior', 'tout-social-buttons' ),
 			array( $this, 'field_select' ),
-			TOUT_SOCIAL_BUTTONS_SLUG,
+			TOUT_SOCIAL_BUTTONS_SETTINGS,
 			TOUT_SOCIAL_BUTTONS_SETTINGS . '_buttons',
 			array(
 				'attributes' 	=> array(
@@ -456,7 +496,7 @@ class Admin {
 			'auto-post',
 			esc_html__( 'Auto Post', 'tout-social-buttons' ),
 			array( $this, 'field_checkbox' ),
-			TOUT_SOCIAL_BUTTONS_SLUG,
+			TOUT_SOCIAL_BUTTONS_SETTINGS,
 			TOUT_SOCIAL_BUTTONS_SETTINGS . '_buttons',
 			array(
 				'attributes' 	=> array(
@@ -470,52 +510,13 @@ class Admin {
 		);
 		$this->settings[] = array( 'auto-post', 'checkbox', 1 );
 
-
-
-		// Accounts fields
-		add_settings_field(
-			'account-twitter',
-			esc_html__( 'Twitter Account', 'tout-social-buttons' ),
-			array( $this, 'field_text' ),
-			TOUT_SOCIAL_BUTTONS_SLUG,
-			TOUT_SOCIAL_BUTTONS_SETTINGS . '_accounts',
-			array(
-				'attributes' 	=> array(
-					'id' 		=> 'account-twitter'
-				),
-				'properties' 	=> array(
-					'description' 	=> __( 'Enter your Twitter username.', 'tout-social-buttons' )
-				)
-			)
-		);
-		$this->settings[] = array( 'account-twitter', 'text' );
-
-		add_settings_field(
-			'account-tumblr',
-			esc_html__( 'tumblr Account', 'tout-social-buttons' ),
-			array( $this, 'field_text' ),
-			TOUT_SOCIAL_BUTTONS_SLUG,
-			TOUT_SOCIAL_BUTTONS_SETTINGS . '_accounts',
-			array(
-				'attributes' 	=> array(
-					'id' 		=> 'account-tumblr'
-				),
-				'properties' 	=> array(
-					'description' 	=> __( 'Enter your tumblr username.', 'tout-social-buttons' )
-				)
-			)
-		);
-		$this->settings[] = array( 'account-tumblr', 'text' );
-
-
-
 		// Design fields
 		add_settings_field(
 			'design',
 			esc_html__( 'Design', 'tout-social-buttons' ),
 			array( $this, 'field_design' ),
-			TOUT_SOCIAL_BUTTONS_SLUG,
-			TOUT_SOCIAL_BUTTONS_SETTINGS . '_design',
+			TOUT_SOCIAL_BUTTONS_SETTINGS,
+			TOUT_SOCIAL_BUTTONS_SETTINGS . '_buttons',
 			array(
 				'attributes' 	=> array(
 					'id' 		=> 'design'
@@ -525,6 +526,144 @@ class Admin {
 				)
 			)
 		);
+
+
+		// Pin It Button fields
+		add_settings_field(
+			'pinit-enable',
+			esc_html__( 'Enable Pin It Button', 'tout-social-buttons' ),
+			array( $this, 'field_checkbox' ),
+			TOUT_SOCIAL_BUTTONS_SETTINGS . '_pinit',
+			TOUT_SOCIAL_BUTTONS_SETTINGS . '_pinit',
+			array(
+				'attributes' 	=> array(
+					'id' 		=> 'pinit-enable',
+					'value' 	=> 1
+				),
+				'properties' 	=> array(
+					'description' 	=> __( 'Enable the Pin It Button when hovering on an image in the content.', 'tout-social-buttons' )
+				),
+				'setting'		=> TOUT_SOCIAL_BUTTONS_SETTINGS . '_pinit'
+			)
+		);
+		$this->settings[] = array( 'pinit-enable', 'checkbox', 1 );
+
+		add_settings_field(
+			'pinit-min-height',
+			esc_html__( 'Minimum Image Height', 'tout-social-buttons' ),
+			array( $this, 'field_text' ),
+			TOUT_SOCIAL_BUTTONS_SETTINGS . '_pinit',
+			TOUT_SOCIAL_BUTTONS_SETTINGS . '_pinit',
+			array(
+				'attributes' 	=> array(
+					'id' 		=> 'pinit-min-height',
+					'value' 	=> 200
+				),
+				'properties' 	=> array(
+					'description' 	=> __( 'Minimum image height for the Pin It Button to appear.', 'tout-social-buttons' )
+				),
+				'setting'		=> TOUT_SOCIAL_BUTTONS_SETTINGS . '_pinit'
+			)
+		);
+		$this->settings[] = array( 'pinit-min-height', 'text', 200 );
+
+		add_settings_field(
+			'pinit-min-width',
+			esc_html__( 'Minimum Image Width', 'tout-social-buttons' ),
+			array( $this, 'field_text' ),
+			TOUT_SOCIAL_BUTTONS_SETTINGS . '_pinit',
+			TOUT_SOCIAL_BUTTONS_SETTINGS . '_pinit',
+			array(
+				'attributes' 	=> array(
+					'id' 		=> 'pinit-min-width',
+					'value' 	=> 200
+				),
+				'properties' 	=> array(
+					'description' 	=> __( 'Minimum image width for the Pin It Button to appear.', 'tout-social-buttons' )
+				),
+				'setting'		=> TOUT_SOCIAL_BUTTONS_SETTINGS . '_pinit'
+			)
+		);
+		$this->settings[] = array( 'pinit-min-width', 'text', 200 );
+
+		add_settings_field(
+			'pinit-exclude',
+			esc_html__( 'Exclude Classes', 'tout-social-buttons' ),
+			array( $this, 'field_text' ),
+			TOUT_SOCIAL_BUTTONS_SETTINGS . '_pinit',
+			TOUT_SOCIAL_BUTTONS_SETTINGS . '_pinit',
+			array(
+				'attributes' 	=> array(
+					'id' 		=> 'pinit-exclude'
+				),
+				'properties' 	=> array(
+					'description' 	=> __( 'Do not add the Pin It Button to images with these classes (seperate each class with a comma).', 'tout-social-buttons' )
+				),
+				'setting'		=> TOUT_SOCIAL_BUTTONS_SETTINGS . '_pinit'
+			)
+		);
+		$this->settings[] = array( 'pinit-exclude', 'text', 200 );
+
+		add_settings_field(
+			'pinit-source',
+			esc_html__( 'Description Source', 'tout-social-buttons' ),
+			array( $this, 'field_select' ),
+			TOUT_SOCIAL_BUTTONS_SETTINGS . '_pinit',
+			TOUT_SOCIAL_BUTTONS_SETTINGS . '_pinit',
+			array(
+				'attributes' 	=> array(
+					'id' 		=> 'pinit-source'
+				),
+				'properties' 	=> array(
+					'description' 	=> __( 'Where should the description for the image come from?', 'tout-social-buttons' )
+				),
+				'options' 		=> array(
+					array( 'label' => __( 'Use the image alt attribute', 'tout-social-buttons' ), 'value' => 'imgalt' ),
+					array( 'label' => __( 'Use the image title', 'tout-social-buttons' ), 'value' => 'imgtitle' )
+				),
+				'setting'		=> TOUT_SOCIAL_BUTTONS_SETTINGS . '_pinit'
+			)
+		);
+		$this->settings[] = array( 'pinit-source', 'select', 'imgalt' );
+
+
+
+		// Accounts fields
+		add_settings_field(
+			'account-twitter',
+			esc_html__( 'Twitter Account', 'tout-social-buttons' ),
+			array( $this, 'field_text' ),
+			TOUT_SOCIAL_BUTTONS_SETTINGS . '_accounts',
+			TOUT_SOCIAL_BUTTONS_SETTINGS . '_accounts',
+			array(
+				'attributes' 	=> array(
+					'id' 		=> 'account-twitter'
+				),
+				'properties' 	=> array(
+					'description' 	=> __( 'Enter your Twitter username.', 'tout-social-buttons' )
+				),
+				'setting'		=> TOUT_SOCIAL_BUTTONS_SETTINGS . '_accounts'
+			)
+		);
+		$this->settings[] = array( 'account-twitter', 'text' );
+
+		add_settings_field(
+			'account-tumblr',
+			esc_html__( 'tumblr Account', 'tout-social-buttons' ),
+			array( $this, 'field_text' ),
+			TOUT_SOCIAL_BUTTONS_SETTINGS . '_accounts',
+			TOUT_SOCIAL_BUTTONS_SETTINGS . '_accounts',
+			array(
+				'attributes' 	=> array(
+					'id' 		=> 'account-tumblr'
+				),
+				'properties' 	=> array(
+					'description' 	=> __( 'Enter your tumblr username.', 'tout-social-buttons' )
+				),
+				'setting'		=> TOUT_SOCIAL_BUTTONS_SETTINGS . '_accounts'
+			)
+		);
+		$this->settings[] = array( 'account-tumblr', 'text' );
 
 	} // register_fields()
 
@@ -543,21 +682,21 @@ class Admin {
 			TOUT_SOCIAL_BUTTONS_SETTINGS . '_buttons',
 			esc_html__( 'Buttons', 'tout-social-buttons' ),
 			array( $this, 'sections' ),
-			TOUT_SOCIAL_BUTTONS_SLUG
+			TOUT_SOCIAL_BUTTONS_SETTINGS
 		);
 
 		add_settings_section(
 			TOUT_SOCIAL_BUTTONS_SETTINGS . '_accounts',
 			esc_html__( 'Accounts', 'tout-social-buttons' ),
 			array( $this, 'sections' ),
-			TOUT_SOCIAL_BUTTONS_SLUG
+			TOUT_SOCIAL_BUTTONS_SETTINGS . '_accounts'
 		);
 
 		add_settings_section(
-			TOUT_SOCIAL_BUTTONS_SETTINGS . '_design',
-			esc_html__( 'Design', 'tout-social-buttons' ),
+			TOUT_SOCIAL_BUTTONS_SETTINGS . '_pinit',
+			esc_html__( 'Pin It Button', 'tout-social-buttons' ),
 			array( $this, 'sections' ),
-			TOUT_SOCIAL_BUTTONS_SLUG
+			TOUT_SOCIAL_BUTTONS_SETTINGS . '_pinit'
 		);
 
 	} // register_sections()
@@ -576,6 +715,18 @@ class Admin {
 		register_setting(
 			TOUT_SOCIAL_BUTTONS_SETTINGS,
 			TOUT_SOCIAL_BUTTONS_SETTINGS,
+			array( $this, 'validate_settings' )
+		);
+
+		register_setting(
+			TOUT_SOCIAL_BUTTONS_SETTINGS . '_accounts',
+			TOUT_SOCIAL_BUTTONS_SETTINGS . '_accounts',
+			array( $this, 'validate_settings' )
+		);
+
+		register_setting(
+			TOUT_SOCIAL_BUTTONS_SETTINGS . '_pinit',
+			TOUT_SOCIAL_BUTTONS_SETTINGS . '_pinit',
 			array( $this, 'validate_settings' )
 		);
 
@@ -604,8 +755,8 @@ class Admin {
 
 		switch ( $params['id'] ) :
 
-			case TOUT_SOCIAL_BUTTONS_SLUG . '-accounts': 	$params['description'] = __( 'Enter your username(s) for correct attributions on items shared on these sites. This is completely optional.', 'tout-social-buttons' ); break;
-			case TOUT_SOCIAL_BUTTONS_SLUG . '-design': 		$params['description'] = __( 'Customize the appearance of the Tout.Social buttons.', 'tout-social-buttons' ); break;
+			case TOUT_SOCIAL_BUTTONS_SETTINGS . '_accounts': 	$params['description'] = __( 'Enter your username(s) for correct attributions on items shared on these sites. This is completely optional.', 'tout-social-buttons' ); break;
+			case TOUT_SOCIAL_BUTTONS_SETTINGS . '_pinit': 		$params['description'] = __( 'Settings for the Pin It Button.', 'tout-social-buttons' ); break;
 
 		endswitch;
 
@@ -628,7 +779,7 @@ class Admin {
 
 		//wp_die( print_r( $this->settings ) );
 
-		foreach ( $this->settings as $setting ) {
+		foreach ( $this->settings as $group => $setting ) {
 
 			$sanitizer 			= new Inc\Sanitize();
 			$valid[$setting[0]] = $sanitizer->clean( $input[$setting[0]], $setting[1] );

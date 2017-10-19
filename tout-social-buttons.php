@@ -25,6 +25,9 @@
  * Domain Path:       /languages
  *
  * @todo 		Public: add Pin It button to images used in content and/or featured images.
+ *         		styles: show pin it button all the time on mobile.
+ *
+ * @todo 		Bug: remove  "Share this" from Click to Tweet box.
  *
  * @todo 		Blocks: add a Gutenblock for the buttons.
  * @todo 		Blocks: add a click-to-tweet Gutenblock for blockquote sharing
@@ -79,6 +82,7 @@ function tout_social_buttons_init() {
 	$classes[] = new Frontend\Frontend();
 	$classes[] = new Frontend\AutoPost();
 	$classes[] = new Frontend\Shortcode_Clicktotweet();
+	$classes[] = new Frontend\PinIt();
 	//$classes[] = new Blocks\Blocks();
 
 	$classes[] = $tout_social_buttons['email'] 			= new Buttons\Email();

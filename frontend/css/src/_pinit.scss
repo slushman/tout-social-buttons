@@ -1,0 +1,32 @@
+
+.pinthis {
+	position: relative;
+
+	@media ( min-width: 600px ) { // Show the pinit button all the time on mobile.
+		&:hover .pinit{
+			opacity: 1
+		}
+	}
+}
+
+.pinit {
+	background-color: #bd081c;
+	border-radius 	: 5px;
+	color 			: #fff;
+	padding 		: 0.25em;
+	position 		: absolute;
+	transition 		: opacity 200ms !important;
+
+	@media ( min-width: 600px ) { // Show the pinit button all the time on mobile.
+		opacity: 0;
+	}
+}
+
+.pinit-top-left {
+	left: 1em;
+	top	: 1em;
+}
+
+.tout-social-button-pinit {
+	fill: #fff;
+}

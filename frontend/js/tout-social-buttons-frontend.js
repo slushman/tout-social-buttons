@@ -20,7 +20,7 @@
 
 		if ( 'UL' === target.nodeName ) { return event; }
 
-		var wrap = tout.getParent( target, 'tout-social-button' );
+		var wrap = getParent( target, 'tout-social-button' );
 		var selection = wrap.getAttribute( 'data-id' );
 
 		if ( 'email' === selection ) { return event; }
@@ -36,62 +36,50 @@
 
 	var buttons = document.querySelector( '.tout-social-buttons' );
 
- 	buttons.addEventListener( 'click', processEvent );
+	 buttons.addEventListener( 'click', processEvent );
 
 })();
 
 /**
- * The following pattern allows for outside files to use these functions as a library.
- *
- * The parameter passed into this function is 'exports'.
- * Each function within defines itself within 'exports', along with a unique name
- * 	that outside scripts can reference.
- * In the parenthesis below, setup the blank this.tout as an empty object.
- *
- * Outside scripts would call these like:
- * tout.getEventTarget( eventName )
- * tout.getParent( element, className )
+ * Functions available to use in JS.
  */
-(function( exports ) {
 
-	'use strict';
+/**
+ * Returns the event target.
+ *
+ * @since 		1.0.0
+ * @param 		object 		event 		The event.
+ * @return 		object 		target 		The event target.
+ */
+function getEventTarget( event ) {
 
-	/**
-	 * Returns the event target.
-	 *
-	 * @param 		object 		event 		The event.
-	 * @return 		object 		target 		The event target.
-	 */
-	exports.getEventTarget = function getEventTarget( event ) {
+	event.event || window.event;
 
-		event = event || window.event;
+	return event.target || event.scrElement;
 
-		return event.target || event.srcElement;
+} // getEventTarget()
 
-	} // getEventTarget()
+/**
+ * Returns the parent node with the requested class.
+ *
+ * This is recursive, so it will continue up the DOM tree
+ * until the correct parent is found.
+ *
+ * @since 		1.0.0
+ * @param 		object 		el 				The node element.
+ * @param 		string 		className 		Name of the class to find.
+ * @return 		object 						The parent element.
+ */
+function getParent( el, className ) {
 
-	/**
-	 * Returns the parent node with the requested class.
-	 *
-	 * This is recursive, so it will continue up the DOM tree
-	 * until the correct parent is found.
-	 *
-	 * @param 		object 		el 				The node element.
-	 * @param 		string 		className 		Name of the class to find.
-	 * @return 		object 						The parent element.
-	 */
-	exports.getParent = function getParent( el, className ) {
+	let parent = el.parentNode;
 
-		var parent = el.parentNode;
+	if ( '' !== parent.classList && parent.classList.contains( className ) ) {
 
-		if ( '' !== parent.classList && parent.classList.contains( className ) ) {
+		return parent;
 
-			return parent;
+	}
 
-		}
+	return getParent( parent, className );
 
-		return exports.getParent( parent, className );
-
-	} // getParent()
-
-})( this.tout = {} );
+} // getParent()

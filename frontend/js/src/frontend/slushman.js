@@ -1,4 +1,8 @@
 /**
+ * Functions available to use in JS.
+ */
+
+/**
  * Returns the event target.
  *
  * @since 		1.0.0
@@ -37,35 +41,3 @@ function getParent( el, className ) {
 	return getParent( parent, className );
 
 } // getParent()
-
-function ajaxFetch( data ) {
-
-	let formData = new FormData();
-	formData.append( 'action', data.action );
-	formData.append( 'nonce', data.nonce );
-	formData.append( 'data', data.order );
-
-	let request = new Request( ajaxurl, {
-		method: 'POST',
-		headers: {
-			'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8'
-		},
-		body: formData,
-		//body: 'action=' + data.action + '&nonce=' + data.nonce + '&active=' + data.active + '&inactive=' + data.inactive,
-		credentials: 'same-origin'
-	});
-
-	fetch( request )
-	.then( function( response ) {
-
-
-		let output = document.querySelector( '.buttons-status' );
-		return response;
-		//let text = response.json().message;
-
-		//console.log( text );
-
-	})
-	.catch( error => console.error( 'DB error: ', error ) );
-
-} // ajaxFetch

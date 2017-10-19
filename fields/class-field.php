@@ -159,7 +159,7 @@ class Field {
 
 		if ( empty( $this->properties['alert'] ) ) { return; }
 
-	    include( plugin_dir_path( dirname( __FILE__ ) ) . 'fields/partials/alert.php' );
+		include( plugin_dir_path( dirname( __FILE__ ) ) . 'fields/partials/alert.php' );
 
 	} // output_alert()
 
@@ -185,7 +185,7 @@ class Field {
 
 		if ( empty( $this->properties['description'] ) ) { return; }
 
-	    include( plugin_dir_path( dirname( __FILE__ ) ) . 'fields/partials/description.php' );
+		include( plugin_dir_path( dirname( __FILE__ ) ) . 'fields/partials/description.php' );
 
 	} // output_description()
 
@@ -199,7 +199,7 @@ class Field {
 
 		if ( empty( $this->properties['description'] ) ) { return; }
 
-	    include( plugin_dir_path( dirname( __FILE__ ) ) . 'fields/partials/description-legend.php' );
+		include( plugin_dir_path( dirname( __FILE__ ) ) . 'fields/partials/description-legend.php' );
 
 	} // output_description_legend()
 
@@ -213,7 +213,7 @@ class Field {
 
 		if ( empty( $this->properties['description'] ) ) { return; }
 
-	    include( plugin_dir_path( dirname( __FILE__ ) ) . 'fields/partials/description-span.php' );
+		include( plugin_dir_path( dirname( __FILE__ ) ) . 'fields/partials/description-span.php' );
 
 	} // output_description_span()
 
@@ -392,7 +392,7 @@ class Field {
 	 * Sets the $setting_name class variable.
 	 *
 	 * @since 		1.0.0
-	 * @param 		array 		$args 		The field args.
+	 * @param 		array 		$args 			The field args.
 	 */
 	protected function set_setting_name( $args ) {
 

@@ -57,7 +57,7 @@ class Frontend {
 	 */
 	public function enqueue_scripts() {
 
-		if ( 'popup' !== $this->settings['button-behavior'] ) { return; }
+		//if ( 'popup' !== $this->settings['button-behavior'] ) { return; }
 
 		wp_enqueue_script( TOUT_SOCIAL_BUTTONS_SLUG, plugin_dir_url( __FILE__ ) . 'js/tout-social-buttons-frontend.min.js', array( 'jquery' ), TOUT_SOCIAL_BUTTONS_VERSION, true );
 

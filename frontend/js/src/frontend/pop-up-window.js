@@ -20,7 +20,7 @@
 
 		if ( 'UL' === target.nodeName ) { return event; }
 
-		var wrap = tout.getParent( target, 'tout-social-button' );
+		var wrap = getParent( target, 'tout-social-button' );
 		var selection = wrap.getAttribute( 'data-id' );
 
 		if ( 'email' === selection ) { return event; }
@@ -36,6 +36,6 @@
 
 	var buttons = document.querySelector( '.tout-social-buttons' );
 
- 	buttons.addEventListener( 'click', processEvent );
+	 buttons.addEventListener( 'click', processEvent );
 
 })();
