@@ -58,18 +58,17 @@ class Design extends \ToutSocialButtons\Fields\Field {
 
 		if ( 0 === count( $posts ) ) { return; }
 
-		$url 		= admin_url( 'customize.php' );
-		$post_url 	= get_permalink( $posts[0]['ID'] );
-
-		$query['autofocus[section]'] 	= 'tout_social_buttons_general';
-		$query['url'] 					= $post_url;
-		$query['return'] 				= urlencode( add_query_arg( array( 'page' => TOUT_SOCIAL_BUTTONS_SETTINGS ), admin_url( 'options-general.php' ) ) );
+		$url 				= admin_url( 'customize.php' );
+		$query 				= array( 'autofocus[' . $this->properties['customizer']['type'] . ']' => $this->properties['customizer']['focus'] );
+		$query['url'] 		= get_permalink( $posts[0]['ID'] );
+		$query['return'] 	= urlencode( add_query_arg( array( 'page' => $this->properties['customizer']['return'] ), admin_url( 'admin.php' ) ) );
 
 		/**
 		 * The tout_social_buttons_customizer_button_url filter.
 		 *
 		 * Allows for customizing the URL for the Customizer button in the plugin settings.
-		 * @var 		array 		$query 		The query array.
+		 *
+		 * @param 		array 		$query 		The query array.
 		 */
 		$query 	= apply_filters( 'tout_social_buttons_customizer_button_url', $query );
 		$link 	= add_query_arg( $query, $url );
@@ -85,7 +84,10 @@ class Design extends \ToutSocialButtons\Fields\Field {
 	 */
 	protected function set_default_design_properties() {
 
-		$this->default_properties['link-label'] = __( 'Customize the Tout.Social buttons', 'tout-social-buttons' );
+		$this->default_properties['customizer']['return'] 	= TOUT_SOCIAL_BUTTONS_SETTINGS;
+		$this->default_properties['customizer']['focus'] 	= 'tout_social_buttons_general';
+		$this->default_properties['customizer']['type'] 	= 'section';
+		$this->default_properties['link-label'] 			= __( 'Customize the Tout.Social buttons', 'tout-social-buttons' );
 
 	} // set_default_design_properties()
 
