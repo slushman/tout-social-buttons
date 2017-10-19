@@ -272,7 +272,7 @@ class PinIt {
 			$pinit 	= $document->createElement( 'a' );
 			$label	= $this->get_button_content( $document );
 
-			$pinit->setAttribute( 'class', 'pinit pinit-top-left' );
+			$pinit->setAttribute( 'class', 'pinit pinit-pos-top-left' );
 			$pinit->setAttribute( 'href', $this->get_button_url( $img ) );
 			$pinit->appendChild( $label );
 

@@ -33,6 +33,7 @@ class Design extends \ToutSocialButtons\Fields\Field {
 		$this->set_name_attribute();
 
 		$this->set_default_properties();
+		$this->set_default_design_properties();
 		$this->set_properties( $args );
 
 		$this->output_label();
@@ -76,5 +77,16 @@ class Design extends \ToutSocialButtons\Fields\Field {
 		include( plugin_dir_path( dirname( __FILE__ ) ) . 'fields/partials/design.php' );
 
 	} // output_field()
+
+	/**
+	 * Sets default properties specifically for checkbox fields.
+	 *
+	 * @since 		1.0.0
+	 */
+	protected function set_default_design_properties() {
+
+		$this->default_properties['link-label'] = __( 'Customize the Tout.Social buttons', 'tout-social-buttons' );
+
+	} // set_default_design_properties()
 
 } // class

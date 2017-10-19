@@ -76,8 +76,8 @@ class Checkbox extends \ToutSocialButtons\Fields\Field {
 	 */
 	protected function set_default_checkbox_properties() {
 
-		$this->default_attributes['class-label'] 		= 'checkbox-label';
-		$this->default_attributes['class-label-span'] 	= 'checkbox-label-text';
+		$this->default_properties['class-label'] 		= 'checkbox-label';
+		$this->default_properties['class-label-span'] 	= 'checkbox-label-text';
 
 	} // set_default_checkbox_properties()
 

@@ -522,7 +522,7 @@ class Admin {
 					'id' 		=> 'design'
 				),
 				'properties' 	=> array(
-					'description' 	=> __( 'Customize the appearance of the Tout.Social buttons.', 'tout-social-buttons' )
+					'description' 	=> __( 'Customize the appearance of the Tout.Social buttons.', 'tout-social-buttons' ),
 				)
 			)
 		);
