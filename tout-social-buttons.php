@@ -24,9 +24,6 @@
  * Text Domain:       tout-social-buttons
  * Domain Path:       /languages
  *
- * @todo 		Public: add Pin It button to images used in content and/or featured images.
- *         		styles: show pin it button all the time on mobile.
- *
  * @todo 		Bug: remove  "Share this" from Click to Tweet box.
  *
  * @todo 		Blocks: add a Gutenblock for the buttons.

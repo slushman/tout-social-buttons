@@ -12,9 +12,17 @@
  */
 
 namespace ToutSocialButtons\Frontend;
-use \ToutSocialButtons\Buttons as Buttons;
 
 class PinIt {
+
+	/**
+	 * The customizer settings.
+	 *
+	 * @since 		1.0.0
+	 * @access 		private
+	 * @var 		array 			$customizer 		The customizer settings.
+	 */
+	protected $customizer;
 
 	/**
 	 * The pinit plugin settings.
@@ -33,6 +41,7 @@ class PinIt {
 	public function __construct() {
 
 		$this->set_settings();
+		$this->set_customizer();
 
 	} // __construct()
 
@@ -75,30 +84,46 @@ class PinIt {
 	} // class_check()
 
 	/**
-	 * Returns the button content
+	 * Returns the a11y text for the Pin It button.
 	 *
 	 * @since 		1.0.0
-	 * @param 		DOMDocument 		$document 		Document object.
-	 * @return 		mixed 								The button content.
+	 * @return 		mixed 		The Pin It Button a11y text.
 	 */
-	protected function get_button_content( $document ) {
+	protected function get_a11y_text() {
 
-		global $tout_social_buttons;
-
-		$return = $document->createCDATASection( $tout_social_buttons['pinterest']->get_pinit() );
+		$text = __( 'Save pin to Pinterest', 'tout-social-buttons' );
 
 		/**
-		 * The tout_social_buttons_pinit_content filter.
+		 * The tout_social_buttons_pinit_button_a11y_text filter.
 		 *
-		 * Allows for changing the Pin It Button content.
+		 * Allows for changing the Pin It a11y text.
 		 *
-		 * @param 		mixed 				$return 					The Pin It SVG icon.
-		 * @param 		DOMDocument 		$document 					Document object.
-		 * @param 		Pinterest 			$tout_social_buttons 		The Pinterest Button object.
+		 * @param 		mixed 		$text 		The current Pin It a11y text.
 		 */
-		return apply_filters( 'tout_social_buttons_pinit_content', $return, $document, $tout_social_buttons['pinterest'] );
+		return apply_filters( 'tout_social_buttons_pinit_button_a11y_text', $text );
 
-	} // get_button_content()
+	} // get_a11y_text()
+
+	/**
+	 * Returns the button label.
+	 *
+	 * @since 		1.0.0
+	 * @return 		mixed 		The button content.
+	 */
+	protected function get_button_label() {
+
+		$label = '';
+
+		/**
+		 * The tout_social_buttons_pinit_button_label filter.
+		 *
+		 * Allows for changing the Pin It button label.
+		 *
+		 * @param 		mixed 		$label 		The current Pin It button label.
+		 */
+		return apply_filters( 'tout_social_buttons_pinit_button_label', $label );
+
+	} // get_button_label()
 
 	/**
 	 * Returns the urlencoded URL for the image.
@@ -190,6 +215,56 @@ class PinIt {
 	} // get_image()
 
 	/**
+	 * Return the classes for the button label.
+	 *
+	 * @since 		1.0.0
+	 * @return 		string 		$classes 		The classes string.
+	 */
+	protected function get_label_classes() {
+
+		$classes = array();
+
+		$classes[] = 'pinit-button-label';
+
+		/**
+		 * The tout_social_buttons_pinit_button_label_classes filter.
+		 *
+		 * @param 		array 		$classes 		The current Pin It button label classes.
+		 */
+		$classes = apply_filters( 'tout_social_buttons_pinit_button_label_classes', $classes );
+
+		return implode( ' ', $classes );
+
+	} // get_label_classes()
+
+	/**
+	 * Return the classes for the pinit link.
+	 *
+	 * @since 		1.0.0
+	 * @return 		string 		$classes 		The classes string.
+	 */
+	protected function get_pinit_classes() {
+
+		$classes = array();
+
+		$classes[] = 'pinit';
+		$classes[] = 'pinit-pos-top-left';
+		$classes[] = 'pinit-color-white-on-red';
+		$classes[] = 'pinit-size-med';
+		$classes[] = 'pinit-type-pinit';
+
+		/**
+		 * The tout_social_buttons_pinit_classes filter.
+		 *
+		 * @param 		array 		$classes 		The current pinit classes.
+		 */
+		$classes = apply_filters( 'tout_social_buttons_pinit_classes', $classes );
+
+		return implode( ' ', $classes );
+
+	} // get_pinit_classes()
+
+	/**
 	 * Adds the Pin It Button to images used in post content.
 	 *
 	 * @exits 		If $content is empty.
@@ -218,7 +293,7 @@ class PinIt {
 
 		if ( empty( $imgs ) ) { return $content; }
 
-		foreach ( $imgs as $img ) {
+		foreach ( $imgs as $img ) :
 
 			$height = $img->getAttribute( 'height' );
 			$width 	= $img->getAttribute( 'width' );
@@ -233,58 +308,56 @@ class PinIt {
 			$parent = $img->parentNode;
 
 
-			// Is this needed? How often will the parent not be figure or p?
-			//
-			// if ( 'p' !== $parent->tagName && 'figure' !== $parent->tagName ) {
-			//
-			// 	$oldparent 	= $parent;
-			// 	$fig 		= $document->createElement( 'figure' );
-			//
-			// 	$fig->setAttribute( 'class', 'pinthis' );
-			// 	$fig->setAttribute( 'style', 'width: ' . $width . 'px' );
-			//
-			// 	$parent 	= $oldparent->insertBefore( $fig );
-			// 	$children 	= $oldparent->childNodes;
-			//
-			// 	foreach ( $children as $child ) {
-			//
-			// 		$parent->appendChild( $child );
-			//
-			// 	}
-			//
-			// 	// remove old parent?
-			//
-			// } else {
+			$parentClasses 	= $parent->getAttribute( 'class' );
+			$space 			= empty( $parentClasses ) ? '' : ' ';
 
-				$parentClasses 	= $parent->getAttribute( 'class' );
-				$space 			= empty( $parentClasses ) ? '' : ' ';
+			$parent->setAttribute( 'class', $parentClasses . $space . 'pinthis' );
 
-				$parent->setAttribute( 'class', $parentClasses . $space . 'pinthis' );
+			if ( 'p' === $parent->tagName ) {
 
-				if ( 'p' === $parent->tagName ) {
+				$parent->setAttribute( 'style', 'width: ' . $width . 'px' );
 
-					$parent->setAttribute( 'style', 'width: ' . $width . 'px' );
+			}
 
-				}
+			$pinit 		= $document->createElement( 'a' );
+			$classes 	= $this->get_pinit_classes();
+			$ally 		= $document->createElement( 'span' );
+			$label 		= $document->createElement( 'span' );
+			$a11y_text 	= $document->createTextNode( $this->get_a11y_text() );
+			$label_text = $document->createTextNode( $this->get_button_label() );
 
-			// }
-
-			$pinit 	= $document->createElement( 'a' );
-			$label	= $this->get_button_content( $document );
-
-			$pinit->setAttribute( 'class', 'pinit pinit-pos-top-left' );
+			$pinit->setAttribute( 'class', $classes );
 			$pinit->setAttribute( 'href', $this->get_button_url( $img ) );
+
+			$ally->setAttribute( 'class', 'screen-reader-text' );
+			$ally->appendChild( $a11y_text );
+
+			$label->setAttribute( 'class', $this->get_label_classes() );
+			$label->appendChild( $label_text );
+
 			$pinit->appendChild( $label );
+			$pinit->appendChild( $ally );
 
 			$parent->appendChild( $pinit );
 
-		}
+		endforeach;
 
 		$html = $document->saveHTML();
 
 		return $html;
 
 	} // pinit()
+
+	/**
+	 * Sets the class variable $customizer.
+	 *
+	 * @since 		1.0.0
+	 */
+	public function set_customizer() {
+
+		$this->customizer = get_option( TOUT_SOCIAL_BUTTON_CUSTOMIZER );
+
+	} // set_customizer()
 
 	/**
 	 * Sets the class variable $settings.
