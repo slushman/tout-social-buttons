@@ -315,12 +315,7 @@ class Button_Set {
 
 		$first = key( $array );
 
-		if ( is_object( $array[$first] ) ) {
-
-			$this->buttons = $array;
-			return;
-
-		}
+		return is_object( $array[$first] );
 
 	} // has_objects()
 

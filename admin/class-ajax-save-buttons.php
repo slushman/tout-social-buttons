@@ -78,9 +78,7 @@ class Ajax_Save_Buttons {
 		check_ajax_referer( 'tout-social-buttons-order-nonce', 'toutButtonNonce' );
 
 		$active 							= $_POST['active'];
-		$inactive 							= $_POST['inactive'];
 		$this->settings['active-buttons']	= $active;
-		$this->settings['inactive-buttons']	= $inactive;
 		$update 							= update_option( TOUT_SOCIAL_BUTTONS_SETTINGS, $this->settings );
 
 		if ( ! $update ) {

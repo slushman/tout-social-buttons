@@ -55,29 +55,43 @@ class Inactive_Buttons extends Field {
 	} // __construct()
 
 	/**
-	 * Returns the inactive buttons in order.
+	 * Returns the inactive buttons.
+	 *
+	 * Grabs the $tout_social_buttons global,
+	 * removes the active buttons, then returns
+	 * the remainder.
 	 *
 	 * @since 		1.0.0
 	 * @return 		array 		$return 		Array of button IDs.
 	 */
 	protected function get_buttons() {
 
-		if ( ! isset( $this->settings['inactive-buttons'] ) ) {
+		global $tout_social_buttons;
 
-			global $tout_social_buttons;
+		if ( ! isset( $this->settings['active-buttons'] ) ) {
 
 			$inactive = $tout_social_buttons;
 
 		} else {
 
-			$inactive = explode( ',', $this->settings['inactive-buttons'] );
+			$active = explode( ',', $this->settings['active-buttons'] );
+
+			foreach ( $tout_social_buttons as $button => $obj ) {
+
+				if ( ! in_array( $button, $active ) ) {
+
+					$inactive[$button] = $obj;
+
+				}
+
+			}
 
 		}
 
 		/**
 		 * The tout_social_buttons_admin_inactive_buttons filter.
 		 *
-		 * @param 		array 		$inactive 		Array of inactive buttons from settings.
+		 * @param 		array 		$inactive 		Array of inactive buttons.
 		 */
 		return apply_filters( 'tout_social_buttons_admin_inactive_buttons', $inactive );
 
@@ -96,11 +110,6 @@ class Inactive_Buttons extends Field {
 		$set->set_buttons( $buttons );
 		$set->output_button_set();
 
-		$args['attributes']['id'] 		= 'inactive-buttons';
-		$args['attributes']['value'] 	= isset( $this->settings['inactive-buttons'] ) ? $this->settings['inactive-buttons'] : '';
-
-		new Hidden( 'settings', $args );
-
 	} // output_field()
 
 	/**
@@ -111,7 +120,7 @@ class Inactive_Buttons extends Field {
 	 */
 	protected function set_default_button_properties( $args ) {
 
-		//$this->default_properties['default-order'] = $args['properties']['default-order'];
+		//
 
 	} // set_default_button_properties()
 

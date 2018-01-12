@@ -176,7 +176,6 @@ class Admin {
 
 			return 'tout-social-inactive-buttons';
 
-
 		} else {
 
 			return $id;
@@ -472,7 +471,6 @@ class Admin {
 				)
 			)
 		);
-		$this->settings[] = array( 'inactive-buttons', 'hidden' );
 
 		add_settings_field(
 			'button-behavior',

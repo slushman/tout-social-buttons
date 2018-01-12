@@ -9,7 +9,6 @@
 	const activeButtons = document.querySelector( '#tout-social-active-buttons' );
 	const inactiveButtons = document.querySelector( '#tout-social-inactive-buttons' );
 	const activeButtonsField = document.querySelector( 'input#active-buttons' );
-	const inactiveButtonsField = document.querySelector( 'input#inactive-buttons' );
 
 	if ( ! inactiveButtons ) { return; }
 
@@ -49,14 +48,12 @@
 
 			// Save the order array in the order field.
 			activeButtonsField.value = activeButtons;
-			inactiveButtonsField.value = inactiveButtons;
 
 			// Save the orders via AJAX and jQuery.
 			let paramData = {
 				action: 'save_button_orders',
 				toutButtonNonce: Tout_Social_Buttons_Ajax.toutButtonNonce,
-				active: activeButtons,
-				inactive: inactiveButtons
+				active: activeButtons
 			};
 
 			// Save the order via AJAX and the Fetch API.
