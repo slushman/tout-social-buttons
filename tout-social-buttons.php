@@ -13,16 +13,18 @@
  * @package           ToutSocialButtons
  *
  * @wordpress-plugin
- * Plugin Name:       Tout.Social Buttons
- * Plugin URI:        https://www.tout.social
- * Description:       Adds social sharing buttons to your posts.
- * Version:           1.0.0
- * Author:            Slushman
- * Author URI:        https://www.slushman.com
- * License:           GPL-2.0+
- * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
- * Text Domain:       tout-social-buttons
- * Domain Path:       /languages
+ * Plugin Name: 		Tout.Social Buttons
+ * Plugin URI: 			https://www.tout.social
+ * Description: 		Adds social sharing buttons to your posts.
+ * Version: 			1.0.0
+ * Author: 				Slushman
+ * Author URI: 			https://www.slushman.com
+ * GitHub Theme URI: 	https://github.com/slushman/tout-social-buttons
+ * Github Branch: 		master
+ * License: 			GPL-2.0+
+ * License URI: 		http://www.gnu.org/licenses/gpl-2.0.txt
+ * Text Domain: 		tout-social-buttons
+ * Domain Path: 		/languages
  *
  * @todo 		Add PinIt button to images and get all resulting admin settings working.
  * @todo 		Blocks: add a Gutenblock for the buttons.
