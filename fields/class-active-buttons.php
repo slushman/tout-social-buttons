@@ -88,11 +88,8 @@ class Active_Buttons extends Field {
 	 */
 	public function output_field() {
 
-		$buttons = $this->get_buttons();
-
-		//if ( empty( $buttons ) || ! is_array( $buttons ) ) { return; }
-
-		$set = new Buttons\Button_Set( 'active' );
+		$buttons 	= $this->get_buttons();
+		$set 		= new Buttons\Button_Set( 'active' );
 
 		$set->set_buttons( $buttons );
 		$set->output_button_set();
@@ -114,7 +111,7 @@ class Active_Buttons extends Field {
 	 */
 	protected function set_default_button_properties( $args ) {
 
-		//$this->default_properties['default-order'] = $args['properties']['default-order'];
+		//
 
 	} // set_default_button_properties()
 

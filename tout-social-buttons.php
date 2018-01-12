@@ -24,6 +24,7 @@
  * Text Domain:       tout-social-buttons
  * Domain Path:       /languages
  *
+ * @todo 		Add PinIt button to images and get all resulting admin settings working.
  * @todo 		Blocks: add a Gutenblock for the buttons.
  * @todo 		Blocks: add a click-to-tweet Gutenblock for blockquote sharing
  *         			Is there already a blockquote block? Can we add an option that instead of creating another one?
@@ -77,7 +78,7 @@ function tout_social_buttons_init() {
 	$classes[] = new Frontend\Frontend();
 	$classes[] = new Frontend\AutoPost();
 	$classes[] = new Frontend\Shortcode_Clicktotweet();
-	$classes[] = new Frontend\PinIt();
+	//$classes[] = new Frontend\PinIt();
 	//$classes[] = new Blocks\Blocks();
 
 	$classes[] = $tout_social_buttons['email'] 			= new Buttons\Email();

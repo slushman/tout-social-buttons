@@ -278,6 +278,18 @@ class Button_Set {
 	} // get_button_text_classes()
 
 	/**
+	 * Returns the $buttons class variable.
+	 *
+	 * @since 		1.0.1
+	 * @return 		array 			The $buttons class variable.
+	 */
+	public function get_buttons() {
+
+		return $this->buttons;
+
+	} // get_buttons()
+
+	/**
 	 * Returns the $context class variable.
 	 *
 	 * @since 		1.0.0
@@ -288,6 +300,29 @@ class Button_Set {
 		return $this->context;
 
 	} // get_context()
+
+	/**
+	 * Returns whether the array values are objects or not.
+	 *
+	 * @exits 		If $array is not an array.
+	 * @since 		1.0.1
+	 * @param 		array 		$array 		The array to check.
+	 * @return 		bool 					TRUE if the array contains objects, otherwise FALSE.
+	 */
+	protected function has_objects( $array ) {
+
+		if ( ! is_array( $array ) ) { return $array; }
+
+		$first = key( $array );
+
+		if ( is_object( $array[$first] ) ) {
+
+			$this->buttons = $array;
+			return;
+
+		}
+
+	} // has_objects()
 
 	/**
 	 * Includes the button-set partial file.
@@ -303,6 +338,21 @@ class Button_Set {
 	/**
 	 * Sets the $buttons class variable.
 	 *
+	 * Exit if $buttons is empty.
+	 * Check if $buttons is an array.
+	 * If so, check if the value at the first array key is an object.
+	 * If so, $buttons already contains the objects, so set the class variable and return.
+	 *
+	 * If the first array value is not an object, grab the $tout_social_buttons global.
+	 * Create a $return array.
+	 * Loop through each button in the global.
+	 * If the global's array key is in the $buttons array,
+	 * 	add the global's object to the $return array
+	 * 	with the key from $buttons.
+	 *
+	 * Once the $return array is populated with objects, set the class
+	 * 	variable.
+	 *
 	 * @exits 		If $buttons is empty.
 	 * @exits 		If $buttons is already an array of objects.
 	 * @since 		1.0.0
@@ -312,31 +362,15 @@ class Button_Set {
 
 		if ( empty( $buttons ) ) { return array(); }
 
-		if ( is_array( $buttons ) ) {
-
-			$first = key( $buttons );
-
-			if ( is_object( $buttons[$first] ) ) {
-
-				$this->buttons = $buttons;
-				return;
-
-			}
-
-		}
+		if ( $this->has_objects( $buttons ) ) { $this->buttons = $buttons; return; }
 
 		global $tout_social_buttons;
 
 		$return = array();
 
-		// Remove buttons that appear in the inactive array.
-		foreach ( $tout_social_buttons as $button => $obj ) {
+		foreach ( $buttons as $button ) {
 
-			if ( in_array( $button, $buttons ) ) {
-
-				$return[$button] = $obj;
-
-			}
+			$return[$button] = $tout_social_buttons[$button];
 
 		}
 
