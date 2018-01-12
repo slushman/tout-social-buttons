@@ -30,6 +30,13 @@
 		?></span>
 		<span class="<?php echo esc_attr( $this->get_button_text_classes( $instance ) ); ?>"><?php
 
+			/**
+			 * The tout_social_buttons_button_text filter.
+			 *
+			 * @param 		string 		The button name text.
+			 * @param 		obj 		The button instance.
+			 * @param 		string 		Where this is being used.
+			 */
 			echo apply_filters( 'tout_social_buttons_button_text', $instance->get_name(), $instance, $this->context );
 
 		?></span>
