@@ -61,6 +61,8 @@ class Admin {
 		//add_action( 'admin_enqueue_scripts', 			array( $this, 'localize_scripts' ) );
 		add_action( 'admin_init', 						array( $this, 'register_settings' ) );
 		add_action( 'admin_init', 						array( $this, 'register_fields' ) );
+		add_action( 'admin_init', 						array( $this, 'register_fields_accounts' ) );
+		//add_action( 'admin_init', 						array( $this, 'register_fields_pinit' ) );
 		add_action( 'admin_init', 						array( $this, 'register_sections' ) );
 		add_action( 'admin_menu', 						array( $this, 'add_menu' ) );
 		add_action( 'plugin_action_links_' . TOUT_SOCIAL_BUTTONS_FILE, array( $this, 'link_settings' ) );
@@ -405,7 +407,9 @@ class Admin {
 
 		global $tout_social_buttons;
 
-		if ( empty( $tout_social_buttons ) ) { return; }
+		//print_r( $tout_social_buttons );
+
+		//if ( empty( $tout_social_buttons ) ) { return; }
 
 		?><style type="text/css"><?php
 
@@ -415,8 +419,8 @@ class Admin {
 
 			echo '.bg-color-none .tout-social-button-' . $button . '{border-color:' . $colors['contrast'] . ';}';
 			echo '.bg-color-none .tout-social-button-' . $button . ':after,.tout-social-button-' . $colors['contrast'] . ':before{border-color:' . $colors['contrast'] . ';}';
-			echo '.content-color-brand .tout-social-button-link-' . $button . '{background-color:' . $colors['contrast'] . ';color:' . $colors['brand'] . ';}';
-			echo '.content-color-brand .tout-social-button-icon-' . $button . '{fill:' . $colors['brand'] . ';}';
+			echo '.content-color-brand .tout-social-button-link-' . $button . '{background-color:' . $colors['brand'] . ';color:' . $colors['contrast'] . ';}';
+			echo '.content-color-brand .tout-social-button-icon-' . $button . '{fill:' . $colors['contrast'] . ';}';
 
 		endforeach;
 
@@ -528,8 +532,68 @@ class Admin {
 			)
 		);
 
+	} // register_fields()
 
-		// Pin It Button fields
+	/**
+	 * Registers settings fields for the Accounts.
+	 *
+	 * add_settings_field( $id, $title, $callback, $page, $section = 'default', $args = array() )
+	 *
+	 * @hooekd 		admin_init
+	 * @link 		https://developer.wordpress.org/reference/functions/add_settings_field/
+	 * @since 		1.0.1
+	 */
+	public function register_fields_accounts() {
+
+		add_settings_field(
+			'account-twitter',
+			esc_html__( 'Twitter Account', 'tout-social-buttons' ),
+			array( $this, 'field_text' ),
+			TOUT_SOCIAL_BUTTONS_SETTINGS . '_accounts',
+			TOUT_SOCIAL_BUTTONS_SETTINGS . '_accounts',
+			array(
+				'attributes' 	=> array(
+					'id' 		=> 'account-twitter'
+				),
+				'properties' 	=> array(
+					'description' 	=> __( 'Enter your Twitter username.', 'tout-social-buttons' )
+				),
+				'setting'		=> TOUT_SOCIAL_BUTTONS_SETTINGS . '_accounts'
+			)
+		);
+		$this->settings[] = array( 'account-twitter', 'text' );
+
+		add_settings_field(
+			'account-tumblr',
+			esc_html__( 'tumblr Account', 'tout-social-buttons' ),
+			array( $this, 'field_text' ),
+			TOUT_SOCIAL_BUTTONS_SETTINGS . '_accounts',
+			TOUT_SOCIAL_BUTTONS_SETTINGS . '_accounts',
+			array(
+				'attributes' 	=> array(
+					'id' 		=> 'account-tumblr'
+				),
+				'properties' 	=> array(
+					'description' 	=> __( 'Enter your tumblr username.', 'tout-social-buttons' )
+				),
+				'setting'		=> TOUT_SOCIAL_BUTTONS_SETTINGS . '_accounts'
+			)
+		);
+		$this->settings[] = array( 'account-tumblr', 'text' );
+
+	} // register_fields_accounts()
+
+	/**
+	 * Registers settings fields for the Pin It module.
+	 *
+	 * add_settings_field( $id, $title, $callback, $page, $section = 'default', $args = array() )
+	 *
+	 * @hooekd 		admin_init
+	 * @link 		https://developer.wordpress.org/reference/functions/add_settings_field/
+	 * @since 		1.0.1
+	 */
+	public function register_fields_pinit() {
+
 		add_settings_field(
 			'pinit-enable',
 			esc_html__( 'Enable Pin It Button', 'tout-social-buttons' ),
@@ -627,46 +691,7 @@ class Admin {
 		);
 		$this->settings[] = array( 'pinit-source', 'select', 'imgalt' );
 
-
-
-		// Accounts fields
-		add_settings_field(
-			'account-twitter',
-			esc_html__( 'Twitter Account', 'tout-social-buttons' ),
-			array( $this, 'field_text' ),
-			TOUT_SOCIAL_BUTTONS_SETTINGS . '_accounts',
-			TOUT_SOCIAL_BUTTONS_SETTINGS . '_accounts',
-			array(
-				'attributes' 	=> array(
-					'id' 		=> 'account-twitter'
-				),
-				'properties' 	=> array(
-					'description' 	=> __( 'Enter your Twitter username.', 'tout-social-buttons' )
-				),
-				'setting'		=> TOUT_SOCIAL_BUTTONS_SETTINGS . '_accounts'
-			)
-		);
-		$this->settings[] = array( 'account-twitter', 'text' );
-
-		add_settings_field(
-			'account-tumblr',
-			esc_html__( 'tumblr Account', 'tout-social-buttons' ),
-			array( $this, 'field_text' ),
-			TOUT_SOCIAL_BUTTONS_SETTINGS . '_accounts',
-			TOUT_SOCIAL_BUTTONS_SETTINGS . '_accounts',
-			array(
-				'attributes' 	=> array(
-					'id' 		=> 'account-tumblr'
-				),
-				'properties' 	=> array(
-					'description' 	=> __( 'Enter your tumblr username.', 'tout-social-buttons' )
-				),
-				'setting'		=> TOUT_SOCIAL_BUTTONS_SETTINGS . '_accounts'
-			)
-		);
-		$this->settings[] = array( 'account-tumblr', 'text' );
-
-	} // register_fields()
+	} // register_fields_pinit()
 
 	/**
 	 * Registers settings sections.
