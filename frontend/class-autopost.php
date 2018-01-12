@@ -15,13 +15,13 @@ use \ToutSocialButtons\Buttons as Buttons;
 class AutoPost {
 
 	/**
-	 * The context where the button set is being used.
+	 * An instance of the Button_Set Object.
 	 *
 	 * @since 		1.0.0
 	 * @access 		private
-	 * @var 		string 		$context 		Where this is being used.
+	 * @var 		Button_Set 			$set 		The Button_Set Object.
 	 */
-	private $context;
+	private $set;
 
 	/**
 	 * The plugin settings.
@@ -40,6 +40,7 @@ class AutoPost {
 	public function __construct() {
 
 		$this->set_settings();
+		$this->make_button_set();
 
 	} // __construct()
 
@@ -51,12 +52,9 @@ class AutoPost {
 	 */
 	public function hooks() {
 
-		add_shortcode( 'toutsocialbuttons', 				array( $this, 'shortcode' ) );
+		add_shortcode( 'toutsocialbuttons', array( $this, 'shortcode' ) );
 
-		add_filter( 'the_content', 							array( $this, 'add_buttons_to_content' ), 19, 1 );
-
-		add_action( 'tout_social_buttons_set_wrap_begin', 	array( $this, 'pretext' ), 10 );
-		//add_action( 'wp_footer', 							array( $this, 'inline_scripts' ) );
+		add_filter( 'the_content', 			array( $this, 'add_buttons_to_content' ), 19, 1 );
 
 		/**
 		 * Action instead of template tag.
@@ -66,7 +64,10 @@ class AutoPost {
 		 *
 		 * @link 		http://nacin.com/2010/05/18/rethinking-template-tags-in-plugins/
 		 */
-		add_action( 'toutsocialbuttons', array( $this, 'shortcode' ) );
+		add_action( 'toutsocialbuttons', 					array( $this, 'shortcode' ) );
+		add_action( 'tout_social_buttons_set_wrap_begin', 	array( $this, 'pretext' ), 10, 1 );
+		//add_action( 'wp_footer', 							array( $this, 'inline_scripts' ) );
+
 
 	} // hooks()
 
@@ -183,7 +184,8 @@ class AutoPost {
 
 		if ( empty( $buttons ) ) { return; }
 
-		$set = new Buttons\Button_Set( $this->context, $buttons );
+		$this->set->set_buttons( $buttons );
+		$this->set->output_button_set();
 
 	} // display_buttons()
 
@@ -219,14 +221,27 @@ class AutoPost {
 	} // get_buttons()
 
 	/**
+	 * Sets the $set class variable with an instance of the Button_Set
+	 * class with the context for this class.
+	 *
+	 * @since 		1.0.0
+	 */
+	protected function make_button_set() {
+
+		$this->set = new Buttons\Button_Set( 'autopost' );
+
+	} // make_button_set()
+
+	/**
 	 * Includes the pretext partial file.
 	 *
 	 * @hooked 		tout_social_buttons_set_wrap_begin
 	 * @since 		1.0.0
+	 * @param 		string 		$context 	Where this is being used.
 	 */
-	public function pretext() {
+	public function pretext( $context ) {
 
-		if ( 'autopost' !== $this->context ) { return; }
+		if ( 'autopost' !== $context ) { return; }
 
 		include( plugin_dir_path( dirname( __FILE__ ) ) . 'frontend/partials/pretext.php' );
 
@@ -258,7 +273,6 @@ class AutoPost {
 
 		$defaults[''] 	= '';
 		$args 			= shortcode_atts( $defaults, $atts, 'toutsocialbuttons' );
-		$this->context 	= 'autopost';
 
 		ob_start();
 

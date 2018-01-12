@@ -91,7 +91,10 @@ class Inactive_Buttons extends Field {
 	public function output_field() {
 
 		$buttons 	= $this->get_buttons();
-		$set 		= new Buttons\Button_Set( 'inactive', $buttons );
+		$set 		= new Buttons\Button_Set( 'inactive' );
+
+		$set->set_buttons( $buttons );
+		$set->output_button_set();
 
 		$args['attributes']['id'] 		= 'inactive-buttons';
 		$args['attributes']['value'] 	= isset( $this->settings['inactive-buttons'] ) ? $this->settings['inactive-buttons'] : '';

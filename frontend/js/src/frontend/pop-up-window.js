@@ -16,7 +16,7 @@
 	 */
 	function processEvent( event ) {
 
-		var target 	= tout.getEventTarget( event );
+		var target 	= getEventTarget( event );
 
 		if ( 'UL' === target.nodeName ) { return event; }
 

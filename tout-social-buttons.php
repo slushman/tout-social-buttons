@@ -24,8 +24,6 @@
  * Text Domain:       tout-social-buttons
  * Domain Path:       /languages
  *
- * @todo 		Bug: remove  "Share this" from Click to Tweet box.
- *
  * @todo 		Blocks: add a Gutenblock for the buttons.
  * @todo 		Blocks: add a click-to-tweet Gutenblock for blockquote sharing
  *         			Is there already a blockquote block? Can we add an option that instead of creating another one?

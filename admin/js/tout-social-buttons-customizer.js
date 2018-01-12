@@ -44,7 +44,7 @@
 	};
 
 	// Button Type
-	wp.customize( 'tout_social_buttons[button_type]', function( value ) {
+	wp.customize( 'tout_social_buttons[button_content]', function( value ) {
 		value.bind( function( to ){
 
 			var labels = $('.tout-social-button-text');
@@ -52,25 +52,25 @@
 			var classyLabels = labels.hasClass( 'screen-reader-text' );
 			var classyIcons = icons.hasClass( 'hidden' );
 
-			if ( 'icon' === to && ! classyLabels ) { // selected icon, labels don't have class - add class
+			if ( 'button-content-icon' === to && ! classyLabels ) { // selected icon, labels don't have class - add class
 
 				labels.addClass( 'screen-reader-text' );
 
 			}
 
-			if ( 'icon' === to && classyIcons ) { // selected icons, icons have class - remove class
+			if ( 'button-content-icon' === to && classyIcons ) { // selected icons, icons have class - remove class
 
 				icons.removeClass( 'hidden' );
 
 			}
 
-			if ( 'text' === to && classyLabels ) { // selected text, labels have class - remove class
+			if ( 'button-content-text' === to && classyLabels ) { // selected text, labels have class - remove class
 
 				labels.removeClass( 'screen-reader-text' );
 
 			}
 
-			if ( 'text' === to && ! classyIcons ) { // selected text, icons don't have class - add class
+			if ( 'button-content-text' === to && ! classyIcons ) { // selected text, icons don't have class - add class
 
 				icons.addClass( 'hidden' );
 

@@ -86,11 +86,11 @@ class Tout_Social_Button {
 	protected $settings;
 
 	/**
-	 * The button type (text or icon).
+	 * The button content type (text or icon).
 	 *
 	 * @since 		1.0.0
 	 * @access 		private
-	 * @var 		string 		$type 		The button type.
+	 * @var 		string 		$type 		The button content type.
 	 */
 	protected $type;
 
@@ -149,13 +149,13 @@ class Tout_Social_Button {
 	 * @since 		1.0.0
 	 * @return 		string 		The icon class variable.
 	 */
-	public function get_icon() {
+	public function get_icon( $context ) {
 
 		$type = $this->get_type();
 
 		if ( 'text' === $type && ! is_admin() && ! is_customize_preview() ) { return; }
 
-		return $this->icon;
+		return apply_filters( 'tout_social_buttons_get_icon', $this->icon, $this->id, $context );
 
 	} // get_icon()
 
@@ -279,16 +279,18 @@ class Tout_Social_Button {
 	} // get_title()
 
 	/**
-	 * Returns the type for this button.
+	 * Returns the content for this button.
 	 *
 	 * @since 		1.0.0
-	 * @return 		string 		The type class variable.
+	 * @return 		string 		The content class variable.
 	 */
 	public function get_type() {
 
 		$options = get_option( 'tout_social_buttons' );
 
-		return $options['button_type'];
+		if ( ! isset( $options['button_content'] ) ) { return ''; }
+
+		return $options['button_content'];
 
 	} // get_type()
 
@@ -386,7 +388,7 @@ class Tout_Social_Button {
 	 */
 	protected function set_type() {
 
-		$this->type = $this->customizer['button_type'];
+		$this->type = $this->customizer['button_content'];
 
 	} // set_url()
 

@@ -92,7 +92,10 @@ class Active_Buttons extends Field {
 
 		//if ( empty( $buttons ) || ! is_array( $buttons ) ) { return; }
 
-		$set = new Buttons\Button_Set( 'active', $buttons );
+		$set = new Buttons\Button_Set( 'active' );
+
+		$set->set_buttons( $buttons );
+		$set->output_button_set();
 
 		$args['attributes']['id'] 		= 'active-buttons';
 		$args['attributes']['value'] 	= isset( $this->settings['active-buttons'] ) ? $this->settings['active-buttons'] : '';

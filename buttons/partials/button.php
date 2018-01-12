@@ -19,13 +19,11 @@
 
 		}
 
-		?> title="<?php echo esc_attr( $instance->get_title() ); ?>">
-		<!--<span class="<?php //echo esc_attr( $this->get_button_icon_wrap_classes( $instance ) ); ?>">--><?php
+		?> title="<?php echo esc_attr( $instance->get_title() ); ?>"><?php
 
-			echo $instance->get_icon();
+		echo $instance->get_icon( $this->context );
 
-		?><!--</span>-->
-		<span class="screen-reader-text"><?php
+		?><span class="screen-reader-text"><?php
 
 			echo $instance->get_a11y_text();
 

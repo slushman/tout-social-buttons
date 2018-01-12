@@ -17,7 +17,8 @@
 
 	if ( ! empty( $buttons ) ) {
 
-		$set = new \ToutSocialButtons\Buttons\Button_Set( $this->context, $buttons );
+		$this->set->set_buttons( $buttons );
+		$this->set->output_button_set();
 
 	}
 

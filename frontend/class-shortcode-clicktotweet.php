@@ -42,6 +42,7 @@ class Shortcode_Clicktotweet {
 	public function __construct() {
 
 		$this->set_customizer();
+		$this->make_button_set();
 
 	} // __construct()
 
@@ -202,7 +203,7 @@ class Shortcode_Clicktotweet {
 	 */
 	public function get_quote_classes() {
 
-		if ( 'clicktotweet' !== $this->context ) { return $classes; }
+		if ( 'clicktotweet' !== $this->set->get_context() ) { return $classes; }
 
 		$classes[] 	= 'click-to-tweet-quote';
 
@@ -219,7 +220,7 @@ class Shortcode_Clicktotweet {
 	 */
 	public function get_quote_wrap_classes() {
 
-		if ( 'clicktotweet' !== $this->context ) { return; }
+		if ( 'clicktotweet' !== $this->set->get_context() ) { return; }
 
 		$classes[] 	= 'click-to-tweet-wrap';
 		$classes[] 	= $this->customizer['clicktotweet_style'];
@@ -227,6 +228,18 @@ class Shortcode_Clicktotweet {
 		return implode( ' ', $classes );
 
 	} // get_quote_wrap_classes()
+
+	/**
+	 * Sets the $set class variable with an instance of the Button_Set
+	 * class with the context for this class.
+	 *
+	 * @since 		1.0.0
+	 */
+	protected function make_button_set() {
+
+		$this->set = new Buttons\Button_Set( 'clicktotweet' );
+
+	} // make_button_set()
 
 	/**
 	 * Sets the $customizer class variable.
@@ -256,8 +269,7 @@ class Shortcode_Clicktotweet {
 
 		global $tout_social_buttons;
 
-		$buttons 		= array( 'twitter' => $tout_social_buttons['twitter'] );
-		$this->context 	= 'clicktotweet';
+		$buttons = array( 'twitter' => $tout_social_buttons['twitter'] );
 
 		ob_start();
 

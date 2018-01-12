@@ -3,6 +3,13 @@
 /**
  * The buttons added by this plugin.
  *
+ * To use:
+ * In constructor, call a make_button_set() method where a new instance of Button_Set is created with a context.
+ * Where you want the button set output, you'll need to:
+ * 		create a list of buttons to include
+ * 		call set_buttons() from the Button_Set class
+ * 		call output_button_set() from the Button_Set class
+ *
  * @link 			https://www.slushman.com
  * @since 			1.0.0
  * @package 		ToutSocialButtons/Buttons
@@ -45,17 +52,17 @@ class Button_Set {
 	 *
 	 * @since 		1.0.0
 	 * @param 		string 		$context 		Where this class is used.
-	 * @param 		array 		$buttons 		Array of buttons IDs for this set.
+	 * @param 		array 		$buttons 		Optional. Array of buttons IDs for this set.
 	 */
-	public function __construct( $context, $buttons ) {
+	public function __construct( $context, $buttons = array() ) {
 
 		$this->set_settings();
 		$this->set_customizer();
 
 		$this->context = $context;
 
-		$this->set_buttons( $buttons );
-		$this->output_button_set();
+		// $this->set_buttons( $buttons );
+		// $this->output_button_set();
 
 	} // __construct()
 
@@ -171,7 +178,7 @@ class Button_Set {
 
 		$return 	= '';
 		$classes[] 	= 'tout-social-buttons';
-		$classes[] 	= 'icon-color-brand';
+		$classes[] 	= 'content-color-brand';
 		$classes[] 	= 'bg-color-none';
 
 		/**
@@ -249,7 +256,7 @@ class Button_Set {
 		$return 	= '';
 		$classes[] 	= 'tout-social-button-text';
 
-		if ( 'icon' === $instance->get_type() ) :
+		if ( 'button-content-icon' === $instance->get_type() && ! is_admin() ) :
 
 			$classes[] = 'screen-reader-text';
 
@@ -271,71 +278,10 @@ class Button_Set {
 	} // get_button_text_classes()
 
 	/**
-	 * Returns the classes for the blockquote element.
+	 * Returns the $context class variable.
 	 *
 	 * @since 		1.0.0
-	 * @param 		array 		$classes 		The classes passed in.
-	 * @return 		string 						The classes for the blockquote element.
-	 */
-	// public function get_quote_classes( $classes = array() ) {
-	//
-	// 	$return 	= '';
-	// 	$classes[] 	= 'tout-social-buttons-quote';
-	//
-	// 	/**
-	// 	 * The tout_social_buttons_quote_classes filter.
-	// 	 *
-	// 	 * Allows for changing classes on the blockquote element.
-	// 	 *
-	// 	 * @param 		array 		$classes 		The current classes.
-	// 	 * @param 		string 		$context 		Where this is being used.
-	// 	 */
-	// 	$classes 	= apply_filters( 'tout_social_buttons_quote_classes', $classes, $context );
-	// 	$return 	= implode( ' ', $classes );
-	//
-	// 	return $return;
-	//
-	// } // get_quote_classes()
-
-	/**
-	 * Returns the classes for the quote wrap.
-	 *
-	 * @since 		1.0.0
-	 * @param 		string 		$context 		Where this function is being used.
-	 * @param 		array 		$classes 		The classes passed in.
-	 * @return 		string 						The classes for the quote wrap.
-	 */
-	// public function get_quote_wrap_classes( $context, $classes = array() ) {
-	//
-	// 	$return 	= '';
-	// 	$classes[] 	= 'tout-this-wrap';
-	//
-	// 	if ( 'clicktotweet' === $context ) {
-	//
-	// 		$classes[] 	= $this->customizer['clicktotweet_style'];
-	//
-	// 	}
-	//
-	// 	/**
-	// 	 * The tout_social_buttons_quote_wrap_classes filter.
-	// 	 *
-	// 	 * Allows for changing classes on the quote wrap element.
-	// 	 *
-	// 	 * @param 		array 		$classes 		The current classes.
-	// 	 * @param 		string 		$context 		Where this is being used.
-	// 	 */
-	// 	$classes 	= apply_filters( 'tout_social_buttons_quote_wrap_classes', $classes, $context );
-	// 	$return 	= implode( ' ', $classes );
-	//
-	// 	return $return;
-	//
-	// } // get_quote_wrap_classes()
-
-	/**
-	 * Return the $context class variable.
-	 *
-	 * @since 		1.0.0
-	 * @return 		string 		The $context class variable.
+	 * @return 		string 		The context.
 	 */
 	public function get_context() {
 
@@ -348,7 +294,7 @@ class Button_Set {
 	 *
 	 * @since 		1.0.0
 	 */
-	protected function output_button_set() {
+	public function output_button_set() {
 
 		include( plugin_dir_path( dirname( __FILE__ ) ) . 'buttons/partials/button-set.php' );
 
@@ -362,7 +308,7 @@ class Button_Set {
 	 * @since 		1.0.0
 	 * @param 		array 		$buttons 		Array of button IDs.
 	 */
-	protected function set_buttons( $buttons ) {
+	public function set_buttons( $buttons ) {
 
 		if ( empty( $buttons ) ) { return array(); }
 

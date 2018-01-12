@@ -424,13 +424,13 @@ gulp.task( 'readme', function() {
 /**
  * Watches for file changes and runs specific tasks.
  */
-gulp.task( 'default', ['adminStyles', 'frontendStyles', 'adminScripts', 'frontendScripts', 'adminImages', 'frontendImages', 'adminSVGs', 'frontendSVGs', 'translate', 'browser-sync', 'readme'], function () {
+gulp.task( 'default', ['adminStyles', 'frontendStyles', 'adminScripts', 'frontendScripts', 'adminImages', 'frontendImages', /*'adminSVGs', 'frontendSVGs',*/ 'translate', 'browser-sync', 'readme'], function () {
 	gulp.watch( watch.php, reload ); // Reload on PHP file changes.
 	gulp.watch( watch.admin.styles, ['adminStyles', reload] ); // Reload on SCSS file changes.
 	gulp.watch( watch.frontend.styles, ['frontendStyles', reload] ); // Reload on SCSS file changes.
-	gulp.watch( watch.blocks.styles, ['blockStyles', reload] ); // Reload on SCSS file changes.
+	//gulp.watch( watch.blocks.styles, ['blockStyles', reload] ); // Reload on SCSS file changes.
 	gulp.watch( watch.admin.scripts.source, [ 'adminScripts', reload ] ); // Reload on admin JS file changes.
 	gulp.watch( watch.frontend.scripts.source, [ 'frontendScripts', reload ] ); // Reload on frontend JS file changes
-	gulp.watch( watch.blocks.scripts.source, [ 'blockScripts', reload ] ); // Reload on blocks JS file changes
+	//gulp.watch( watch.blocks.scripts.source, [ 'blockScripts', reload ] ); // Reload on blocks JS file changes
 	gulp.watch( 'README.txt', ['readme'] );
 });

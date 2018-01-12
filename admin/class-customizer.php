@@ -38,7 +38,6 @@ class Customizer {
 		add_action( 'enqueue_customizer_styles', 				array( $this, 'enqueue_styles' ) );
 		add_action( 'customize_preview_init', 					array( $this, 'enqueue_scripts' ) );
 		add_action( 'customize_controls_enqueue_scripts', 		array( $this, 'enqueue_controls_scripts' ) );
-		add_action( 'tout_social_buttons_button_set_classes', 	array( $this, 'filter_button_set_classes' ), 10, 1 );
 		add_action( 'customize_register', 						array( $this, 'register_panels' ) );
 		add_action( 'customize_register', 						array( $this, 'register_sections' ) );
 		add_action( 'customize_register', 						array( $this, 'register_fields' ) );
@@ -80,24 +79,6 @@ class Customizer {
 		wp_enqueue_script( TOUT_SOCIAL_BUTTONS_SLUG, plugin_dir_url( __FILE__ ) . 'js/tout-social-buttons-customizer.min.js', array(), TOUT_SOCIAL_BUTTONS_VERSION, true );
 
 	} // enqueue_scripts()
-
-	/**
-	 * Removes button set classes, based on the selected customizer settings.
-	 *
-	 * @hooked 		tout_social_buttons_button_set_classes
-	 * @since 		1.0.0
-	 * @param 		array 		$classes 		The button set classes.
-	 * @return 		array 						The modified button set classes.
-	 */
-	public function filter_button_set_classes( $classes ) {
-
-		$mods = get_theme_mods();
-
-		// Filter classes here.
-
-		return $classes;
-
-	} // filter_button_set_classes()
 
 	/**
 	 * Registers custom panels for the Customizer.
@@ -145,7 +126,7 @@ class Customizer {
 	 */
 	public function register_sections( $wp_customize ) {
 
-		// Button Type Section
+		// Buttons Section
 		$wp_customize->add_section( 'tout_social_buttons_general',
 			array(
 				'active_callback' 	=> '',
@@ -154,7 +135,7 @@ class Customizer {
 				'panel' 			=> TOUT_SOCIAL_BUTTON_CUSTOMIZER,
 				'priority'  		=> 9,
 				'theme_supports'  	=> '',
-				'title'  			=> esc_html__( 'General', 'tout-social-buttons' ),
+				'title'  			=> esc_html__( 'Buttons', 'tout-social-buttons' ),
 			)
 		);
 
@@ -190,34 +171,42 @@ class Customizer {
 	 */
 	public function register_fields( $wp_customize ) {
 
-		$types['icon'] 	= esc_html__( 'Icon', 'tout-social-buttons' );
-		$types['text'] 	= esc_html__( 'Text', 'tout-social-buttons' );
-		$button_types 	= apply_filters( 'tout_social_buttons_types_of_buttons', $types );
+		$types['button-content-icon'] 	= esc_html__( 'Icon', 'tout-social-buttons' );
+		$types['button-content-text'] 	= esc_html__( 'Text', 'tout-social-buttons' );
 
-		// Button Type Field
+		/**
+		 * The tout_social_buttons_content filter.
+		 *
+		 * Allows for changing the content of the buttons.
+		 *
+		 * @param 		array 		$types 		The button content array.
+		 */
+		$button_contents 	= apply_filters( 'tout_social_buttons_content', $types );
+
+		// Button Content Field
 		$wp_customize->add_setting(
-			TOUT_SOCIAL_BUTTON_CUSTOMIZER . '[button_type]',
+			TOUT_SOCIAL_BUTTON_CUSTOMIZER . '[button_content]',
 			array(
 				'capability' 		=> 'edit_theme_options',
-				'default'  			=> 'icon',
+				'default'  			=> 'button-content-icon',
 				'transport' 		=> 'postMessage',
 				'type' 				=> 'option'
 			)
 		);
 		$wp_customize->add_control(
-			TOUT_SOCIAL_BUTTON_CUSTOMIZER . '[button_type]',
+			TOUT_SOCIAL_BUTTON_CUSTOMIZER . '[button_content]',
 			array(
 				'active_callback' 	=> '',
-				'choices' 			=> $button_types,
+				'choices' 			=> $button_contents,
 				'description' 		=> esc_html__( '', 'tout-social-buttons' ),
-				'label'  			=> esc_html__( 'Button Type', 'tout-social-buttons' ),
+				'label'  			=> esc_html__( 'Button Content', 'tout-social-buttons' ),
 				'priority' 			=> 10,
 				'section'  			=> 'tout_social_buttons_general',
-				'settings' 			=> TOUT_SOCIAL_BUTTON_CUSTOMIZER . '[button_type]',
+				'settings' 			=> TOUT_SOCIAL_BUTTON_CUSTOMIZER . '[button_content]',
 				'type' 				=> 'select'
 			)
 		);
-		$wp_customize->get_setting( TOUT_SOCIAL_BUTTON_CUSTOMIZER . '[button_type]' )->transport = 'postMessage';
+		$wp_customize->get_setting( TOUT_SOCIAL_BUTTON_CUSTOMIZER . '[button_content]' )->transport = 'postMessage';
 
 
 
@@ -228,7 +217,15 @@ class Customizer {
 		$styles['border'] 		= esc_html__( 'Border', 'tout-social-buttons' );
 		$styles['solid'] 		= esc_html__( 'Solid Color', 'tout-social-buttons' );
 		$styles['shadow'] 		= esc_html__( 'Shadow', 'tout-social-buttons' );
-		$clicktotweet_styles 	= apply_filters( 'tout_social_buttons_clicktotweet_styles', $styles );
+
+		/**
+		 * The tout_social_buttons_clicktotweet_styles filter.
+		 *
+		 * Allows for adding more Click to Tweet style presets.
+		 *
+		 * @param 		array 		$styles 		The current style presets.
+		 */
+		$clicktotweet_styles = apply_filters( 'tout_social_buttons_clicktotweet_styles', $styles );
 
 		// Click to Tweet Style Field
 		$wp_customize->add_setting(

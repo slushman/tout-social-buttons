@@ -413,9 +413,10 @@ class Admin {
 
 			$colors = $object->get_colors();
 
-			echo '.tout-social-button-' . $button . '{background-color:' . $colors['brand'] . ';}';
-			echo '.tout-social-button-link-' . $button . '{color:' . $colors['contrast'] . ';}';
-			echo '.tout-social-button-icon-' . $button . '{fill:' . $colors['contrast'] . ';}';
+			echo '.bg-color-none .tout-social-button-' . $button . '{border-color:' . $colors['contrast'] . ';}';
+			echo '.bg-color-none .tout-social-button-' . $button . ':after,.tout-social-button-' . $colors['contrast'] . ':before{border-color:' . $colors['contrast'] . ';}';
+			echo '.content-color-brand .tout-social-button-link-' . $button . '{background-color:' . $colors['contrast'] . ';color:' . $colors['brand'] . ';}';
+			echo '.content-color-brand .tout-social-button-icon-' . $button . '{fill:' . $colors['brand'] . ';}';
 
 		endforeach;
 
